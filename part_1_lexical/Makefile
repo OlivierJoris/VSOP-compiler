@@ -1,21 +1,24 @@
 CC=g++
-FLAGS=-g -std=c++17 -Wall -Wextra
+FLAGS=-std=c++17 -Wall -Wextra -O3
 PROGRAM=vsopc
-
 DIR=vsopcompiler/
-SOURCES=$(DIR)/vsopc.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
 
 all: $(PROGRAM)
 
-$(PROGRAM): %c: $(DIR)%.yy.c $(OBJECTS)
-	$(CC) -o $@ $(OBJECTS)
+$(PROGRAM): $(DIR)vsopc.o 
+	$(CC) $(FLAGS) -o $@ $^
 
-$(DIR)%.yy.c: $(DIR)%.lex
-	flex -o $@ $^
-
-%.o : %.cpp
+$(DIR)vsopc.o: $(DIR)vsopc.yy.c 
 	$(CC) $(FLAGS) -c $< -o $@
+
+$(DIR)vsopc.yy.c: $(DIR)vsopc.lex
+	flex -o $@ $^
 
 install-tools:
 	sudo apt-get install flex	
+
+clean:
+	rm -f $(DIR)*.yy.c
+	rm -f $(DIR)*.o
+	rm $(PROGRAM)
+	clear
