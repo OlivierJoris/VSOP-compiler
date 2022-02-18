@@ -1,5 +1,6 @@
 %{
     #include <iostream>
+    #include <algorithm>
 
     extern FILE *yyin;
 
@@ -48,6 +49,8 @@
 %token LOWER "<"
 %token LOWER-EQUAL "<="
 %token ASSIGN "<-"
+%token INVALID_HEX_NUMBER
+%token INVALID_CHAR
 
 %union
 {
@@ -81,6 +84,9 @@ int main(int argc, char** argv)
     if(flag == "-l")
     {
         std::string fileName = argv[2];
+        std::string fileNameUppercase = argv[2];
+        std::transform(fileNameUppercase.begin(), fileNameUppercase.end(), fileNameUppercase.begin(), ::toupper);
+
         yyin = fopen(argv[2], "r");
         if(!yyin)
         {
@@ -92,6 +98,19 @@ int main(int argc, char** argv)
 
         while((token = yylex()) != 0)
         {
+            if(token == INVALID_HEX_NUMBER) {
+                std::cerr << fileNameUppercase << ":" << yylloc.first_line << ":";
+                std::cerr << yylloc.first_column << ": " << "lexical error: invalid hex number ";
+                std::cerr << yylval.stringValue << std::endl;
+                return -1;
+            }
+            if(token == INVALID_CHAR) {
+                std::cerr << fileNameUppercase << ":" << yylloc.first_line << ":";
+                std::cerr << yylloc.first_column << ": " << "lexical error: invalid character ";
+                std::cerr << yylval.stringValue << std::endl;
+                return -1;
+            }
+
             std::cout << yylloc.first_line << "," << yylloc.first_column << ",";
             switch(token)
             {

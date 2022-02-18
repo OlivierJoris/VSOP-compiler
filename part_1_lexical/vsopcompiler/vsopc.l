@@ -110,7 +110,8 @@ string-literal \"({regular-char}|{escaped-char})*\"
 }
 
 {error-hex-integer-literal} /* invalid hex integer literal */ {
-    std::cerr << "lexical error: invalid hexadecimal number " << yytext << std::endl;
+    yylval.stringValue = yytext;
+    return INVALID_HEX_NUMBER;
 }
 
 {type-identifier} {
@@ -123,7 +124,10 @@ string-literal \"({regular-char}|{escaped-char})*\"
     return OBJECT_IDENTIFIER;
 }
 
-. {}
+. {
+    yylval.stringValue = yytext;
+    return INVALID_CHAR;
+}
 
 %%
 
