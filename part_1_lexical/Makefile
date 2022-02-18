@@ -11,7 +11,7 @@ $(PROGRAM): $(DIR)$(PROGRAM).yy.c $(DIR)$(PROGRAM).tab.c
 $(DIR)$(PROGRAM).tab.c: $(DIR)$(PROGRAM).y
 	bison -o $@ -d $^
 
-$(DIR)$(PROGRAM).yy.c: $(DIR)$(PROGRAM).lex
+$(DIR)$(PROGRAM).yy.c: $(DIR)$(PROGRAM).l
 	flex -o $@ $^
 
 install-tools:
