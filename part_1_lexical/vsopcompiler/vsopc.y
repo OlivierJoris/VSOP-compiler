@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 
         while((token = yylex()) != 0)
         {
-            std::cout << yylloc.first_line << ',' << yylloc.first_column;
+            std::cout << yylloc.first_line << "," << yylloc.first_column << ",";
             switch(token)
             {
                 case AND:       

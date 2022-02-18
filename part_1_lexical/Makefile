@@ -12,7 +12,7 @@ $(DIR)$(PROGRAM).tab.c: $(DIR)$(PROGRAM).y
 	bison -o $@ -d $^
 
 $(DIR)$(PROGRAM).yy.c: $(DIR)$(PROGRAM).l
-	flex -o $@ $^
+	flex --nounput -o $@ $^
 
 install-tools:
 	sudo apt-get install flex
