@@ -6,9 +6,9 @@
 
     int yylex();
 
-    void yyerror (char const *s)
+    void yyerror (char const *message)
     {
-        std::cerr << s << std::endl;
+        std::cerr << message << std::endl;
     }
 %}
 
@@ -71,6 +71,60 @@ exp:
 
 %%
 
+static std::string hexConvert(char character)
+{
+    std::string ret = "\\x00";
+    std::string ref = "0123456789abcdef";
+
+    int i = 2;
+    while(character)
+    {
+        ret[i++] = ref[character % 16];
+        character /= 16;
+    }
+
+    int j = 2;
+    // reverse
+    while(j < i)
+    {
+        char tmp = ret[j];
+        ret[j] = ret[i];
+        ret[i] = tmp;
+        --i;
+        ++j;
+    }
+
+    return ret;
+}
+
+static std::string encodeString(char *string)
+{
+    std::string ret = "\"";
+
+    while(*string)
+    {
+        if(*string != '\"' && *string != '\\')
+        {
+            if(*string >= 32 && *string <= 126)
+                ret += *string;
+            else 
+                ret += hexConvert(*string);
+        }
+        else
+        {
+            if(*string == '\\')
+            {
+                ret += hexConvert(*string);
+                break;
+            }
+        }
+
+        ++string;
+    }
+
+    return ret + "\"";
+}
+
 int main(int argc, char** argv)
 {
     if(argc != 3)
@@ -102,13 +156,13 @@ int main(int argc, char** argv)
                 std::cerr << fileNameUppercase << ":" << yylloc.first_line << ":";
                 std::cerr << yylloc.first_column << ": " << "lexical error: invalid hex number ";
                 std::cerr << yylval.stringValue << std::endl;
-                return -1;
+                return EXIT_FAILURE;
             }
             if(token == INVALID_CHAR) {
                 std::cerr << fileNameUppercase << ":" << yylloc.first_line << ":";
                 std::cerr << yylloc.first_column << ": " << "lexical error: invalid character ";
                 std::cerr << yylval.stringValue << std::endl;
-                return -1;
+                return EXIT_FAILURE;
             }
 
             std::cout << yylloc.first_line << "," << yylloc.first_column << ",";
@@ -229,7 +283,7 @@ int main(int argc, char** argv)
                     std::cout << "integer-literal," << yylval.intValue;		
                     break;
 			    case STRING_LITERAL:
-                    std::cout << "string-literal," << yylval.stringValue;
+                    std::cout << "string-literal," << encodeString(yylval.stringValue);
                     break;
 			    case TYPE_IDENTIFIER:
                     std::cout << "type-identifier," << yylval.stringValue;
