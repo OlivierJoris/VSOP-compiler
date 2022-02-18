@@ -1,7 +1,7 @@
 CC=g++
-FLAGS=-std=c++17 -Wall -Wextra -O3
+FLAGS=-std=c++17 -Wall -Wextra -pedantic -O3
 PROGRAM=vsopc
-DIR=vsopcompiler/
+DIR=./
 
 all: $(PROGRAM)
 

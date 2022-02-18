@@ -2,6 +2,9 @@
 
 %{
   #include "vsopc.tab.h"
+  #include <iostream>
+  #include <string>
+  #include <cstdlib>
 
   /* source : https://stackoverflow.com/questions/656703/how-does-flex-support-bison-location-exactly */
   #define YY_USER_ACTION \
@@ -10,7 +13,7 @@
     for(int i = 0; yytext[i] != '\0'; i++) { \
         if(yytext[i] == '\n') { \
             yylloc.last_line++; \
-            yylloc.last_column = 0; \
+            yylloc.last_column = 1; \
         } \
         else { \
             yylloc.last_column++; \
@@ -20,20 +23,36 @@
     extern int yylex();
 %}
 
-lowercase-letter    [a-z]
-uppercase-letter    [A-Z]
-letter              {lowercase-letter}|{uppercase-letter}
-bin-digit           [0-1]
-digit               [0-9]
-hex-digit           {digit}|[a-f]|[A-F]
-whitespace          [ \t\n\f\r]+
-single-line-comment "//"[^\n]*
-integer-litteral    {digit}+|"0x"{hex-digit}+
-type-identifier     {uppercase-letter}({letter}|{digit}|_)*
-object-identifier   lowercase-letter({letter}|{digit}|_)*
-escape-sequence     [btnr\"\\]|(x{hex-digit}{hex-digit})|(\n[ |\t])
-escaped-char        \\{escape-sequence}
-regular-char        [^{escaped-char}] 
+lowercase-letter [a-z]
+uppercase-letter [A-Z]
+letter {lowercase-letter}|{uppercase-letter}
+digit [0-9]
+hex-digit {digit}|[a-f]|[A-F]
+wrong-hex-digit {digit}|{lowercase-letter}|{uppercase-letter}
+bin-digit [0-1]
+
+/* Whitespace */
+whitespace [ \t\n\f\r]+
+
+/* Comments */
+comment1Line "//"[^\n]*\n
+
+/* Integer literals */
+integer-literal-decimal {digit}+
+integer-literal-hexadecimal "0x"{hex-digit}+
+error-hex-integer-literal "0x"{wrong-hex-digit}+
+
+/* Type identifiers */
+type-identifier {uppercase-letter}({letter}|{digit}|_)*
+
+/* Object Identifiers */
+object-identifier {lowercase-letter}({letter}|{digit}|_)*
+
+/* String literals */
+escape-sequence [btnr\"\\]|(x{hex-digit}{hex-digit})|(\n[ \t]*)
+escaped-char \\{escape-sequence}
+regular-char [^\"\\]
+string-literal \"({regular-char}|{escaped-char})*\"
 
 %%
 
@@ -76,8 +95,35 @@ regular-char        [^{escaped-char}]
 "<"			{return LOWER;}
 
 {whitespace}          {/* No action and no return */}
-{single-line-comment} {/* No action and no return */}
-{type-identifier}     {yylval.stringValue = yytext; return TYPE_IDENTIFIER;}
+{comment1Line}        {/* No action and no return */}
+
+{integer-literal-decimal}     {
+    yylval.intValue = atoi(yytext);
+    return INTEGER_LITERAL;
+}
+
+{integer-literal-hexadecimal} {
+    std::string integer;
+    integer = yytext;
+    yylval.intValue = stoi(integer, 0, 16);
+    return INTEGER_LITERAL;
+}
+
+{error-hex-integer-literal} /* invalid hex integer literal */ {
+    std::cerr << "lexical error: invalid hexadecimal number " << yytext << std::endl;
+}
+
+{type-identifier} {
+    yylval.stringValue = yytext;
+    return TYPE_IDENTIFIER;
+}
+
+{object-identifier} {
+    yylval.stringValue = yytext;
+    return OBJECT_IDENTIFIER;
+}
+
+. {}
 
 %%
 
