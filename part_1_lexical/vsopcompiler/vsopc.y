@@ -95,19 +95,19 @@ int main(int argc, char** argv)
             std::cout << yylloc.first_line << "," << yylloc.first_column << ",";
             switch(token)
             {
-                case AND:       
+                case AND:
                     std::cout << "and";
                     break;
-                case BOOL:				
+                case BOOL:	
                     std::cout << "bool";								
                     break;
-                case CLASS:				
+                case CLASS:	
                     std::cout << "class";								
                     break;
-                case DO:			
+                case DO:
                     std::cout << "do";									
                     break;
-                case ELSE:	
+                case ELSE:
                     std::cout << "else";
                     break;
                 case EXTENDS:
@@ -206,7 +206,7 @@ int main(int argc, char** argv)
                 case ASSIGN:
                     std::cout << "assign";
                     break;
-                case INTEGER_LITERAL:	
+                case INTEGER_LITERAL:
                     std::cout << "integer-literal," << yylval.intValue;		
                     break;
 			    case STRING_LITERAL:
@@ -215,7 +215,7 @@ int main(int argc, char** argv)
 			    case TYPE_IDENTIFIER:
                     std::cout << "type-identifier," << yylval.stringValue;
                     break;
-			    case OBJECT_IDENTIFIER:	
+			    case OBJECT_IDENTIFIER:
                     std::cout << "object-identifier," << yylval.stringValue;
                     break;
                 default:

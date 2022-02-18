@@ -20,17 +20,17 @@
     extern int yylex();
 %}
 
-lowercase_letter    [a-z]
-uppercase_letter    [A-Z]
-letter              {lowercase_letter}|{uppercase_letter}
+lowercase-letter    [a-z]
+uppercase-letter    [A-Z]
+letter              {lowercase-letter}|{uppercase-letter}
 bin-digit           [0-1]
 digit               [0-9]
 hex-digit           {digit}|[a-f]|[A-F]
 whitespace          [ \t\n\f\r]+
-single_line_comment "//"[^\n]*
+single-line-comment "//"[^\n]*
 integer-litteral    {digit}+|"0x"{hex-digit}+
-type-identifier     {uppercase_letter}({letter}|{digit}|_)*
-object-identifier   lowercase_letter({letter}|{digit}|_)*
+type-identifier     {uppercase-letter}({letter}|{digit}|_)*
+object-identifier   lowercase-letter({letter}|{digit}|_)*
 escape-sequence     [btnr\"\\]|(x{hex-digit}{hex-digit})|(\n[ |\t])
 escaped-char        \\{escape-sequence}
 regular-char        [^{escaped-char}] 
@@ -75,7 +75,9 @@ regular-char        [^{escaped-char}]
 "<-"		{return ASSIGN;}
 "<"			{return LOWER;}
 
-{whitespace} {/* No action and no return */}
+{whitespace}          {/* No action and no return */}
+{single-line-comment} {/* No action and no return */}
+{type-identifier}     {yylval.stringValue = yytext; return TYPE_IDENTIFIER;}
 
 %%
 

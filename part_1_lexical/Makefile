@@ -23,5 +23,5 @@ clean:
 	rm -f $(DIR)*.o
 	rm -f $(DIR)*.tab.h
 	rm -f $(DIR)*.tab.c
-	rm $(PROGRAM)
+	rm -f $(PROGRAM)
 	clear
