@@ -7,7 +7,10 @@
   #include <cstdlib>
   #include <stack>
 
-  /* source : https://stackoverflow.com/questions/656703/how-does-flex-support-bison-location-exactly */
+  /* 
+     Update yylloc
+     source : https://stackoverflow.com/questions/656703/how-does-flex-support-bison-location-exactly 
+  */
   #define YY_USER_ACTION \
     yylloc.first_line = yylloc.last_line; \
     yylloc.first_column = yylloc.last_column; \
@@ -22,27 +25,30 @@
     }
 
     std::stack<int> comment_stack;
-    std::string string_buf;
     std::stack<YYLTYPE> location_stack;
+    std::string string_buf;
 
-    void start_comment()
-    {
+    /* Call on (* */
+    void start_comment(){
         comment_stack.push(0);
+        location_stack.push(yylloc);
     }
 
-    void end_comment()
-    {
+    /* Call on *) */
+    void end_comment(){
         comment_stack.pop();
+        yylloc = location_stack.top();
+        location_stack.pop();
     }
 
-    void start_string()
-    {
+    /* Call when a string is started with " */
+    void start_string(){
         string_buf = "";
         location_stack.push(yylloc);
     }
 
-    void end_string()
-    {
+    /* Call when a string is ended with " */
+    void end_string(){
         yylval.stringValue = &string_buf[0];
         yylloc = location_stack.top();
         location_stack.pop();
@@ -51,6 +57,7 @@
     extern int yylex();
 %}
 
+/* Base */
 lowercase-letter [a-z]
 uppercase-letter [A-Z]
 letter {lowercase-letter}|{uppercase-letter}
@@ -77,54 +84,54 @@ type-identifier {uppercase-letter}({letter}|{digit}|_)*
 object-identifier {lowercase-letter}({letter}|{digit}|_)*
 
 /* String literals */
+regular-char [^\"\\\0\n]
 escaped-sequence [btnr\"\\]|(x{hex-digit}{hex-digit})|(\n[ \t]*)
 escaped-char \\{escaped-sequence}
-regular-char [^\"\\\0\n]
 
 %x comment_multi
 %x string
 %%
 
-"and"       {return AND;}
-"bool"      {return BOOL;}
-"class"     {return CLASS;}
-"do"        {return DO;}
-"else"      {return ELSE;}
-"extends"   {return EXTENDS;}
-"false"     {return FALSE;}
-"if"        {return IF;}
-"in"        {return IN;}
-"int32"     {return INT32;}
-"isnull"    {return ISNULL;}  
-"let"       {return LET;}
-"new"       {return NEW;}
-"not"       {return NOT;}
-"self"      {return SELF;}
-"string"    {return STRING;}
-"then"      {return THEN;}
-"true"      {return TRUE;}
-"unit"      {return UNIT;}
-"while"     {return WHILE;}
-"{"		    {return LBRACE;}
-"}"			{return RBRACE;}
-"("			{return LPAR;}
-")"			{return RPAR;}
-":"			{return COLON;}
-";"			{return SEMICOLON;}
-","			{return COMMA;}
-"+"			{return PLUS;}
-"-"			{return MINUS;}
-"*"			{return TIMES;}
-"/"			{return DIV;}
-"^"		    {return POW;}
-"."			{return DOT;}
-"="			{return EQUAL;}
-"<="		{return LOWER-EQUAL;}
-"<-"		{return ASSIGN;}
-"<"			{return LOWER;}
+"and" {return AND;}
+"bool" {return BOOL;}
+"class" {return CLASS;}
+"do" {return DO;}
+"else" {return ELSE;}
+"extends" {return EXTENDS;}
+"false" {return FALSE;}
+"if" {return IF;}
+"in" {return IN;}
+"int32" {return INT32;}
+"isnull" {return ISNULL;}  
+"let" {return LET;}
+"new" {return NEW;}
+"not" {return NOT;}
+"self" {return SELF;}
+"string" {return STRING;}
+"then" {return THEN;}
+"true" {return TRUE;}
+"unit" {return UNIT;}
+"while" {return WHILE;}
+"{" {return LBRACE;}
+"}" {return RBRACE;}
+"(" {return LPAR;}
+")" {return RPAR;}
+":" {return COLON;}
+";" {return SEMICOLON;}
+"," {return COMMA;}
+"+" {return PLUS;}
+"-" {return MINUS;}
+"*" {return TIMES;}
+"/" {return DIV;}
+"^" {return POW;}
+"." {return DOT;}
+"=" {return EQUAL;}
+"<=" {return LOWER-EQUAL;}
+"<-" {return ASSIGN;}
+"<" {return LOWER;}
 
-{whitespace}          {/* No action and no return */}
-{comment1Line}        {/* No action and no return */}
+{whitespace} {/* No action and no return */}
+{comment1Line} {/* No action and no return */}
 
 {integer-literal-decimal} {
     yylval.intValue = atoi(yytext);
@@ -170,6 +177,11 @@ regular-char [^\"\\\0\n]
 
 <comment_multi>[^\0] {/* No action and no return */}
 
+<comment_multi><<EOF>> {
+    yylloc = location_stack.top();
+    return INVALID_EOF_COMMENT;
+}
+
 \" {
     start_string();
     BEGIN(string);
@@ -180,8 +192,6 @@ regular-char [^\"\\\0\n]
     BEGIN(INITIAL);
     return STRING_LITERAL;
 }
-
-<string>{regular-char}+ {string_buf += yytext;}
 
 <string>{escaped-char} {
     switch(yytext[1])
@@ -199,11 +209,19 @@ regular-char [^\"\\\0\n]
             string_buf += '\r';
             break;
         case 'x':
+            yytext[0] = '0';
             string_buf += std::strtol(&yytext[0], NULL, 16);
             break;
         default:
             break;
     }
+}
+
+<string>{regular-char}+ {string_buf += yytext;}
+
+<string><<EOF>> {
+    yylloc = location_stack.top();
+    return INVALID_EOF_STRING;
 }
 
 . {

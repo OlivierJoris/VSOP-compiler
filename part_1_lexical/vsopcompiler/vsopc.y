@@ -1,15 +1,12 @@
 %{
     #include <iostream>
-    #include <algorithm>
 
     extern FILE *yyin;
+    std::string fileName;
 
     int yylex();
 
-    void yyerror (char const *message)
-    {
-        std::cerr << message << std::endl;
-    }
+    void yyerror(const std::string message);
 %}
 
 %token AND "and"
@@ -51,9 +48,10 @@
 %token ASSIGN "<-"
 %token INVALID_HEX_NUMBER
 %token INVALID_CHAR
+%token INVALID_EOF_STRING
+%token INVALID_EOF_COMMENT
 
-%union
-{
+%union{
     int intValue;
     char *stringValue;
 }
@@ -71,49 +69,36 @@ exp:
 
 %%
 
-static std::string hexConvert(char character)
-{
-    std::string ret = "\\x00";
+void yyerror(const std::string message){
+    std::cerr << fileName << ":" << yylloc.first_line << ":";
+    std::cerr << yylloc.first_column << ": " << "lexical error: ";
+    std::cerr << message << std::endl;
+}
+
+/* Converts a character to its hexadecimal value */
+static std::string hexConvert(char character){
+    std::string ret = "\\xhh";
     std::string ref = "0123456789abcdef";
 
-    int i = 2;
-    while(character)
-    {
-        ret[i++] = ref[character % 16];
-        character /= 16;
-    }
-
-    int j = 2;
-    // reverse
-    while(j < i)
-    {
-        char tmp = ret[j];
-        ret[j] = ret[i];
-        ret[i] = tmp;
-        --i;
-        ++j;
-    }
+    ret[2] = ref[character / 16];
+    ret[3] = ref[character % 16];
 
     return ret;
 }
 
-static std::string encodeString(char *string)
-{
+/* Encode a string according to the statement */
+static std::string encodeString(char *string){
     std::string ret = "\"";
 
-    while(*string)
-    {
-        if(*string != '\"' && *string != '\\')
-        {
+    while(*string){
+        if(*string != '\"' && *string != '\\'){
             if(*string >= 32 && *string <= 126)
                 ret += *string;
             else 
                 ret += hexConvert(*string);
         }
-        else
-        {
-            if(*string == '\\')
-            {
+        else{
+            if(*string == '\\'){
                 ret += hexConvert(*string);
                 break;
             }
@@ -125,49 +110,45 @@ static std::string encodeString(char *string)
     return ret + "\"";
 }
 
-int main(int argc, char** argv)
-{
-    if(argc != 3)
-    {
+int main(int argc, char** argv){
+    if(argc != 3){
         std::cerr << "Program usage: ./vsopc -l <SOURCE-FILE>" << std::endl;
         return EXIT_FAILURE;
     }
 
     std::string flag = argv[1];
 
-    if(flag == "-l")
-    {
-        std::string fileName = argv[2];
-        std::string fileNameUppercase = argv[2];
-        std::transform(fileNameUppercase.begin(), fileNameUppercase.end(), fileNameUppercase.begin(), ::toupper);
+    if(flag == "-l"){
+        fileName = argv[2];
 
         yyin = fopen(argv[2], "r");
-        if(!yyin)
-        {
+        if(!yyin){
             std::cerr << "Can't open file " << fileName << std::endl;
             return EXIT_FAILURE;
         }
 
         int token;
 
-        while((token = yylex()) != 0)
-        {
-            if(token == INVALID_HEX_NUMBER) {
-                std::cerr << fileNameUppercase << ":" << yylloc.first_line << ":";
-                std::cerr << yylloc.first_column << ": " << "lexical error: invalid hex number ";
-                std::cerr << yylval.stringValue << std::endl;
+        while((token = yylex()) != 0){
+            if(token == INVALID_HEX_NUMBER){
+                yyerror(std::string("invalid hexadecimal number ") + std::string(yylval.stringValue));
                 return EXIT_FAILURE;
             }
-            if(token == INVALID_CHAR) {
-                std::cerr << fileNameUppercase << ":" << yylloc.first_line << ":";
-                std::cerr << yylloc.first_column << ": " << "lexical error: invalid character ";
-                std::cerr << yylval.stringValue << std::endl;
+            if(token == INVALID_CHAR){            
+                yyerror(std::string("invalid character ") + std::string(yylval.stringValue));
+                return EXIT_FAILURE;
+            }
+            if(token == INVALID_EOF_STRING){
+                yyerror(std::string("unexpected end-of-file without \" closing"));
+                return EXIT_FAILURE;
+            }
+            if(token == INVALID_EOF_COMMENT){
+                yyerror(std::string("unexpected end-of-file without *) closing"));
                 return EXIT_FAILURE;
             }
 
             std::cout << yylloc.first_line << "," << yylloc.first_column << ",";
-            switch(token)
-            {
+            switch(token){
                 case AND:
                     std::cout << "and";
                     break;
@@ -282,14 +263,14 @@ int main(int argc, char** argv)
                 case INTEGER_LITERAL:
                     std::cout << "integer-literal," << yylval.intValue;		
                     break;
-			    case STRING_LITERAL:
-                    std::cout << "string-literal," << encodeString(yylval.stringValue);
-                    break;
 			    case TYPE_IDENTIFIER:
                     std::cout << "type-identifier," << yylval.stringValue;
                     break;
 			    case OBJECT_IDENTIFIER:
                     std::cout << "object-identifier," << yylval.stringValue;
+                    break;
+                case STRING_LITERAL:
+                    std::cout << "string-literal," << encodeString(yylval.stringValue);
                     break;
                 default:
                     break;
