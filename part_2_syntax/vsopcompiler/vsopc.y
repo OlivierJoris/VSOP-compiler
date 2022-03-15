@@ -1,6 +1,6 @@
 %{
     #include <iostream>
-
+    
     extern FILE *yyin;
     std::string fileName;
 
@@ -9,9 +9,14 @@
     void yyerror(const std::string message);
 %}
 
+%code requires {
+    #include "AbstractSyntaxTree.hpp"
+}
+
 %union{
     int intValue;
     char *stringValue;
+    Expr *expression;
 }
 
 %token AND "and"
@@ -61,11 +66,13 @@
 %token <stringValue> OBJECT_IDENTIFIER
 %token <stringValue> STRING_LITERAL
 
+%nterm <expression> exp 
+
 %locations
 
 %%
 
-exp:
+exp:   
 
 %%
 
