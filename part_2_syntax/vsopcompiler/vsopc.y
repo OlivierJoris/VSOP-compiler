@@ -36,7 +36,7 @@
 %token TRUE "true"
 %token UNIT "unit"
 %token WHILE "while"
-%token <stringValue> LBRACE
+%token LBRACE
 %token RBRACE "}"
 %token LPAR "("
 %token RPAR ")"
@@ -69,7 +69,62 @@
 
 %%
 
-Program: CLASS TYPE_IDENTIFIER LBRACE TYPE_IDENTIFIER TYPE_IDENTIFIER{std::cout << "Detected " << $2 << " | " << $4 << " | " << $5 << std::endl;};
+Program: Class
+
+Class:  /* */
+        | Class CLASS TYPE_IDENTIFIER ClassBody {std::cout << "Class named " << $3 << std::endl;}
+        | Class CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER ClassBody {std::cout << "Extended class named " << $3 << std::endl;}
+        ;
+
+ClassBody: LBRACE ClassBodyFieldMethod RBRACE {std::cout << "Class body" << std::endl;};
+ClassBodyFieldMethod: /* */
+        | ClassBodyFieldMethod Field
+        | ClassBodyFieldMethod Method
+        ;
+
+Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {std::cout << "Class field " << $1 << std::endl;}
+        | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {std::cout << "Class field (with value) " << $1 << std::endl;}
+        ;
+
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{std::cout << "Method " << $1 << std::endl;};
+
+Type: TYPE_IDENTIFIER
+        | INT32
+        | BOOL
+        | STRING
+        | UNIT
+        ;
+
+Formals: /* */
+        | Formal
+        | Formals COMMA Formal
+        ;
+
+Formal: OBJECT_IDENTIFIER COLON Type {std::cout << "Formal " << $1 << std::endl;};
+
+Block: LBRACE Expr BlockExpr RBRACE {std::cout << "Found block" << std::endl;};
+BlockExpr: /* */
+        | SEMICOLON Expr BlockExpr
+        ;
+
+Expr: ;
+
+Args: /* */
+        | Expr
+        | Expr ArgsExprList
+        ;
+ArgsExprList: /* */
+        | COMMA Expr ArgsExprList
+        ;
+
+Literal: INTEGER_LITERAL
+        | STRING_LITERAL
+        | BooleanLiteral
+        ;
+
+BooleanLiteral: TRUE
+        | FALSE
+        ;
 
 %%
 
@@ -133,7 +188,7 @@ int main(int argc, char** argv){
         return EXIT_FAILURE;
     }
 
-    /* Start Lexer */
+    /* Start lexer */
     if(flag == "-l"){
         int token;
 
@@ -296,10 +351,10 @@ int main(int argc, char** argv){
     if(flag == "-p") {
         std::cout << "* ENTERING PARSING MODE *" << std::endl;
         if(yyparse()) {
-            std::cerr << "Error while parsing" << std::endl;
+            std::cerr << "! Error while parsing !" << std::endl;
             return EXIT_FAILURE;
         }else{
-            std::cout << "Parsing done" << std::endl;
+            std::cout << "* Parsing done *" << std::endl;
         }
     }
 
