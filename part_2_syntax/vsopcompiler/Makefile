@@ -9,7 +9,7 @@ $(PROGRAM): $(DIR)$(PROGRAM).yy.c $(DIR)$(PROGRAM).tab.c
 	$(CC) $(FLAGS) -o $@ $^
 
 $(DIR)$(PROGRAM).tab.c: $(DIR)$(PROGRAM).y
-	bison -o $@ -d $^
+	bison -o $@ -d $^ -Wcounterexample
 
 $(DIR)$(PROGRAM).yy.c: $(DIR)$(PROGRAM).l
 	flex --nounput -o $@ $^

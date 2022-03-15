@@ -256,4 +256,6 @@ regular-char [^\"\\\0\n]
     return INVALID_CHAR;
 }
 
+<<EOF>> {return 0;}
+
 %%

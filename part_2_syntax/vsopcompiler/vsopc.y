@@ -1,6 +1,8 @@
 %{
     #include <iostream>
 
+    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE>";
+
     extern FILE *yyin;
     std::string fileName;
 
@@ -63,9 +65,17 @@
 
 %locations
 
+%start Program
+
 %%
 
-exp:
+Program: Class;
+
+Class: /* */
+        | Class ClassLine;
+
+ClassLine: "class" TYPE_IDENTIFIER LBRACE TYPE_IDENTIFIER RBRACE {std::cout << "Detected class " << $2 << std::endl;}
+        ;
 
 %%
 
@@ -108,22 +118,29 @@ static std::string encodeString(char *string){
 }
 
 int main(int argc, char** argv){
+    /* Check arguments */
     if(argc != 3){
-        std::cerr << "Program usage: ./vsopc -l <SOURCE-FILE>" << std::endl;
+        std::cerr << PROGRAM_USAGE << std::endl;
         return EXIT_FAILURE;
     }
 
+    /* Check if expected option */
     std::string flag = argv[1];
+    if (flag != "-l" && flag != "-p") {
+        std::cerr << PROGRAM_USAGE << std::endl;
+        return EXIT_FAILURE;
+    }
 
+    /* Open vsop source file */
+    fileName = argv[2];
+    yyin = fopen(argv[2], "r");
+    if(!yyin){
+        std::cerr << "Can't open file " << fileName << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    /* Start Lexer */
     if(flag == "-l"){
-        fileName = argv[2];
-
-        yyin = fopen(argv[2], "r");
-        if(!yyin){
-            std::cerr << "Can't open file " << fileName << std::endl;
-            return EXIT_FAILURE;
-        }
-
         int token;
 
         while((token = yylex()) != 0){
@@ -279,9 +296,17 @@ int main(int argc, char** argv){
 
             std::cout << std::endl;
         }
-
-        fclose(yyin);
     }
 
+    /* Start parser */
+    if(flag == "-p") {
+        std::cout << "* ENTERING PARSING MODE *" << std::endl;
+        if(!yyparse()) {
+            std::cerr << "Error while parsing" << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
+
+    fclose(yyin);
     return EXIT_SUCCESS;
 }
