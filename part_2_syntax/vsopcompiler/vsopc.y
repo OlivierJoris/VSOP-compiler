@@ -36,7 +36,8 @@
 %token TRUE "true"
 %token UNIT "unit"
 %token WHILE "while"
-%token LBRACE
+
+%token LBRACE "{"
 %token RBRACE "}"
 %token LPAR "("
 %token RPAR ")"
@@ -51,8 +52,9 @@
 %token DOT "."
 %token EQUAL "="
 %token LOWER "<"
-%token LOWER-EQUAL "<="
+%token LOWER_EQUAL "<="
 %token ASSIGN "<-"
+
 %token INVALID_HEX_NUMBER
 %token INVALID_CHAR
 %token INVALID_EOF_STRING
@@ -62,6 +64,16 @@
 %token <stringValue> TYPE_IDENTIFIER
 %token <stringValue> OBJECT_IDENTIFIER
 %token <stringValue> STRING_LITERAL
+
+%right ASSIGN
+%left AND
+%right NOT
+%nonassoc LOWER LOWER_EQUAL EQUAL
+%left PLUS MINUS
+%left TIMES DIV
+%right UNARYMINUS ISNULL
+%right POW
+%left DOT
 
 %locations
 
@@ -321,7 +333,7 @@ int main(int argc, char** argv){
                 case LOWER:
                     std::cout << "lower";
                     break;
-                case LOWER-EQUAL:
+                case LOWER_EQUAL:
                     std::cout << "lower-equal";
                     break;
                 case ASSIGN:

@@ -132,7 +132,7 @@ regular-char [^\"\\\0\n]
 "^" {return POW;}
 "." {return DOT;}
 "=" {return EQUAL;}
-"<=" {return LOWER-EQUAL;}
+"<=" {return LOWER_EQUAL;}
 "<-" {return ASSIGN;}
 "<" {return LOWER;}
 
