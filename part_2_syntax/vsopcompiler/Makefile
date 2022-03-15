@@ -12,7 +12,7 @@ $(DIR)AbstractSyntaxTree.o: $(DIR)AbstractSyntaxTree.cpp
 	$(CC) $(FLAGS) -c $^ -o $@
 
 $(DIR)$(PROGRAM).tab.c: $(DIR)$(PROGRAM).y
-	bison -o $@ -d $^
+	bison -o $@ -d $^ -Wcounterexample
 
 $(DIR)$(PROGRAM).yy.c: $(DIR)$(PROGRAM).l
 	flex --nounput -o $@ $^

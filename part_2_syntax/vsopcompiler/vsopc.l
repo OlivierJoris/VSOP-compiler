@@ -2,6 +2,7 @@
 
 %{
   #include "vsopc.tab.h"
+  #include <string.h>
   #include <iostream>
   #include <string>
   #include <cstdlib>
@@ -131,7 +132,7 @@ regular-char [^\"\\\0\n]
 "^" {return POW;}
 "." {return DOT;}
 "=" {return EQUAL;}
-"<=" {return LOWER-EQUAL;}
+"<=" {return LOWER_EQUAL;}
 "<-" {return ASSIGN;}
 "<" {return LOWER;}
 
@@ -151,22 +152,26 @@ regular-char [^\"\\\0\n]
 }
 
 {error-hex-integer-literal} /* invalid hex integer literal */ {
-    yylval.stringValue = yytext;
+    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    strncpy(yylval.stringValue, yytext, yyleng);
     return INVALID_HEX_NUMBER;
 }
 
 {error-integer-literal} {
-    yylval.stringValue = yytext;
+    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    strncpy(yylval.stringValue, yytext, yyleng);
     return INVALID_INTEGER_LITERAL;
 }
 
 {type-identifier} {
-    yylval.stringValue = yytext;
+    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    strncpy(yylval.stringValue, yytext, yyleng);
     return TYPE_IDENTIFIER;
 }
 
 {object-identifier} {
-    yylval.stringValue = yytext;
+    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    strncpy(yylval.stringValue, yytext, yyleng);
     return OBJECT_IDENTIFIER;
 }
 
@@ -255,5 +260,7 @@ regular-char [^\"\\\0\n]
     yylval.stringValue = yytext;
     return INVALID_CHAR;
 }
+
+<<EOF>> {return 0;}
 
 %%

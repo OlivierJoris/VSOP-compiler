@@ -1,6 +1,8 @@
 %{
     #include <iostream>
-    
+
+    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE>";
+
     extern FILE *yyin;
     std::string fileName;
 
@@ -39,6 +41,7 @@
 %token TRUE "true"
 %token UNIT "unit"
 %token WHILE "while"
+
 %token LBRACE "{"
 %token RBRACE "}"
 %token LPAR "("
@@ -54,8 +57,9 @@
 %token DOT "."
 %token EQUAL "="
 %token LOWER "<"
-%token LOWER-EQUAL "<="
+%token LOWER_EQUAL "<="
 %token ASSIGN "<-"
+
 %token INVALID_HEX_NUMBER
 %token INVALID_CHAR
 %token INVALID_EOF_STRING
@@ -66,13 +70,100 @@
 %token <stringValue> OBJECT_IDENTIFIER
 %token <stringValue> STRING_LITERAL
 
-%nterm <expression> exp 
+%right ASSIGN
+%left AND
+%right NOT
+%nonassoc LOWER LOWER_EQUAL EQUAL
+%left PLUS MINUS
+%left TIMES DIV
+%right UNARYMINUS ISNULL
+%right POW
+%left DOT
 
 %locations
 
+%start Program
+
 %%
 
-exp:   
+Program: Class
+
+Class:  /* */
+        | Class CLASS TYPE_IDENTIFIER ClassBody {std::cout << "Class named " << $3 << std::endl;}
+        | Class CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER ClassBody {std::cout << "Extended class named " << $3 << std::endl;}
+        ;
+
+ClassBody: LBRACE ClassBodyFieldMethod RBRACE {std::cout << "Class body" << std::endl;};
+ClassBodyFieldMethod: /* */
+        | ClassBodyFieldMethod Field
+        | ClassBodyFieldMethod Method
+        ;
+
+Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {std::cout << "Class field " << $1 << std::endl;}
+        | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {std::cout << "Class field (with value) " << $1 << std::endl;}
+        ;
+
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{std::cout << "Method " << $1 << std::endl;};
+
+Type: TYPE_IDENTIFIER
+        | INT32
+        | BOOL
+        | STRING
+        | UNIT
+        ;
+
+Formals: /* */
+        | Formal
+        | Formals COMMA Formal
+        ;
+
+Formal: OBJECT_IDENTIFIER COLON Type {std::cout << "Formal " << $1 << std::endl;};
+
+Block: LBRACE Expr BlockExpr RBRACE {std::cout << "Found block" << std::endl;};
+BlockExpr: /* */
+        | SEMICOLON Expr BlockExpr
+        ;
+
+Expr: WHILE Expr DO Expr
+        | OBJECT_IDENTIFIER ASSIGN Expr
+        | NOT Expr
+        | Expr AND Expr
+        | Expr LOWER_EQUAL Expr
+        | Expr LOWER Expr
+        | Expr EQUAL Expr
+        | Expr MINUS Expr
+        | Expr PLUS Expr
+        | Expr DIV Expr
+        | Expr TIMES Expr
+        | Expr POW Expr
+        | MINUS Expr %prec UNARYMINUS
+        | ISNULL Expr
+        | OBJECT_IDENTIFIER LPAR Args RPAR
+        | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR
+        | NEW TYPE_IDENTIFIER
+        | OBJECT_IDENTIFIER
+        | SELF
+        | Literal
+        | LPAR RPAR
+        | LPAR Expr RPAR
+        | Block
+        ;
+
+Args: /* */
+        | Expr ArgsExprList
+        ;
+ArgsExprList: /* */
+        | COMMA Expr ArgsExprList
+        ;
+
+Literal: INTEGER_LITERAL
+        | STRING_LITERAL
+        | BooleanLiteral
+        ;
+
+BooleanLiteral: TRUE
+        | FALSE
+        ;
 
 %%
 
@@ -115,22 +206,29 @@ static std::string encodeString(char *string){
 }
 
 int main(int argc, char** argv){
+    /* Check arguments */
     if(argc != 3){
-        std::cerr << "Program usage: ./vsopc -l <SOURCE-FILE>" << std::endl;
+        std::cerr << PROGRAM_USAGE << std::endl;
         return EXIT_FAILURE;
     }
 
+    /* Check if expected option */
     std::string flag = argv[1];
+    if (flag != "-l" && flag != "-p") {
+        std::cerr << PROGRAM_USAGE << std::endl;
+        return EXIT_FAILURE;
+    }
 
+    /* Open vsop source file */
+    fileName = argv[2];
+    yyin = fopen(argv[2], "r");
+    if(!yyin){
+        std::cerr << "Can't open file " << fileName << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    /* Start lexer */
     if(flag == "-l"){
-        fileName = argv[2];
-
-        yyin = fopen(argv[2], "r");
-        if(!yyin){
-            std::cerr << "Can't open file " << fileName << std::endl;
-            return EXIT_FAILURE;
-        }
-
         int token;
 
         while((token = yylex()) != 0){
@@ -262,7 +360,7 @@ int main(int argc, char** argv){
                 case LOWER:
                     std::cout << "lower";
                     break;
-                case LOWER-EQUAL:
+                case LOWER_EQUAL:
                     std::cout << "lower-equal";
                     break;
                 case ASSIGN:
@@ -286,9 +384,19 @@ int main(int argc, char** argv){
 
             std::cout << std::endl;
         }
-
-        fclose(yyin);
     }
 
+    /* Start parser */
+    if(flag == "-p") {
+        std::cout << "* ENTERING PARSING MODE *" << std::endl;
+        if(yyparse()) {
+            std::cerr << "! Error while parsing !" << std::endl;
+            return EXIT_FAILURE;
+        }else{
+            std::cout << "* Parsing done *" << std::endl;
+        }
+    }
+
+    fclose(yyin);
     return EXIT_SUCCESS;
 }

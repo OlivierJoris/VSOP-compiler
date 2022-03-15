@@ -1,0 +1,6 @@
+IfThenElse: IF Expr THEN Expr {std::cout << "IF THEN" << std::endl;}
+        | IF Expr THEN Expr ELSE Expr {std::cout << "IF THEN ELSE" << std::endl;}
+        ;
+Let: LET OBJECT_IDENTIFIER COLON Type IN Expr {std::cout << "Let without assign" << std::end;}
+        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr {std::cout << "Let with assign" << std::end;}
+        ;
