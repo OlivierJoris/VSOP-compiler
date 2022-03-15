@@ -119,10 +119,32 @@ BlockExpr: /* */
         | SEMICOLON Expr BlockExpr
         ;
 
-Expr: ;
+Expr: WHILE Expr DO Expr
+        | OBJECT_IDENTIFIER ASSIGN Expr
+        | NOT Expr
+        | Expr AND Expr
+        | Expr LOWER_EQUAL Expr
+        | Expr LOWER Expr
+        | Expr EQUAL Expr
+        | Expr MINUS Expr
+        | Expr PLUS Expr
+        | Expr DIV Expr
+        | Expr TIMES Expr
+        | Expr POW Expr
+        | MINUS Expr %prec UNARYMINUS
+        | ISNULL Expr
+        | OBJECT_IDENTIFIER LPAR Args RPAR
+        | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR
+        | NEW TYPE_IDENTIFIER
+        | OBJECT_IDENTIFIER
+        | SELF
+        | Literal
+        | LPAR RPAR
+        | LPAR Expr RPAR
+        | Block
+        ;
 
 Args: /* */
-        | Expr
         | Expr ArgsExprList
         ;
 ArgsExprList: /* */
