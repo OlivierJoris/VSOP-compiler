@@ -36,7 +36,7 @@
 %token TRUE "true"
 %token UNIT "unit"
 %token WHILE "while"
-%token LBRACE "{"
+%token <stringValue> LBRACE
 %token RBRACE "}"
 %token LPAR "("
 %token RPAR ")"
@@ -69,13 +69,7 @@
 
 %%
 
-Program: Class;
-
-Class: /* */
-        | Class ClassLine;
-
-ClassLine: "class" TYPE_IDENTIFIER LBRACE TYPE_IDENTIFIER RBRACE {std::cout << "Detected class " << $2 << std::endl;}
-        ;
+Program: CLASS TYPE_IDENTIFIER LBRACE TYPE_IDENTIFIER TYPE_IDENTIFIER{std::cout << "Detected " << $2 << " | " << $4 << " | " << $5 << std::endl;};
 
 %%
 
@@ -301,9 +295,11 @@ int main(int argc, char** argv){
     /* Start parser */
     if(flag == "-p") {
         std::cout << "* ENTERING PARSING MODE *" << std::endl;
-        if(!yyparse()) {
+        if(yyparse()) {
             std::cerr << "Error while parsing" << std::endl;
             return EXIT_FAILURE;
+        }else{
+            std::cout << "Parsing done" << std::endl;
         }
     }
 
