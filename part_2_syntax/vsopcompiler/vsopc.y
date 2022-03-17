@@ -1,5 +1,6 @@
 %{
     #include <iostream>
+    #define YYERROR_VERBOSE 1
 
     const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE>";
 
@@ -9,16 +10,16 @@
     int yylex();
 
     void yyerror(const std::string message);
+    void lexicalError(const std::string& message);
+    void syntaxError(const std::string& message);
 %}
 
-%code requires {
-    #include "AbstractSyntaxTree.hpp"
-}
+%define parse.lac full
+%define parse.error detailed
 
 %union{
     int intValue;
     char *stringValue;
-    Expr *expression;
 }
 
 %token AND "and"
@@ -79,6 +80,10 @@
 %right UNARYMINUS ISNULL
 %right POW
 %left DOT
+%right EMBEDDED
+
+%precedence IF THEN WHILE LET DO IN
+%precedence ELSE
 
 %locations
 
@@ -124,7 +129,9 @@ BlockExpr: /* */
         | SEMICOLON Expr BlockExpr
         ;
 
-Expr: WHILE Expr DO Expr
+Expr:     If
+        | While
+        | Let
         | OBJECT_IDENTIFIER ASSIGN Expr
         | NOT Expr
         | Expr AND Expr
@@ -149,6 +156,16 @@ Expr: WHILE Expr DO Expr
         | Block
         ;
 
+If: IF Expr THEN Expr
+        | IF Expr THEN Expr ELSE Expr 
+        ;
+
+While: WHILE Expr DO Expr;
+
+Let: LET OBJECT_IDENTIFIER COLON Type IN Expr %prec EMBEDDED {std::cout << "Let without assign" << std::endl;}
+        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr %prec EMBEDDED {std::cout << "Let with assign" << std::endl;}
+        ;
+
 Args: /* */
         | Expr ArgsExprList
         ;
@@ -169,7 +186,19 @@ BooleanLiteral: TRUE
 
 void yyerror(const std::string message){
     std::cerr << fileName << ":" << yylloc.first_line << ":";
+    std::cerr << yylloc.first_column << ": ";
+    std::cerr << message << std::endl;
+}
+
+void lexicalError(const std::string& message){
+     std::cerr << fileName << ":" << yylloc.first_line << ":";
     std::cerr << yylloc.first_column << ": " << "lexical error: ";
+    std::cerr << message << std::endl;
+}
+
+void syntaxError(const std::string& message){
+    std::cerr << fileName << ":" << yylloc.first_line << ":";
+    std::cerr << yylloc.first_column << ": " << "syntax error: ";
     std::cerr << message << std::endl;
 }
 
@@ -235,19 +264,19 @@ int main(int argc, char** argv){
             switch(token)
             {
                 case INVALID_HEX_NUMBER:
-                    yyerror(std::string("invalid hexadecimal number ") + std::string(yylval.stringValue));
+                    lexicalError(std::string("invalid hexadecimal number ") + std::string(yylval.stringValue));
                     return EXIT_FAILURE;
                 case INVALID_CHAR:
-                    yyerror(std::string("invalid character ") + std::string(yylval.stringValue));
+                    lexicalError(std::string("invalid character ") + std::string(yylval.stringValue));
                     return EXIT_FAILURE;
                 case INVALID_EOF_STRING:
-                    yyerror(std::string("unexpected end-of-file without \" closing"));
+                    lexicalError(std::string("unexpected end-of-file without \" closing"));
                     return EXIT_FAILURE;
                 case INVALID_EOF_COMMENT:
-                    yyerror(std::string("unexpected end-of-file without *) closing"));
+                    lexicalError(std::string("unexpected end-of-file without *) closing"));
                     return EXIT_FAILURE;
                 case INVALID_INTEGER_LITERAL:
-                    yyerror(std::string("invalid literal value ") + std::string(yylval.stringValue));
+                    lexicalError(std::string("invalid literal value ") + std::string(yylval.stringValue));
                     return EXIT_FAILURE;
                 default:
                     break;
@@ -390,7 +419,6 @@ int main(int argc, char** argv){
     if(flag == "-p") {
         std::cout << "* ENTERING PARSING MODE *" << std::endl;
         if(yyparse()) {
-            std::cerr << "! Error while parsing !" << std::endl;
             return EXIT_FAILURE;
         }else{
             std::cout << "* Parsing done *" << std::endl;
