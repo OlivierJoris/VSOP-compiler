@@ -1,11 +1,16 @@
 %{
     #include <iostream>
+    #include <vector>
+
+    #include "AbstractSyntaxTree.hpp"
+
     #define YYERROR_VERBOSE 1
 
     const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE>";
 
     extern FILE *yyin;
     std::string fileName;
+    Program *abstractSyntaxTree;
 
     int yylex();
 
@@ -14,12 +19,24 @@
     void syntaxError(const std::string& message);
 %}
 
+%code requires{
+    #include "AbstractSyntaxTree.hpp"
+}
+
 %define parse.lac full
 %define parse.error detailed
 
 %union{
     int intValue;
     char *stringValue;
+    Expr *expression;
+    Formal *formal;
+    Block *block;
+    Class *cls;
+    ClassBody *classBody;
+    Field *field;
+    Method *method;
+    Program *program;
 }
 
 %token AND "and"
@@ -85,30 +102,48 @@
 %precedence IF THEN WHILE LET DO IN
 %precedence ELSE
 
+%nterm <stringValue> Type
+%nterm <expression> Expr Let While If 
+%nterm <program> Program
+%nterm <cls> Class 
+%nterm <classBody> ClassBody ClassBodyFieldMethod
+%nterm <field> Field
+%nterm <method> Method
+%nterm <block> Block
+
 %locations
 
 %start Program
 
 %%
 
-Program: Class
+Program: Class {std::vector<Class*> classes = std::vector<Class*>();
+                classes.push_back($1);
+                $$ = new Program(classes);
+                abstractSyntaxTree = $$;}
 
-Class:  /* */
-        | Class CLASS TYPE_IDENTIFIER ClassBody {std::cout << "Class named " << $3 << std::endl;}
-        | Class CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER ClassBody {std::cout << "Extended class named " << $3 << std::endl;}
+Class:  /* */ {}
+        | Class CLASS TYPE_IDENTIFIER ClassBody {std::vector<Field*> fields = $4->getFields();
+                                                 std::vector<Method*> methods = $4->getMethods();
+                                                 $$ = new Class($3, "Object", fields, methods);}
+        | Class CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER ClassBody {std::vector<Field*> fields = $6->getFields();
+                                                                         std::vector<Method*> methods = $6->getMethods();
+                                                                         $$ = new Class($3, $5, fields, methods);}
         ;
 
-ClassBody: LBRACE ClassBodyFieldMethod RBRACE {std::cout << "Class body" << std::endl;};
-ClassBodyFieldMethod: /* */
-        | ClassBodyFieldMethod Field
-        | ClassBodyFieldMethod Method
+ClassBody: LBRACE ClassBodyFieldMethod RBRACE {$$ = new ClassBody();};
+ClassBodyFieldMethod: /* */ {}
+        | ClassBodyFieldMethod Field {$1->addField($2);
+                                      $$ = $1;}
+        | ClassBodyFieldMethod Method {$1->addMethod($2);
+                                       $$ = $1;}
         ;
 
-Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {std::cout << "Class field " << $1 << std::endl;}
-        | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {std::cout << "Class field (with value) " << $1 << std::endl;}
+Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL);}
+        | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {$$ = new Field($1, $3, $5);}
         ;
 
-Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{std::cout << "Method " << $1 << std::endl;};
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, $7);};
 
 Type: TYPE_IDENTIFIER
         | INT32
@@ -131,20 +166,20 @@ BlockExpr: /* */
 
 Expr:     If
         | While
-        | Let
-        | OBJECT_IDENTIFIER ASSIGN Expr
-        | NOT Expr
-        | Expr AND Expr
-        | Expr LOWER_EQUAL Expr
-        | Expr LOWER Expr
-        | Expr EQUAL Expr
-        | Expr MINUS Expr
-        | Expr PLUS Expr
-        | Expr DIV Expr
-        | Expr TIMES Expr
-        | Expr POW Expr
-        | MINUS Expr %prec UNARYMINUS
-        | ISNULL Expr
+        | Let 
+        | OBJECT_IDENTIFIER ASSIGN Expr {$$ = new Assign($1, $3);}
+        | NOT Expr {$$ = new Not($2);}
+        | Expr AND Expr {$$ = new And($1, $3);}
+        | Expr LOWER_EQUAL Expr {$$ = new LowerEqual($1, $3);}
+        | Expr LOWER Expr {$$ = new Lower($1, $3);}
+        | Expr EQUAL Expr {$$ = new Equal($1, $3);}
+        | Expr MINUS Expr {$$ = new Minus($1, $3);}
+        | Expr PLUS Expr {$$ = new Plus($1, $3);}
+        | Expr DIV Expr {$$ = new Div($1, $3);}
+        | Expr TIMES Expr {$$ = new Times($1, $3);}
+        | Expr POW Expr {$$ = new Pow($1, $3);}
+        | MINUS Expr %prec UNARYMINUS {$$ = new UnaryMinus($2);}
+        | ISNULL Expr {$$ = new IsNull($2);}
         | OBJECT_IDENTIFIER LPAR Args RPAR
         | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR
         | NEW TYPE_IDENTIFIER
@@ -156,14 +191,14 @@ Expr:     If
         | Block
         ;
 
-If: IF Expr THEN Expr
-        | IF Expr THEN Expr ELSE Expr 
+If: IF Expr THEN Expr {$$ = new If($2, $4, NULL);}
+        | IF Expr THEN Expr ELSE Expr {$$ = new If($2, $4, $6);}
         ;
 
-While: WHILE Expr DO Expr;
+While: WHILE Expr DO Expr {$$ = new While($2, $4);};
 
-Let: LET OBJECT_IDENTIFIER COLON Type IN Expr %prec EMBEDDED {std::cout << "Let without assign" << std::endl;}
-        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr %prec EMBEDDED {std::cout << "Let with assign" << std::endl;}
+Let: LET OBJECT_IDENTIFIER COLON Type IN Expr %prec EMBEDDED {$$ = new Let($2, $4, $6, NULL);}
+        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr %prec EMBEDDED {$$ = new Let($2, $4, $8, $6);}
         ;
 
 Args: /* */
@@ -421,6 +456,7 @@ int main(int argc, char** argv){
         if(yyparse()) {
             return EXIT_FAILURE;
         }else{
+            std::cout << abstractSyntaxTree->eval() << std::endl;
             std::cout << "* Parsing done *" << std::endl;
         }
     }
