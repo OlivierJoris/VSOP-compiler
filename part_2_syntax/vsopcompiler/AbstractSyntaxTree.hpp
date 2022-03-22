@@ -43,16 +43,27 @@ class Formal : public Expr
         std::string eval() const override;
 };
 
+class Formals : public Expr
+{
+    private:
+        std::vector<Formal*> formals;
+    
+    public:
+        Formals();
+        void addFormal(Formal *formal){formals.push_back(formal);};
+        std::string eval() const override;
+};
+
 class Method : public Expr 
 {
     private:
         std::string name;
-        std::vector<Formal*> formals;
+        Formals* formals;
         std::string retType;
         Block* block;
 
     public:
-        Method(const std::string name, std::vector<Formal*>& formals, const std::string retType, Block *block);
+        Method(const std::string name, Formals *formals, const std::string retType, Block *block);
         std::string eval() const override;
 };
 
@@ -67,13 +78,15 @@ class Class : public Expr
     public:
         Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods);
         std::string eval() const override;
+        int getFields() {return fields.size();}
 };
 
-class ClassBody 
+class ClassBody
 {
     private:
         std::vector<Field*> fields;
         std::vector<Method*> methods;
+
     public:
         ClassBody();
         std::vector<Field*> getFields() {return fields;}
@@ -88,7 +101,8 @@ class Program : public Expr
         std::vector<Class*> classes;
 
     public:
-        Program(std::vector<Class*>& classes);
+        Program();
+        void addClass(Class* cls) {classes.push_back(cls);}
         std::string eval() const override;
 };
 
@@ -253,6 +267,61 @@ class New : public Expr
     
     public:
         New(const std::string typeName);
+        std::string eval() const override;
+};
+
+class IntegerLiteral : public Expr 
+{
+    private:
+        int intValue;
+
+    public:
+        IntegerLiteral(const int intValue);
+        std::string eval() const override;
+};
+
+class StringLiteral : public Expr
+{
+    private:
+        std::string stringValue;
+    
+    public:
+        StringLiteral(const std::string stringValue);
+        std::string eval() const override;
+
+};
+
+class BooleanLiteral : public Expr
+{
+    private:
+        bool booleanValue;
+    
+    public:
+        BooleanLiteral(const bool booleanValue);
+        std::string eval() const override;
+};
+
+class ObjectIdentifier : public Expr
+{
+    private:
+        std::string identifier;
+    
+    public:
+        ObjectIdentifier(const std::string identifier);
+        std::string eval() const override;
+};
+
+class Self : public Expr
+{
+    public:
+        Self();
+        std::string eval() const override;
+};
+
+class Unit : public Expr
+{
+    public:
+        Unit();
         std::string eval() const override;
 };
 

@@ -1,3 +1,3 @@
 class List {
-    head : int32 <- 1;
+    head : int32 <- true;
 }

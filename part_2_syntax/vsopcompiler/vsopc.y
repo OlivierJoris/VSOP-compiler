@@ -1,6 +1,7 @@
 %{
     #include <iostream>
     #include <vector>
+    #include <cstring>
 
     #include "AbstractSyntaxTree.hpp"
 
@@ -23,6 +24,7 @@
     #include "AbstractSyntaxTree.hpp"
 }
 
+%define parse.trace
 %define parse.lac full
 %define parse.error detailed
 
@@ -31,6 +33,7 @@
     char *stringValue;
     Expr *expression;
     Formal *formal;
+    Formals *formals;
     Block *block;
     Class *cls;
     ClassBody *classBody;
@@ -84,7 +87,7 @@
 %token INVALID_EOF_COMMENT
 %token INVALID_INTEGER_LITERAL
 %token <intValue> INTEGER_LITERAL
-%token <stringValue> TYPE_IDENTIFIER 
+%token <stringValue> TYPE_IDENTIFIER "type-identifier"
 %token <stringValue> OBJECT_IDENTIFIER
 %token <stringValue> STRING_LITERAL
 
@@ -103,7 +106,7 @@
 %precedence ELSE
 
 %nterm <stringValue> Type 
-%nterm <expression> Expr Let While If 
+%nterm <expression> Expr Let While If Literal
 %nterm <program> Program
 %nterm <cls> Class 
 %nterm <classBody> ClassBody ClassBodyFieldMethod
@@ -111,6 +114,7 @@
 %nterm <method> Method
 %nterm <block> Block
 %nterm <formals> Formals
+%nterm <formal> Formal
 
 %locations
 
@@ -118,9 +122,8 @@
 
 %%
 
-Program: Class {std::vector<Class*> classes = std::vector<Class*>();
-                classes.push_back($1);
-                abstractSyntaxTree = new Program(classes);}
+Program: Class {abstractSyntaxTree->addClass($1);
+                $$ = abstractSyntaxTree;}
 
 Class:  /* */ {}
         | Class CLASS TYPE_IDENTIFIER ClassBody {std::vector<Field*> fields = $4->getFields();
@@ -131,34 +134,34 @@ Class:  /* */ {}
                                                                          $$ = new Class($3, $5, fields, methods);}
         ;
 
-ClassBody: LBRACE ClassBodyFieldMethod RBRACE {$$ = new ClassBody();};
-ClassBodyFieldMethod: /* */ {}
-        | ClassBodyFieldMethod Field {$$ = $1;}
-        | ClassBodyFieldMethod Method {$$ = $1;}
+ClassBody: LBRACE ClassBodyFieldMethod RBRACE {$$ = $2;};
+ClassBodyFieldMethod: /* */ {$$ = new ClassBody();}
+        | ClassBodyFieldMethod Field {$1->addField($2);}
+        | ClassBodyFieldMethod Method {$1->addMethod($2);}
         ;
 
-Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {std::cout << $3 << std::endl;
-                                               $$ = new Field($1, $3, NULL);}
+Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL);}
         | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {$$ = new Field($1, $3, $5);}
         ;
 
-Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{};
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, $7);};
 
-Type: TYPE_IDENTIFIER
-        | INT32
-        | BOOL
-        | STRING
-        | UNIT
+Type: TYPE_IDENTIFIER {$$ = $1;}
+        | INT32       {$$ = (char *) "int32";}
+        | BOOL        {$$ = (char *) "bool";} 
+        | STRING      {$$ = (char *) "string";}
+        | UNIT        {$$ = (char *) "unit";}
         ;
 
-Formals: /* */ {}
-        | Formal
-        | Formals COMMA Formal
+Formals: /* */ {$$ = new Formals();}
+        | Formal 
+        | Formals COMMA Formal {$1->addFormal($3);
+                                $$ = $1;}
         ;
 
-Formal: OBJECT_IDENTIFIER COLON Type {std::cout << "Formal " << $1 << std::endl;};
+Formal: OBJECT_IDENTIFIER COLON Type {$$ = new Formal($1, $3);};
 
-Block: LBRACE Expr BlockExpr RBRACE {std::cout << "Found block" << std::endl;};
+Block: LBRACE Expr BlockExpr RBRACE {};
 BlockExpr: /* */
         | SEMICOLON Expr BlockExpr
         ;
@@ -182,10 +185,10 @@ Expr:     If
         | OBJECT_IDENTIFIER LPAR Args RPAR
         | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR
         | NEW TYPE_IDENTIFIER
-        | OBJECT_IDENTIFIER
-        | SELF
+        | OBJECT_IDENTIFIER {$$ = new ObjectIdentifier($1);}
+        | SELF {$$ = new Self();}
         | Literal
-        | LPAR RPAR
+        | LPAR RPAR {$$ = new Unit();}
         | LPAR Expr RPAR
         | Block
         ;
@@ -207,13 +210,10 @@ ArgsExprList: /* */
         | COMMA Expr ArgsExprList
         ;
 
-Literal: INTEGER_LITERAL
-        | STRING_LITERAL
-        | BooleanLiteral
-        ;
-
-BooleanLiteral: TRUE
-        | FALSE
+Literal: INTEGER_LITERAL {$$ = new IntegerLiteral($1);}
+        | STRING_LITERAL {$$ = new StringLiteral($1);}
+        | TRUE {$$ = new BooleanLiteral(true);}
+        | FALSE {$$ = new BooleanLiteral(false);} 
         ;
 
 %%
@@ -452,6 +452,7 @@ int main(int argc, char** argv){
     /* Start parser */
     if(flag == "-p") {
         std::cout << "* ENTERING PARSING MODE *" << std::endl;
+        abstractSyntaxTree = new Program();
         if(yyparse()) {
             return EXIT_FAILURE;
         }else{

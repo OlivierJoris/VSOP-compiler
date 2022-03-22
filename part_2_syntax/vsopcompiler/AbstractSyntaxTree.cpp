@@ -1,6 +1,7 @@
 #include "AbstractSyntaxTree.hpp"
+#include <iostream>
 
-Program::Program(std::vector<Class*>& classes): classes(classes){}
+Program::Program(){}
 
 std::string Program::eval() const 
 {
@@ -18,11 +19,11 @@ Class::Class(const std::string name, const std::string parent, std::vector<Field
 std::string Class::eval() const
 {
     std::string fields = "";    
-    
-    if(fields.size() != 0)
+
+    if(Class::fields.size() != 0)
     {
         auto firstField = Class::fields.begin();
-        std::string fields = (*firstField)->eval();
+        fields = (*firstField)->eval();
 
         for(auto it = Class::fields.begin() + 1; it != Class::fields.end(); ++it)
             fields += ", " + (*it)->eval();
@@ -30,10 +31,10 @@ std::string Class::eval() const
 
     std::string methods = "";
 
-    if(methods.size() != 0)
+    if(Class::methods.size() != 0)
     {
         auto firstMethod = Class::methods.begin();
-        std::string methods = (*firstMethod)->eval();
+        methods = (*firstMethod)->eval();
 
         for(auto it = Class::methods.begin() + 1; it != Class::methods.end(); ++it)
             methods += ", " + (*it)->eval();
@@ -56,17 +57,11 @@ std::string Field::eval() const
     return "Field(" + Field::name + ", " + Field::type + initExpr + ")";
 }
 
-Method::Method(const std::string name, std::vector<Formal*>& formals, const std::string retType, Block* block): name(name), formals(formals), retType(retType), block(block){}
+Method::Method(const std::string name, Formals* formals, const std::string retType, Block* block): name(name), formals(formals), retType(retType), block(block){}
 
 std::string Method::eval() const 
 {
-    auto firstFormal = Method::formals.begin();
-    std::string formals = (*firstFormal)->eval();
-
-    for(auto it = Method::formals.begin() + 1; it != Method::formals.end(); ++it)
-        formals += ", " + (*it)->eval();
-
-    return "Method(" + Method::name + ", " + "[" + formals + "]" + ", " + Method::retType + ", " + block->eval() + ")";
+    return "Method(" + Method::name + ", " + Method::formals->eval() + ", " + Method::retType + ", " + block->eval() + ")";
 }
 
 Formal::Formal(const std::string name, const std::string type): name(name), type(type){}
@@ -74,6 +69,19 @@ Formal::Formal(const std::string name, const std::string type): name(name), type
 std::string Formal::eval() const
 {
     return Formal::name + ":" + Formal::type;
+}
+
+Formals::Formals(){}
+
+std::string Formals::eval() const
+{
+    auto firstFormal = Formals::formals.begin();
+    std::string formals = (*firstFormal)->eval();
+
+    for(auto it = Formals::formals.begin() + 1; it != Formals::formals.end(); ++it)
+        formals += ", " + (*it)->eval();
+    
+    return "[" + formals + "]";
 }
 
 Block::Block(std::vector<Expr*>& exprList): exprList(exprList){}
@@ -188,3 +196,76 @@ std::string New::eval() const
 {
     return "New(" + New::typeName + ")";
 }
+
+IntegerLiteral::IntegerLiteral(const int intValue): intValue(intValue){}
+
+std::string IntegerLiteral::eval() const
+{
+    return std::to_string(IntegerLiteral::intValue);
+}
+
+StringLiteral::StringLiteral(const std::string stringValue): stringValue(stringValue){}
+
+std::string hexConvert(char character)
+{
+    std::string ret = "\\xhh";
+    std::string ref = "0123456789abcdef";
+
+    ret[2] = ref[character / 16];
+    ret[3] = ref[character % 16];
+
+    return ret;
+}
+
+std::string StringLiteral::eval() const
+{
+    std::string ret = "\"";
+
+    for(char character: StringLiteral::stringValue){
+
+        if(character != '\"' && character != '\\'){
+            if(character >= 32 && character <= 126)
+                ret += character;
+            else 
+                ret += hexConvert(character);
+        }
+        else
+            ret += hexConvert(character);
+    }
+
+    return ret + "\"";
+}
+
+BooleanLiteral::BooleanLiteral(const bool booleanValue): booleanValue(booleanValue){}
+
+std::string BooleanLiteral::eval() const
+{
+    std::string boolString = "false";
+
+    if(BooleanLiteral::booleanValue)
+        boolString = "true";
+
+    return boolString;
+}
+
+ObjectIdentifier::ObjectIdentifier(const std::string identifier): identifier(identifier){}
+
+std::string ObjectIdentifier::eval() const 
+{
+    return ObjectIdentifier::identifier;
+}
+
+Self::Self(){}
+
+std::string Self::eval() const
+{
+    return "self";
+}
+
+Unit::Unit(){}
+
+std::string Unit::eval() const
+{
+    return "unit";
+}
+
