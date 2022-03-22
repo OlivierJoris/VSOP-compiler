@@ -98,7 +98,7 @@ Terminaux, suivis des règles où ils apparaissent
     $end (0) 0
     error (256)
     "and" (258) 29
-    "bool" (259) 14
+    "bool" <stringValue> (259) 14
     "class" (260) 3 4
     "do" (261) 51
     "else" (262) 50
@@ -106,16 +106,16 @@ Terminaux, suivis des règles où ils apparaissent
     "false" (264) 62
     "if" (265) 49 50
     "in" (266) 52 53
-    "int32" (267) 13
+    "int32" <stringValue> (267) 13
     "isnull" (268) 39
     "let" (269) 52 53
     "new" (270) 42
     "not" (271) 28
     "self" (272) 44
-    "string" (273) 15
+    "string" <stringValue> (273) 15
     "then" (274) 49 50
     "true" (275) 61
-    "unit" (276) 16
+    "unit" <stringValue> (276) 16
     "while" (277) 51
     "{" (278) 5 21
     "}" (279) 5 21
@@ -172,13 +172,13 @@ Non-terminaux, suivis des règles où ils apparaissent
     Type <stringValue> (58)
         à gauche: 12 13 14 15 16
         à droite: 9 10 11 20 52 53
-    Formals (59)
+    Formals <formals> (59)
         à gauche: 17 18 19
         à droite: 11 19
     Formal (60)
         à gauche: 20
         à droite: 18 19
-    Block (61)
+    Block <block> (61)
         à gauche: 21
         à droite: 11 48
     BlockExpr (62)

@@ -7,27 +7,37 @@ std::string Program::eval() const
     auto firstClass = Program::classes.begin();
     std::string program = (*firstClass)->eval();
 
-    for(auto it = Program::classes.begin(); it != Program::classes.end(); ++it)
+    for(auto it = Program::classes.begin() + 1; it != Program::classes.end(); ++it)
         program += ", " + (*it)->eval();
     
-    return program;
+    return "[" + program + "]";
 }
 
 Class::Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods): name(name), parent(parent), fields(fields), methods(methods){}
 
 std::string Class::eval() const
 {
-    auto firstField = Class::fields.begin();
-    std::string fields = (*firstField)->eval();
-
-    for(auto it = Class::fields.begin() + 1; it != Class::fields.end(); ++it)
-        fields += ", " + (*it)->eval();
+    std::string fields = "";    
     
-    auto firstMethod = Class::methods.begin();
-    std::string methods = (*firstMethod)->eval();
+    if(fields.size() != 0)
+    {
+        auto firstField = Class::fields.begin();
+        std::string fields = (*firstField)->eval();
 
-    for(auto it = Class::methods.begin() + 1; it != Class::methods.end(); ++it)
-        methods += ", " + (*it)->eval();
+        for(auto it = Class::fields.begin() + 1; it != Class::fields.end(); ++it)
+            fields += ", " + (*it)->eval();
+    }
+
+    std::string methods = "";
+
+    if(methods.size() != 0)
+    {
+        auto firstMethod = Class::methods.begin();
+        std::string methods = (*firstMethod)->eval();
+
+        for(auto it = Class::methods.begin() + 1; it != Class::methods.end(); ++it)
+            methods += ", " + (*it)->eval();
+    }
     
     return "Class(" + Class::name + ", " + Class::parent + ", " + "[" + fields + "]" + ", " + "[" + methods + "]" + ")";
 }   

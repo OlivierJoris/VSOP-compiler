@@ -40,7 +40,7 @@
 }
 
 %token AND "and"
-%token BOOL "bool"
+%token <stringValue> BOOL "bool"
 %token CLASS "class"
 %token DO "do"
 %token ELSE "else"
@@ -48,16 +48,16 @@
 %token FALSE "false"
 %token IF "if"
 %token IN "in"
-%token INT32 "int32"
+%token <stringValue> INT32 "int32"
 %token ISNULL "isnull"
 %token LET "let"
 %token NEW "new"
 %token NOT "not"
 %token SELF "self"
-%token STRING "string"
+%token <stringValue> STRING "string"
 %token THEN "then"
 %token TRUE "true"
-%token UNIT "unit"
+%token <stringValue> UNIT "unit"
 %token WHILE "while"
 
 %token LBRACE "{"
@@ -84,7 +84,7 @@
 %token INVALID_EOF_COMMENT
 %token INVALID_INTEGER_LITERAL
 %token <intValue> INTEGER_LITERAL
-%token <stringValue> TYPE_IDENTIFIER
+%token <stringValue> TYPE_IDENTIFIER 
 %token <stringValue> OBJECT_IDENTIFIER
 %token <stringValue> STRING_LITERAL
 
@@ -102,7 +102,7 @@
 %precedence IF THEN WHILE LET DO IN
 %precedence ELSE
 
-%nterm <stringValue> Type
+%nterm <stringValue> Type 
 %nterm <expression> Expr Let While If 
 %nterm <program> Program
 %nterm <cls> Class 
@@ -110,6 +110,7 @@
 %nterm <field> Field
 %nterm <method> Method
 %nterm <block> Block
+%nterm <formals> Formals
 
 %locations
 
@@ -119,8 +120,7 @@
 
 Program: Class {std::vector<Class*> classes = std::vector<Class*>();
                 classes.push_back($1);
-                $$ = new Program(classes);
-                abstractSyntaxTree = $$;}
+                abstractSyntaxTree = new Program(classes);}
 
 Class:  /* */ {}
         | Class CLASS TYPE_IDENTIFIER ClassBody {std::vector<Field*> fields = $4->getFields();
@@ -133,17 +133,16 @@ Class:  /* */ {}
 
 ClassBody: LBRACE ClassBodyFieldMethod RBRACE {$$ = new ClassBody();};
 ClassBodyFieldMethod: /* */ {}
-        | ClassBodyFieldMethod Field {$1->addField($2);
-                                      $$ = $1;}
-        | ClassBodyFieldMethod Method {$1->addMethod($2);
-                                       $$ = $1;}
+        | ClassBodyFieldMethod Field {$$ = $1;}
+        | ClassBodyFieldMethod Method {$$ = $1;}
         ;
 
-Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL);}
+Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {std::cout << $3 << std::endl;
+                                               $$ = new Field($1, $3, NULL);}
         | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {$$ = new Field($1, $3, $5);}
         ;
 
-Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, $7);};
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{};
 
 Type: TYPE_IDENTIFIER
         | INT32
@@ -152,7 +151,7 @@ Type: TYPE_IDENTIFIER
         | UNIT
         ;
 
-Formals: /* */
+Formals: /* */ {}
         | Formal
         | Formals COMMA Formal
         ;
