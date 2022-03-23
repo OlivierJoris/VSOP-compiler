@@ -1,0 +1,17 @@
+
+
+class Cons extends List {
+head : int32;
+tail : List;
+init(hd : int32, tl : List) : Cons {
+head <- _aaa;
+tail <- tl;
+self
+}
+head() : int32 { head }
+isNil() : bool { false }
+length() : int32 { 1 + tail.length() }
+}
+
+class Nil extends List {}
+

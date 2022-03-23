@@ -107,9 +107,9 @@
 
 %nterm <stringValue> Type 
 %nterm <expression> Expr Let While If Literal
-%nterm <program> Program
+%nterm <program> Program ProgramContinued
 %nterm <cls> Class 
-%nterm <classBody> ClassBody ClassBodyFieldMethod
+%nterm <classBody> ClassBody 
 %nterm <field> Field
 %nterm <method> Method
 %nterm <args> Block BlockExpr Args ArgsExprList
@@ -122,22 +122,27 @@
 
 %%
 
-Program: Class {abstractSyntaxTree->addClass($1);
-                $$ = abstractSyntaxTree;}
+Program: Class ProgramContinued {$2->addClass($1); 
+                                 $$ = $2; 
+                                 abstractSyntaxTree = $$;};
 
-Class:  /* */ {}
-        | Class CLASS TYPE_IDENTIFIER ClassBody {std::vector<Field*> fields = $4->getFields();
-                                                 std::vector<Method*> methods = $4->getMethods();
-                                                 $$ = new Class($3, "Object", fields, methods);}
-        | Class CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER ClassBody {std::vector<Field*> fields = $6->getFields();
-                                                                         std::vector<Method*> methods = $6->getMethods();
-                                                                         $$ = new Class($3, $5, fields, methods);}
+ProgramContinued:	/* */ { $$ = new Program(); }
+				| Class ProgramContinued {$2->addClass($1); 
+                                          $$ = $2;};
+
+Class: CLASS TYPE_IDENTIFIER LBRACE ClassBody RBRACE {std::vector<Field*> fields = $4->getFields();
+                                                               std::vector<Method*> methods = $4->getMethods();
+                                                               $$ = new Class($2, "Object", fields, methods);}
+        | CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER LBRACE ClassBody RBRACE {std::vector<Field*> fields = $6->getFields();
+                                                                                       std::vector<Method*> methods = $6->getMethods();
+                                                                                       $$ = new Class($2, $4, fields, methods);}
         ;
 
-ClassBody: LBRACE ClassBodyFieldMethod RBRACE {$$ = $2;};
-ClassBodyFieldMethod: /* */ {$$ = new ClassBody();}
-        | ClassBodyFieldMethod Field {$1->addField($2);}
-        | ClassBodyFieldMethod Method {$1->addMethod($2);}
+ClassBody: /* */ {$$ = new ClassBody();}
+        | Field ClassBody {$2->addField($1);
+                                      $$ = $2;}
+        | Method ClassBody {$2->addMethod($1);
+                                       $$ = $2;}
         ;
 
 Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL);}
@@ -232,7 +237,7 @@ void yyerror(const std::string message){
 }
 
 void lexicalError(const std::string& message){
-     std::cerr << fileName << ":" << yylloc.first_line << ":";
+    std::cerr << fileName << ":" << yylloc.first_line << ":";
     std::cerr << yylloc.first_column << ": " << "lexical error: ";
     std::cerr << message << std::endl;
 }
@@ -467,6 +472,6 @@ int main(int argc, char** argv){
     }
 
     fclose(yyin);
-    
+
     return EXIT_SUCCESS;
 }

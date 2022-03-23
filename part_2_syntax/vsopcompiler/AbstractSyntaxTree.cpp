@@ -5,10 +5,10 @@ Program::Program(){}
 
 std::string Program::eval() const 
 {
-    auto firstClass = Program::classes.begin();
+    auto firstClass = Program::classes.rbegin();
     std::string program = (*firstClass)->eval();
 
-    for(auto it = Program::classes.begin() + 1; it != Program::classes.end(); ++it)
+    for(auto it = Program::classes.rbegin() + 1; it != Program::classes.rend(); ++it)
         program += ", " + (*it)->eval();
     
     return "[" + program + "]";
@@ -22,10 +22,10 @@ std::string Class::eval() const
 
     if(Class::fields.size() != 0)
     {
-        auto firstField = Class::fields.begin();
+        auto firstField = Class::fields.rbegin();
         fields = (*firstField)->eval();
 
-        for(auto it = Class::fields.begin() + 1; it != Class::fields.end(); ++it)
+        for(auto it = Class::fields.rbegin() + 1; it != Class::fields.rend(); ++it)
             fields += ", " + (*it)->eval();
     }
 
@@ -33,10 +33,10 @@ std::string Class::eval() const
 
     if(Class::methods.size() != 0)
     {
-        auto firstMethod = Class::methods.begin();
+        auto firstMethod = Class::methods.rbegin();
         methods = (*firstMethod)->eval();
 
-        for(auto it = Class::methods.begin() + 1; it != Class::methods.end(); ++it)
+        for(auto it = Class::methods.rbegin() + 1; it != Class::methods.rend(); ++it)
             methods += ", " + (*it)->eval();
     }
     
@@ -77,7 +77,7 @@ Formal::Formal(const std::string name, const std::string type): name(name), type
 
 std::string Formal::eval() const
 {
-    return Formal::name + ":" + Formal::type;
+    return Formal::name + " : " + Formal::type;
 }
 
 Formals::Formals(){}
@@ -88,10 +88,10 @@ std::string Formals::eval() const
 
     if(Formals::formals.size() != 0)
     {
-        auto firstFormal = Formals::formals.begin();
+        auto firstFormal = Formals::formals.rbegin();
         formals = (*firstFormal)->eval();
 
-        for(auto it = Formals::formals.begin() + 1; it != Formals::formals.end(); ++it)
+        for(auto it = Formals::formals.rbegin() + 1; it != Formals::formals.rend(); ++it)
             formals += ", " + (*it)->eval();
     }
 
@@ -194,10 +194,10 @@ std::string Args::eval() const
 
     if(Args::exprList.size() != 0)
     {
-        auto firstFormal = Args::exprList.begin();
+        auto firstFormal = Args::exprList.rbegin();
         exprList = (*firstFormal)->eval();
 
-        for(auto it = Args::exprList.begin() + 1; it != Args::exprList.end(); ++it)
+        for(auto it = Args::exprList.rbegin() + 1; it != Args::exprList.rend(); ++it)
             exprList += ", " + (*it)->eval();
     }
 

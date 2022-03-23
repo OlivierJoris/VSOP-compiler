@@ -170,9 +170,9 @@ enum yysymbol_kind_t
   YYSYMBOL_EMBEDDED = 50,                  /* EMBEDDED  */
   YYSYMBOL_YYACCEPT = 51,                  /* $accept  */
   YYSYMBOL_Program = 52,                   /* Program  */
-  YYSYMBOL_Class = 53,                     /* Class  */
-  YYSYMBOL_ClassBody = 54,                 /* ClassBody  */
-  YYSYMBOL_ClassBodyFieldMethod = 55,      /* ClassBodyFieldMethod  */
+  YYSYMBOL_ProgramContinued = 53,          /* ProgramContinued  */
+  YYSYMBOL_Class = 54,                     /* Class  */
+  YYSYMBOL_ClassBody = 55,                 /* ClassBody  */
   YYSYMBOL_Field = 56,                     /* Field  */
   YYSYMBOL_Method = 57,                    /* Method  */
   YYSYMBOL_Type = 58,                      /* Type  */
@@ -304,7 +304,7 @@ typedef int yytype_uint16;
 
 
 /* Stored state numbers (used for stacks). */
-typedef yytype_int8 yy_state_t;
+typedef yytype_uint8 yy_state_t;
 
 /* State numbers in computations.  */
 typedef int yy_state_fast_t;
@@ -487,7 +487,7 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  3
+#define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
 #define YYLAST   245
 
@@ -498,7 +498,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  63
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  124
+#define YYNSTATES  130
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   305
@@ -552,13 +552,13 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   125,   125,   128,   129,   132,   137,   138,   139,   140,
-     143,   144,   147,   149,   150,   151,   152,   153,   156,   157,
-     161,   162,   165,   167,   169,   170,   174,   175,   176,   177,
-     178,   179,   180,   181,   182,   183,   184,   185,   186,   187,
-     188,   189,   190,   191,   192,   193,   194,   195,   196,   197,
-     198,   201,   202,   205,   207,   208,   211,   212,   215,   216,
-     220,   221,   222,   223
+       0,   125,   125,   129,   130,   133,   136,   141,   142,   144,
+     148,   149,   152,   154,   155,   156,   157,   158,   161,   162,
+     166,   167,   170,   172,   174,   175,   179,   180,   181,   182,
+     183,   184,   185,   186,   187,   188,   189,   190,   191,   192,
+     193,   194,   195,   196,   197,   198,   199,   200,   201,   202,
+     203,   206,   207,   210,   212,   213,   216,   217,   220,   221,
+     225,   226,   227,   228
 };
 #endif
 
@@ -582,10 +582,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
   "INVALID_HEX_NUMBER", "INVALID_CHAR", "INVALID_EOF_STRING",
   "INVALID_EOF_COMMENT", "INVALID_INTEGER_LITERAL", "INTEGER_LITERAL",
   "type-identifier", "OBJECT_IDENTIFIER", "STRING_LITERAL", "UNARYMINUS",
-  "EMBEDDED", "$accept", "Program", "Class", "ClassBody",
-  "ClassBodyFieldMethod", "Field", "Method", "Type", "Formals",
-  "FormalsContinued", "Formal", "Block", "BlockExpr", "Expr", "If",
-  "While", "Let", "Args", "ArgsExprList", "Literal", YY_NULLPTR
+  "EMBEDDED", "$accept", "Program", "ProgramContinued", "Class",
+  "ClassBody", "Field", "Method", "Type", "Formals", "FormalsContinued",
+  "Formal", "Block", "BlockExpr", "Expr", "If", "While", "Let", "Args",
+  "ArgsExprList", "Literal", YY_NULLPTR
   };
   return yy_sname[yysymbol];
 }
@@ -605,7 +605,7 @@ static const yytype_int16 yytoknum[] =
 };
 #endif
 
-#define YYPACT_NINF (-36)
+#define YYPACT_NINF (-39)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -619,19 +619,19 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -36,    16,    15,   -36,   -35,    -4,   -23,   -36,   -36,    17,
-     -21,   -36,   -36,    40,   -36,   -36,    10,     6,    19,    38,
-      41,   -36,   -36,   -36,   -36,   -36,   -11,     6,    49,    10,
-     -36,   -36,    86,   -36,     6,    41,   -36,    86,    86,    31,
-      42,    86,   -36,   -36,    86,    86,    46,    86,   -36,   -18,
-     -36,   -36,   107,   -36,   -36,   -36,   -36,    63,   -36,   117,
-      39,    60,   -36,   188,   126,   143,   -36,    -1,    39,    86,
-      86,    86,   -36,    86,    86,    86,    86,    86,    45,    86,
-      86,    86,   -36,    86,     6,    86,    86,    65,   -36,   162,
-      71,   198,   188,    50,    50,    39,    39,    39,    73,   207,
-     207,   207,    97,    11,   -36,   143,   -36,    86,   -36,   -36,
-      86,    86,    86,    86,   -36,   162,    79,   -36,   -36,   179,
-     -36,   -36,    86,   -36
+       2,   -35,    16,     2,    -4,   -39,   -39,     2,   -23,    -7,
+     -39,    41,     1,    43,    -7,    -7,    -7,    23,     6,   -39,
+     -39,   -39,    49,    38,    48,    47,   -39,   -39,   -39,   -39,
+     -39,    18,   -39,     6,    51,    23,   -39,   -39,    86,   -39,
+       6,    47,   -39,    86,    86,    42,    52,    86,   -39,   -39,
+      86,    86,    46,    86,   -39,   -22,   -39,   -39,   107,   -39,
+     -39,   -39,   -39,    69,   -39,   117,   -14,    70,   -39,   188,
+     126,   143,   -39,    -1,   -14,    86,    86,    86,   -39,    86,
+      86,    86,    86,    86,    57,    86,    86,    86,   -39,    86,
+       6,    86,    86,    81,   -39,   162,    87,   198,   188,    50,
+      50,   -14,   -14,   -14,    82,   207,   207,   207,   105,    11,
+     -39,   143,   -39,    86,   -39,   -39,    86,    86,    86,    86,
+     -39,   162,    88,   -39,   -39,   179,   -39,   -39,    86,   -39
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -639,82 +639,82 @@ static const yytype_int16 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       3,     0,     2,     1,     0,     0,     0,     7,     4,     0,
-       0,     5,     6,     0,     8,     9,    18,     0,     0,     0,
-      20,    15,    14,    16,    17,    13,     0,     0,     0,     0,
-      19,    10,     0,    22,     0,    20,    63,     0,     0,     0,
-       0,     0,    46,    62,     0,     0,     0,     0,    60,    45,
-      61,    50,     0,    26,    27,    28,    47,     0,    21,     0,
-      41,     0,    44,    30,     0,    24,    48,     0,    40,    56,
-       0,     0,    11,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    12,     0,     0,     0,     0,     0,    49,    58,
-       0,    29,    31,    36,    35,    38,    37,    39,     0,    34,
-      33,    32,    51,     0,    53,    24,    23,     0,    57,    42,
-      56,     0,     0,     0,    25,    58,     0,    52,    54,     0,
-      59,    43,     0,    55
+       0,     0,     0,     3,     0,     1,     2,     3,     0,     7,
+       4,     0,     0,     0,     7,     7,     7,    18,     0,     5,
+       8,     9,     0,     0,     0,    20,    15,    14,    16,    17,
+      13,     0,     6,     0,     0,     0,    19,    10,     0,    22,
+       0,    20,    63,     0,     0,     0,     0,     0,    46,    62,
+       0,     0,     0,     0,    60,    45,    61,    50,     0,    26,
+      27,    28,    47,     0,    21,     0,    41,     0,    44,    30,
+       0,    24,    48,     0,    40,    56,     0,     0,    11,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    12,     0,
+       0,     0,     0,     0,    49,    58,     0,    29,    31,    36,
+      35,    38,    37,    39,     0,    34,    33,    32,    51,     0,
+      53,    24,    23,     0,    57,    42,    56,     0,     0,     0,
+      25,    58,     0,    52,    54,     0,    59,    43,     0,    55
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -36,   -36,   -36,    98,   -36,   -36,   -36,   -26,   -36,    77,
-      84,    57,    13,   -32,   -36,   -36,   -36,     5,     1,   -36
+     -39,   -39,   108,   116,    72,   -39,   -39,   -32,   -39,    77,
+      84,    58,    12,   -38,   -39,   -39,   -39,     8,     4,   -39
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     2,     8,    10,    14,    15,    26,    19,    30,
-      20,    51,    87,    89,    53,    54,    55,    90,   108,    56
+       0,     2,     6,     7,    13,    14,    15,    31,    24,    36,
+      25,    57,    93,    95,    59,    60,    61,    96,   114,    62
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule whose
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_int8 yytable[] =
+static const yytype_int16 yytable[] =
 {
-      52,    33,    71,    12,     6,    59,    60,    69,    57,    63,
-      21,     5,    64,    65,    67,    68,     3,    31,    22,     7,
-       4,    70,   112,     9,    23,    88,    13,    24,    32,    73,
-      74,    75,    76,    77,    78,    79,    80,    81,    91,    92,
-       7,    93,    94,    95,    96,    97,    27,    99,   100,   101,
-     113,   102,    25,   104,   105,    36,    37,    18,   103,    38,
-      39,    40,    41,    42,    28,    16,    43,    17,    44,    45,
-      29,    46,    66,    77,    78,   115,    34,    47,    61,   117,
-     118,   119,    75,    76,    77,    78,    45,    84,    62,   106,
-     123,    48,    98,    49,    50,    36,    37,   109,   110,    38,
-      39,    40,    41,    42,   111,   121,    43,    11,    44,    45,
-      71,    46,    58,    35,    82,   116,   120,    47,   114,     0,
-      71,     0,     0,     0,     0,     0,     0,     0,     0,    71,
-       0,    48,    85,    49,    50,    72,    83,    73,    74,    75,
-      76,    77,    78,    79,    80,    81,    71,    73,    74,    75,
-      76,    77,    78,    79,    80,    81,    73,    74,    75,    76,
-      77,    78,    79,    80,    81,    71,     0,     0,     0,     0,
-       0,    86,     0,    73,    74,    75,    76,    77,    78,    79,
-      80,    81,    71,     0,     0,     0,     0,     0,     0,     0,
-     122,   107,    73,    74,    75,    76,    77,    78,    79,    80,
-      81,    71,     0,     0,     0,     0,     0,     0,     0,    73,
-      74,    75,    76,    77,    78,    79,    80,    81,    73,    74,
-      75,    76,    77,    78,    79,    80,    81,     0,    73,    74,
-      75,    76,    77,    78,    79,    80,    81,    73,    74,    75,
-      76,    77,    78,    -1,    -1,    -1
+      58,    39,    77,    75,     8,    65,    66,     1,    63,    69,
+      26,     4,    70,    71,    73,    74,     5,    76,    27,     9,
+      83,    84,   118,    11,    28,    94,    17,    29,    18,    79,
+      80,    81,    82,    83,    84,    85,    86,    87,    97,    98,
+      12,    99,   100,   101,   102,   103,    37,   105,   106,   107,
+     119,   108,    30,   110,   111,    42,    43,    38,   109,    44,
+      45,    46,    47,    48,    16,    33,    49,    19,    50,    51,
+      23,    52,    72,    32,    34,   121,    35,    53,    40,   123,
+     124,   125,    81,    82,    83,    84,    20,    21,    22,    67,
+     129,    54,    51,    55,    56,    42,    43,    90,    68,    44,
+      45,    46,    47,    48,   104,   112,    49,   116,    50,    51,
+      77,    52,   117,   115,   127,    10,     3,    53,    64,    41,
+      77,    88,     0,   120,   122,   126,     0,     0,     0,    77,
+       0,    54,    91,    55,    56,    78,    89,    79,    80,    81,
+      82,    83,    84,    85,    86,    87,    77,    79,    80,    81,
+      82,    83,    84,    85,    86,    87,    79,    80,    81,    82,
+      83,    84,    85,    86,    87,    77,     0,     0,     0,     0,
+       0,    92,     0,    79,    80,    81,    82,    83,    84,    85,
+      86,    87,    77,     0,     0,     0,     0,     0,     0,     0,
+     128,   113,    79,    80,    81,    82,    83,    84,    85,    86,
+      87,    77,     0,     0,     0,     0,     0,     0,     0,    79,
+      80,    81,    82,    83,    84,    85,    86,    87,    79,    80,
+      81,    82,    83,    84,    85,    86,    87,     0,    79,    80,
+      81,    82,    83,    84,    85,    86,    87,    79,    80,    81,
+      82,    83,    84,    -1,    -1,    -1
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_int16 yycheck[] =
 {
-      32,    27,     3,    24,     8,    37,    38,    25,    34,    41,
-       4,    46,    44,    45,    46,    47,     0,    28,    12,    23,
-       5,    39,    11,    46,    18,    26,    47,    21,    39,    30,
-      31,    32,    33,    34,    35,    36,    37,    38,    70,    71,
-      23,    73,    74,    75,    76,    77,    27,    79,    80,    81,
-      39,    83,    46,    85,    86,     9,    10,    47,    84,    13,
-      14,    15,    16,    17,    26,    25,    20,    27,    22,    23,
-      29,    25,    26,    34,    35,   107,    27,    31,    47,   111,
-     112,   113,    32,    33,    34,    35,    23,    27,    46,    24,
-     122,    45,    47,    47,    48,     9,    10,    26,    25,    13,
-      14,    15,    16,    17,     7,    26,    20,     9,    22,    23,
-       3,    25,    35,    29,    57,   110,   115,    31,   105,    -1,
-       3,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,     3,
+      38,    33,     3,    25,     8,    43,    44,     5,    40,    47,
+       4,    46,    50,    51,    52,    53,     0,    39,    12,    23,
+      34,    35,    11,    46,    18,    26,    25,    21,    27,    30,
+      31,    32,    33,    34,    35,    36,    37,    38,    76,    77,
+      47,    79,    80,    81,    82,    83,    28,    85,    86,    87,
+      39,    89,    46,    91,    92,     9,    10,    39,    90,    13,
+      14,    15,    16,    17,    23,    27,    20,    24,    22,    23,
+      47,    25,    26,    24,    26,   113,    29,    31,    27,   117,
+     118,   119,    32,    33,    34,    35,    14,    15,    16,    47,
+     128,    45,    23,    47,    48,     9,    10,    27,    46,    13,
+      14,    15,    16,    17,    47,    24,    20,    25,    22,    23,
+       3,    25,     7,    26,    26,     7,     0,    31,    41,    35,
+       3,    63,    -1,   111,   116,   121,    -1,    -1,    -1,     3,
       -1,    45,     6,    47,    48,    28,    19,    30,    31,    32,
       33,    34,    35,    36,    37,    38,     3,    30,    31,    32,
       33,    34,    35,    36,    37,    38,    30,    31,    32,    33,
@@ -733,25 +733,25 @@ static const yytype_int8 yycheck[] =
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    52,    53,     0,     5,    46,     8,    23,    54,    46,
-      55,    54,    24,    47,    56,    57,    25,    27,    47,    59,
-      61,     4,    12,    18,    21,    46,    58,    27,    26,    29,
-      60,    28,    39,    58,    27,    61,     9,    10,    13,    14,
-      15,    16,    17,    20,    22,    23,    25,    31,    45,    47,
-      48,    62,    64,    65,    66,    67,    70,    58,    60,    64,
-      64,    47,    46,    64,    64,    64,    26,    64,    64,    25,
-      39,     3,    28,    30,    31,    32,    33,    34,    35,    36,
-      37,    38,    62,    19,    27,     6,    28,    63,    26,    64,
-      68,    64,    64,    64,    64,    64,    64,    64,    47,    64,
-      64,    64,    64,    58,    64,    64,    24,    29,    69,    26,
-      25,     7,    11,    39,    63,    64,    68,    64,    64,    64,
-      69,    26,    11,    64
+       0,     5,    52,    54,    46,     0,    53,    54,     8,    23,
+      53,    46,    47,    55,    56,    57,    23,    25,    27,    24,
+      55,    55,    55,    47,    59,    61,     4,    12,    18,    21,
+      46,    58,    24,    27,    26,    29,    60,    28,    39,    58,
+      27,    61,     9,    10,    13,    14,    15,    16,    17,    20,
+      22,    23,    25,    31,    45,    47,    48,    62,    64,    65,
+      66,    67,    70,    58,    60,    64,    64,    47,    46,    64,
+      64,    64,    26,    64,    64,    25,    39,     3,    28,    30,
+      31,    32,    33,    34,    35,    36,    37,    38,    62,    19,
+      27,     6,    28,    63,    26,    64,    68,    64,    64,    64,
+      64,    64,    64,    64,    47,    64,    64,    64,    64,    58,
+      64,    64,    24,    29,    69,    26,    25,     7,    11,    39,
+      63,    64,    68,    64,    64,    64,    69,    26,    11,    64
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    51,    52,    53,    53,    53,    54,    55,    55,    55,
+       0,    51,    52,    53,    53,    54,    54,    55,    55,    55,
       56,    56,    57,    58,    58,    58,    58,    58,    59,    59,
       60,    60,    61,    62,    63,    63,    64,    64,    64,    64,
       64,    64,    64,    64,    64,    64,    64,    64,    64,    64,
@@ -763,7 +763,7 @@ static const yytype_int8 yyr1[] =
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     0,     4,     6,     3,     0,     2,     2,
+       0,     2,     2,     0,     2,     5,     7,     0,     2,     2,
        4,     6,     7,     1,     1,     1,     1,     1,     0,     2,
        0,     3,     3,     4,     0,     3,     1,     1,     1,     3,
        2,     3,     3,     3,     3,     3,     3,     3,     3,     3,
@@ -1813,367 +1813,371 @@ yyreduce:
     int yychar_backup = yychar;
     switch (yyn)
       {
-  case 2: /* Program: Class  */
+  case 2: /* Program: Class ProgramContinued  */
 #line 125 "vsopc.y"
-               {abstractSyntaxTree->addClass((yyvsp[0].cls));
-                (yyval.program) = abstractSyntaxTree;}
-#line 1821 "vsopc.tab.c"
+                                {(yyvsp[0].program)->addClass((yyvsp[-1].cls)); 
+                                 (yyval.program) = (yyvsp[0].program); 
+                                 abstractSyntaxTree = (yyval.program);}
+#line 1822 "vsopc.tab.c"
     break;
 
-  case 3: /* Class: %empty  */
-#line 128 "vsopc.y"
-              {}
-#line 1827 "vsopc.tab.c"
-    break;
-
-  case 4: /* Class: Class "class" "type-identifier" ClassBody  */
+  case 3: /* ProgramContinued: %empty  */
 #line 129 "vsopc.y"
-                                                {std::vector<Field*> fields = (yyvsp[0].classBody)->getFields();
-                                                 std::vector<Method*> methods = (yyvsp[0].classBody)->getMethods();
-                                                 (yyval.cls) = new Class((yyvsp[-1].stringValue), "Object", fields, methods);}
+                              { (yyval.program) = new Program(); }
+#line 1828 "vsopc.tab.c"
+    break;
+
+  case 4: /* ProgramContinued: Class ProgramContinued  */
+#line 130 "vsopc.y"
+                                                         {(yyvsp[0].program)->addClass((yyvsp[-1].cls)); 
+                                          (yyval.program) = (yyvsp[0].program);}
 #line 1835 "vsopc.tab.c"
     break;
 
-  case 5: /* Class: Class "class" "type-identifier" "extends" "type-identifier" ClassBody  */
-#line 132 "vsopc.y"
-                                                                        {std::vector<Field*> fields = (yyvsp[0].classBody)->getFields();
-                                                                         std::vector<Method*> methods = (yyvsp[0].classBody)->getMethods();
-                                                                         (yyval.cls) = new Class((yyvsp[-3].stringValue), (yyvsp[-1].stringValue), fields, methods);}
+  case 5: /* Class: "class" "type-identifier" "{" ClassBody "}"  */
+#line 133 "vsopc.y"
+                                                     {std::vector<Field*> fields = (yyvsp[-1].classBody)->getFields();
+                                                               std::vector<Method*> methods = (yyvsp[-1].classBody)->getMethods();
+                                                               (yyval.cls) = new Class((yyvsp[-3].stringValue), "Object", fields, methods);}
 #line 1843 "vsopc.tab.c"
     break;
 
-  case 6: /* ClassBody: "{" ClassBodyFieldMethod "}"  */
-#line 137 "vsopc.y"
-                                              {(yyval.classBody) = (yyvsp[-1].classBody);}
-#line 1849 "vsopc.tab.c"
+  case 6: /* Class: "class" "type-identifier" "extends" "type-identifier" "{" ClassBody "}"  */
+#line 136 "vsopc.y"
+                                                                                {std::vector<Field*> fields = (yyvsp[-1].classBody)->getFields();
+                                                                                       std::vector<Method*> methods = (yyvsp[-1].classBody)->getMethods();
+                                                                                       (yyval.cls) = new Class((yyvsp[-5].stringValue), (yyvsp[-3].stringValue), fields, methods);}
+#line 1851 "vsopc.tab.c"
     break;
 
-  case 7: /* ClassBodyFieldMethod: %empty  */
-#line 138 "vsopc.y"
-                            {(yyval.classBody) = new ClassBody();}
-#line 1855 "vsopc.tab.c"
+  case 7: /* ClassBody: %empty  */
+#line 141 "vsopc.y"
+                 {(yyval.classBody) = new ClassBody();}
+#line 1857 "vsopc.tab.c"
     break;
 
-  case 8: /* ClassBodyFieldMethod: ClassBodyFieldMethod Field  */
-#line 139 "vsopc.y"
-                                     {(yyvsp[-1].classBody)->addField((yyvsp[0].field));}
-#line 1861 "vsopc.tab.c"
+  case 8: /* ClassBody: Field ClassBody  */
+#line 142 "vsopc.y"
+                          {(yyvsp[0].classBody)->addField((yyvsp[-1].field));
+                                      (yyval.classBody) = (yyvsp[0].classBody);}
+#line 1864 "vsopc.tab.c"
     break;
 
-  case 9: /* ClassBodyFieldMethod: ClassBodyFieldMethod Method  */
-#line 140 "vsopc.y"
-                                      {(yyvsp[-1].classBody)->addMethod((yyvsp[0].method));}
-#line 1867 "vsopc.tab.c"
+  case 9: /* ClassBody: Method ClassBody  */
+#line 144 "vsopc.y"
+                           {(yyvsp[0].classBody)->addMethod((yyvsp[-1].method));
+                                       (yyval.classBody) = (yyvsp[0].classBody);}
+#line 1871 "vsopc.tab.c"
     break;
 
   case 10: /* Field: OBJECT_IDENTIFIER ":" Type ";"  */
-#line 143 "vsopc.y"
+#line 148 "vsopc.y"
                                               {(yyval.field) = new Field((yyvsp[-3].stringValue), (yyvsp[-1].stringValue), NULL);}
-#line 1873 "vsopc.tab.c"
+#line 1877 "vsopc.tab.c"
     break;
 
   case 11: /* Field: OBJECT_IDENTIFIER ":" Type "<-" Expr ";"  */
-#line 144 "vsopc.y"
+#line 149 "vsopc.y"
                                                              {(yyval.field) = new Field((yyvsp[-5].stringValue), (yyvsp[-3].stringValue), (yyvsp[-1].expression));}
-#line 1879 "vsopc.tab.c"
+#line 1883 "vsopc.tab.c"
     break;
 
   case 12: /* Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block  */
-#line 147 "vsopc.y"
+#line 152 "vsopc.y"
                                                             {(yyval.method) = new Method((yyvsp[-6].stringValue), (yyvsp[-4].formals), (yyvsp[-1].stringValue), new Block((yyvsp[0].args)));}
-#line 1885 "vsopc.tab.c"
+#line 1889 "vsopc.tab.c"
     break;
 
   case 13: /* Type: "type-identifier"  */
-#line 149 "vsopc.y"
+#line 154 "vsopc.y"
                       {(yyval.stringValue) = (yyvsp[0].stringValue);}
-#line 1891 "vsopc.tab.c"
+#line 1895 "vsopc.tab.c"
     break;
 
   case 14: /* Type: "int32"  */
-#line 150 "vsopc.y"
+#line 155 "vsopc.y"
                       {(yyval.stringValue) = (char *) "int32";}
-#line 1897 "vsopc.tab.c"
+#line 1901 "vsopc.tab.c"
     break;
 
   case 15: /* Type: "bool"  */
-#line 151 "vsopc.y"
+#line 156 "vsopc.y"
                       {(yyval.stringValue) = (char *) "bool";}
-#line 1903 "vsopc.tab.c"
+#line 1907 "vsopc.tab.c"
     break;
 
   case 16: /* Type: "string"  */
-#line 152 "vsopc.y"
+#line 157 "vsopc.y"
                       {(yyval.stringValue) = (char *) "string";}
-#line 1909 "vsopc.tab.c"
+#line 1913 "vsopc.tab.c"
     break;
 
   case 17: /* Type: "unit"  */
-#line 153 "vsopc.y"
+#line 158 "vsopc.y"
                       {(yyval.stringValue) = (char *) "unit";}
-#line 1915 "vsopc.tab.c"
+#line 1919 "vsopc.tab.c"
     break;
 
   case 18: /* Formals: %empty  */
-#line 156 "vsopc.y"
+#line 161 "vsopc.y"
                {(yyval.formals) = new Formals();}
-#line 1921 "vsopc.tab.c"
+#line 1925 "vsopc.tab.c"
     break;
 
   case 19: /* Formals: Formal FormalsContinued  */
-#line 157 "vsopc.y"
+#line 162 "vsopc.y"
                                   {(yyvsp[0].formals)->addFormal((yyvsp[-1].formal));
                                    (yyval.formals) = (yyvsp[0].formals);}
-#line 1928 "vsopc.tab.c"
+#line 1932 "vsopc.tab.c"
     break;
 
   case 20: /* FormalsContinued: %empty  */
-#line 161 "vsopc.y"
+#line 166 "vsopc.y"
                         {(yyval.formals) = new Formals();}
-#line 1934 "vsopc.tab.c"
+#line 1938 "vsopc.tab.c"
     break;
 
   case 21: /* FormalsContinued: "," Formal FormalsContinued  */
-#line 162 "vsopc.y"
+#line 167 "vsopc.y"
                                                  {(yyvsp[0].formals)->addFormal((yyvsp[-1].formal));
                                                   (yyval.formals) = (yyvsp[0].formals);}
-#line 1941 "vsopc.tab.c"
+#line 1945 "vsopc.tab.c"
     break;
 
   case 22: /* Formal: OBJECT_IDENTIFIER ":" Type  */
-#line 165 "vsopc.y"
+#line 170 "vsopc.y"
                                      {(yyval.formal) = new Formal((yyvsp[-2].stringValue), (yyvsp[0].stringValue));}
-#line 1947 "vsopc.tab.c"
+#line 1951 "vsopc.tab.c"
     break;
 
   case 23: /* Block: "{" Expr BlockExpr "}"  */
-#line 167 "vsopc.y"
+#line 172 "vsopc.y"
                                     {(yyvsp[-1].args)->addExpr((yyvsp[-2].expression));
                                      (yyval.args) = (yyvsp[-1].args);}
-#line 1954 "vsopc.tab.c"
+#line 1958 "vsopc.tab.c"
     break;
 
   case 24: /* BlockExpr: %empty  */
-#line 169 "vsopc.y"
+#line 174 "vsopc.y"
                  {(yyval.args) = new Args();}
-#line 1960 "vsopc.tab.c"
+#line 1964 "vsopc.tab.c"
     break;
 
   case 25: /* BlockExpr: ";" Expr BlockExpr  */
-#line 170 "vsopc.y"
+#line 175 "vsopc.y"
                                    {(yyvsp[0].args)->addExpr((yyvsp[-1].expression));
                                     (yyval.args) = (yyvsp[0].args);}
-#line 1967 "vsopc.tab.c"
+#line 1971 "vsopc.tab.c"
     break;
 
   case 29: /* Expr: OBJECT_IDENTIFIER "<-" Expr  */
-#line 177 "vsopc.y"
+#line 182 "vsopc.y"
                                         {(yyval.expression) = new Assign((yyvsp[-2].stringValue), (yyvsp[0].expression));}
-#line 1973 "vsopc.tab.c"
+#line 1977 "vsopc.tab.c"
     break;
 
   case 30: /* Expr: "not" Expr  */
-#line 178 "vsopc.y"
+#line 183 "vsopc.y"
                    {(yyval.expression) = new Not((yyvsp[0].expression));}
-#line 1979 "vsopc.tab.c"
+#line 1983 "vsopc.tab.c"
     break;
 
   case 31: /* Expr: Expr "and" Expr  */
-#line 179 "vsopc.y"
+#line 184 "vsopc.y"
                         {(yyval.expression) = new And((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 1985 "vsopc.tab.c"
+#line 1989 "vsopc.tab.c"
     break;
 
   case 32: /* Expr: Expr "<=" Expr  */
-#line 180 "vsopc.y"
+#line 185 "vsopc.y"
                                 {(yyval.expression) = new LowerEqual((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 1991 "vsopc.tab.c"
+#line 1995 "vsopc.tab.c"
     break;
 
   case 33: /* Expr: Expr "<" Expr  */
-#line 181 "vsopc.y"
+#line 186 "vsopc.y"
                           {(yyval.expression) = new Lower((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 1997 "vsopc.tab.c"
+#line 2001 "vsopc.tab.c"
     break;
 
   case 34: /* Expr: Expr "=" Expr  */
-#line 182 "vsopc.y"
+#line 187 "vsopc.y"
                           {(yyval.expression) = new Equal((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2003 "vsopc.tab.c"
+#line 2007 "vsopc.tab.c"
     break;
 
   case 35: /* Expr: Expr "-" Expr  */
-#line 183 "vsopc.y"
+#line 188 "vsopc.y"
                           {(yyval.expression) = new Minus((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2009 "vsopc.tab.c"
+#line 2013 "vsopc.tab.c"
     break;
 
   case 36: /* Expr: Expr "+" Expr  */
-#line 184 "vsopc.y"
+#line 189 "vsopc.y"
                          {(yyval.expression) = new Plus((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2015 "vsopc.tab.c"
+#line 2019 "vsopc.tab.c"
     break;
 
   case 37: /* Expr: Expr "/" Expr  */
-#line 185 "vsopc.y"
+#line 190 "vsopc.y"
                         {(yyval.expression) = new Div((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2021 "vsopc.tab.c"
+#line 2025 "vsopc.tab.c"
     break;
 
   case 38: /* Expr: Expr "*" Expr  */
-#line 186 "vsopc.y"
+#line 191 "vsopc.y"
                           {(yyval.expression) = new Times((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2027 "vsopc.tab.c"
+#line 2031 "vsopc.tab.c"
     break;
 
   case 39: /* Expr: Expr "^" Expr  */
-#line 187 "vsopc.y"
+#line 192 "vsopc.y"
                         {(yyval.expression) = new Pow((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2033 "vsopc.tab.c"
+#line 2037 "vsopc.tab.c"
     break;
 
   case 40: /* Expr: "-" Expr  */
-#line 188 "vsopc.y"
+#line 193 "vsopc.y"
                                       {(yyval.expression) = new UnaryMinus((yyvsp[0].expression));}
-#line 2039 "vsopc.tab.c"
+#line 2043 "vsopc.tab.c"
     break;
 
   case 41: /* Expr: "isnull" Expr  */
-#line 189 "vsopc.y"
+#line 194 "vsopc.y"
                       {(yyval.expression) = new IsNull((yyvsp[0].expression));}
-#line 2045 "vsopc.tab.c"
+#line 2049 "vsopc.tab.c"
     break;
 
   case 42: /* Expr: OBJECT_IDENTIFIER "(" Args ")"  */
-#line 190 "vsopc.y"
+#line 195 "vsopc.y"
                                            {(yyval.expression) = new Call(NULL, (yyvsp[-3].stringValue), (yyvsp[-1].args));}
-#line 2051 "vsopc.tab.c"
+#line 2055 "vsopc.tab.c"
     break;
 
   case 43: /* Expr: Expr "." OBJECT_IDENTIFIER "(" Args ")"  */
-#line 191 "vsopc.y"
+#line 196 "vsopc.y"
                                                     {(yyval.expression) = new Call((yyvsp[-5].expression), (yyvsp[-3].stringValue), (yyvsp[-1].args));}
-#line 2057 "vsopc.tab.c"
+#line 2061 "vsopc.tab.c"
     break;
 
   case 44: /* Expr: "new" "type-identifier"  */
-#line 192 "vsopc.y"
+#line 197 "vsopc.y"
                               {(yyval.expression) = new New((yyvsp[0].stringValue));}
-#line 2063 "vsopc.tab.c"
+#line 2067 "vsopc.tab.c"
     break;
 
   case 45: /* Expr: OBJECT_IDENTIFIER  */
-#line 193 "vsopc.y"
+#line 198 "vsopc.y"
                             {(yyval.expression) = new ObjectIdentifier((yyvsp[0].stringValue));}
-#line 2069 "vsopc.tab.c"
+#line 2073 "vsopc.tab.c"
     break;
 
   case 46: /* Expr: "self"  */
-#line 194 "vsopc.y"
+#line 199 "vsopc.y"
                {(yyval.expression) = new Self();}
-#line 2075 "vsopc.tab.c"
+#line 2079 "vsopc.tab.c"
     break;
 
   case 48: /* Expr: "(" ")"  */
-#line 196 "vsopc.y"
+#line 201 "vsopc.y"
                     {(yyval.expression) = new Unit();}
-#line 2081 "vsopc.tab.c"
+#line 2085 "vsopc.tab.c"
     break;
 
   case 49: /* Expr: "(" Expr ")"  */
-#line 197 "vsopc.y"
+#line 202 "vsopc.y"
                          {(yyval.expression) = (yyvsp[-1].expression);}
-#line 2087 "vsopc.tab.c"
+#line 2091 "vsopc.tab.c"
     break;
 
   case 50: /* Expr: Block  */
-#line 198 "vsopc.y"
+#line 203 "vsopc.y"
                 {(yyval.expression) = new Block((yyvsp[0].args));}
-#line 2093 "vsopc.tab.c"
+#line 2097 "vsopc.tab.c"
     break;
 
   case 51: /* If: "if" Expr "then" Expr  */
-#line 201 "vsopc.y"
+#line 206 "vsopc.y"
                       {(yyval.expression) = new If((yyvsp[-2].expression), (yyvsp[0].expression), NULL);}
-#line 2099 "vsopc.tab.c"
+#line 2103 "vsopc.tab.c"
     break;
 
   case 52: /* If: "if" Expr "then" Expr "else" Expr  */
-#line 202 "vsopc.y"
+#line 207 "vsopc.y"
                                       {(yyval.expression) = new If((yyvsp[-4].expression), (yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2105 "vsopc.tab.c"
+#line 2109 "vsopc.tab.c"
     break;
 
   case 53: /* While: "while" Expr "do" Expr  */
-#line 205 "vsopc.y"
+#line 210 "vsopc.y"
                           {(yyval.expression) = new While((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2111 "vsopc.tab.c"
+#line 2115 "vsopc.tab.c"
     break;
 
   case 54: /* Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr  */
-#line 207 "vsopc.y"
+#line 212 "vsopc.y"
                                                              {(yyval.expression) = new Let((yyvsp[-4].stringValue), (yyvsp[-2].stringValue), (yyvsp[0].expression), NULL);}
-#line 2117 "vsopc.tab.c"
+#line 2121 "vsopc.tab.c"
     break;
 
   case 55: /* Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr  */
-#line 208 "vsopc.y"
+#line 213 "vsopc.y"
                                                                               {(yyval.expression) = new Let((yyvsp[-6].stringValue), (yyvsp[-4].stringValue), (yyvsp[0].expression), (yyvsp[-2].expression));}
-#line 2123 "vsopc.tab.c"
+#line 2127 "vsopc.tab.c"
     break;
 
   case 56: /* Args: %empty  */
-#line 211 "vsopc.y"
+#line 216 "vsopc.y"
             {(yyval.args) = new Args();}
-#line 2129 "vsopc.tab.c"
+#line 2133 "vsopc.tab.c"
     break;
 
   case 57: /* Args: Expr ArgsExprList  */
-#line 212 "vsopc.y"
+#line 217 "vsopc.y"
                             {(yyvsp[0].args)->addExpr((yyvsp[-1].expression)); 
                              (yyval.args) = (yyvsp[0].args);}
-#line 2136 "vsopc.tab.c"
+#line 2140 "vsopc.tab.c"
     break;
 
   case 58: /* ArgsExprList: %empty  */
-#line 215 "vsopc.y"
+#line 220 "vsopc.y"
                     {(yyval.args) = new Args();}
-#line 2142 "vsopc.tab.c"
+#line 2146 "vsopc.tab.c"
     break;
 
   case 59: /* ArgsExprList: "," Expr ArgsExprList  */
-#line 216 "vsopc.y"
+#line 221 "vsopc.y"
                                   {(yyvsp[0].args)->addExpr((yyvsp[-1].expression));
                                    (yyval.args) = (yyvsp[0].args);}
-#line 2149 "vsopc.tab.c"
+#line 2153 "vsopc.tab.c"
     break;
 
   case 60: /* Literal: INTEGER_LITERAL  */
-#line 220 "vsopc.y"
+#line 225 "vsopc.y"
                          {(yyval.expression) = new IntegerLiteral((yyvsp[0].intValue));}
-#line 2155 "vsopc.tab.c"
+#line 2159 "vsopc.tab.c"
     break;
 
   case 61: /* Literal: STRING_LITERAL  */
-#line 221 "vsopc.y"
+#line 226 "vsopc.y"
                          {(yyval.expression) = new StringLiteral((yyvsp[0].stringValue));}
-#line 2161 "vsopc.tab.c"
+#line 2165 "vsopc.tab.c"
     break;
 
   case 62: /* Literal: "true"  */
-#line 222 "vsopc.y"
+#line 227 "vsopc.y"
                {(yyval.expression) = new BooleanLiteral(true);}
-#line 2167 "vsopc.tab.c"
+#line 2171 "vsopc.tab.c"
     break;
 
   case 63: /* Literal: "false"  */
-#line 223 "vsopc.y"
+#line 228 "vsopc.y"
                 {(yyval.expression) = new BooleanLiteral(false);}
-#line 2173 "vsopc.tab.c"
+#line 2177 "vsopc.tab.c"
     break;
 
 
-#line 2177 "vsopc.tab.c"
+#line 2181 "vsopc.tab.c"
 
         default: break;
       }
@@ -2414,7 +2418,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 226 "vsopc.y"
+#line 231 "vsopc.y"
 
 
 void yyerror(const std::string message){
@@ -2659,5 +2663,6 @@ int main(int argc, char** argv){
     }
 
     fclose(yyin);
+
     return EXIT_SUCCESS;
 }
