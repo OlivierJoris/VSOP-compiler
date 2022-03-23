@@ -35,112 +35,114 @@ Grammaire
    16     | "unit"
 
    17 Formals: %empty
-   18        | Formal
-   19        | Formals "," Formal
+   18        | Formal FormalsContinued
 
-   20 Formal: OBJECT_IDENTIFIER ":" Type
+   19 FormalsContinued: %empty
+   20                 | "," Formal FormalsContinued
 
-   21 Block: "{" Expr BlockExpr "}"
+   21 Formal: OBJECT_IDENTIFIER ":" Type
 
-   22 BlockExpr: %empty
-   23          | ";" Expr BlockExpr
+   22 Block: "{" Expr BlockExpr "}"
 
-   24 Expr: If
-   25     | While
-   26     | Let
-   27     | OBJECT_IDENTIFIER "<-" Expr
-   28     | "not" Expr
-   29     | Expr "and" Expr
-   30     | Expr "<=" Expr
-   31     | Expr "<" Expr
-   32     | Expr "=" Expr
-   33     | Expr "-" Expr
-   34     | Expr "+" Expr
-   35     | Expr "/" Expr
-   36     | Expr "*" Expr
-   37     | Expr "^" Expr
-   38     | "-" Expr
-   39     | "isnull" Expr
-   40     | OBJECT_IDENTIFIER "(" Args ")"
-   41     | Expr "." OBJECT_IDENTIFIER "(" Args ")"
-   42     | "new" "type-identifier"
-   43     | OBJECT_IDENTIFIER
-   44     | "self"
-   45     | Literal
-   46     | "(" ")"
-   47     | "(" Expr ")"
-   48     | Block
+   23 BlockExpr: %empty
+   24          | ";" Expr BlockExpr
 
-   49 If: "if" Expr "then" Expr
-   50   | "if" Expr "then" Expr "else" Expr
+   25 Expr: If
+   26     | While
+   27     | Let
+   28     | OBJECT_IDENTIFIER "<-" Expr
+   29     | "not" Expr
+   30     | Expr "and" Expr
+   31     | Expr "<=" Expr
+   32     | Expr "<" Expr
+   33     | Expr "=" Expr
+   34     | Expr "-" Expr
+   35     | Expr "+" Expr
+   36     | Expr "/" Expr
+   37     | Expr "*" Expr
+   38     | Expr "^" Expr
+   39     | "-" Expr
+   40     | "isnull" Expr
+   41     | OBJECT_IDENTIFIER "(" Args ")"
+   42     | Expr "." OBJECT_IDENTIFIER "(" Args ")"
+   43     | "new" "type-identifier"
+   44     | OBJECT_IDENTIFIER
+   45     | "self"
+   46     | Literal
+   47     | "(" ")"
+   48     | "(" Expr ")"
+   49     | Block
 
-   51 While: "while" Expr "do" Expr
+   50 If: "if" Expr "then" Expr
+   51   | "if" Expr "then" Expr "else" Expr
 
-   52 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr
-   53    | "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
+   52 While: "while" Expr "do" Expr
 
-   54 Args: %empty
-   55     | Expr ArgsExprList
+   53 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr
+   54    | "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
 
-   56 ArgsExprList: %empty
-   57             | "," Expr ArgsExprList
+   55 Args: %empty
+   56     | Expr ArgsExprList
 
-   58 Literal: INTEGER_LITERAL
-   59        | STRING_LITERAL
-   60        | "true"
-   61        | "false"
+   57 ArgsExprList: %empty
+   58             | "," Expr ArgsExprList
+
+   59 Literal: INTEGER_LITERAL
+   60        | STRING_LITERAL
+   61        | "true"
+   62        | "false"
 
 
 Terminaux, suivis des règles où ils apparaissent
 
     $end (0) 0
     error (256)
-    "and" (258) 29
+    "and" (258) 30
     "bool" <stringValue> (259) 14
     "class" (260) 3 4
-    "do" (261) 51
-    "else" (262) 50
+    "do" (261) 52
+    "else" (262) 51
     "extends" (263) 4
-    "false" (264) 61
-    "if" (265) 49 50
-    "in" (266) 52 53
+    "false" (264) 62
+    "if" (265) 50 51
+    "in" (266) 53 54
     "int32" <stringValue> (267) 13
-    "isnull" (268) 39
-    "let" (269) 52 53
-    "new" (270) 42
-    "not" (271) 28
-    "self" (272) 44
+    "isnull" (268) 40
+    "let" (269) 53 54
+    "new" (270) 43
+    "not" (271) 29
+    "self" (272) 45
     "string" <stringValue> (273) 15
-    "then" (274) 49 50
-    "true" (275) 60
+    "then" (274) 50 51
+    "true" (275) 61
     "unit" <stringValue> (276) 16
-    "while" (277) 51
-    "{" (278) 5 21
-    "}" (279) 5 21
-    "(" (280) 11 40 41 46 47
-    ")" (281) 11 40 41 46 47
-    ":" (282) 9 10 11 20 52 53
-    ";" (283) 9 10 23
-    "," (284) 19 57
-    "+" (285) 34
-    "-" (286) 33 38
-    "*" (287) 36
-    "/" (288) 35
-    "^" (289) 37
-    "." (290) 41
-    "=" (291) 32
-    "<" (292) 31
-    "<=" (293) 30
-    "<-" (294) 10 27 53
+    "while" (277) 52
+    "{" (278) 5 22
+    "}" (279) 5 22
+    "(" (280) 11 41 42 47 48
+    ")" (281) 11 41 42 47 48
+    ":" (282) 9 10 11 21 53 54
+    ";" (283) 9 10 24
+    "," (284) 20 58
+    "+" (285) 35
+    "-" (286) 34 39
+    "*" (287) 37
+    "/" (288) 36
+    "^" (289) 38
+    "." (290) 42
+    "=" (291) 33
+    "<" (292) 32
+    "<=" (293) 31
+    "<-" (294) 10 28 54
     INVALID_HEX_NUMBER (295)
     INVALID_CHAR (296)
     INVALID_EOF_STRING (297)
     INVALID_EOF_COMMENT (298)
     INVALID_INTEGER_LITERAL (299)
-    INTEGER_LITERAL <intValue> (300) 58
-    "type-identifier" <stringValue> (301) 3 4 12 42
-    OBJECT_IDENTIFIER <stringValue> (302) 9 10 11 20 27 40 41 43 52 53
-    STRING_LITERAL <stringValue> (303) 59
+    INTEGER_LITERAL <intValue> (300) 59
+    "type-identifier" <stringValue> (301) 3 4 12 43
+    OBJECT_IDENTIFIER <stringValue> (302) 9 10 11 21 28 41 42 44 53 54
+    STRING_LITERAL <stringValue> (303) 60
     UNARYMINUS (304)
     EMBEDDED (305)
 
@@ -169,40 +171,43 @@ Non-terminaux, suivis des règles où ils apparaissent
         à droite: 8
     Type <stringValue> (58)
         à gauche: 12 13 14 15 16
-        à droite: 9 10 11 20 52 53
+        à droite: 9 10 11 21 53 54
     Formals <formals> (59)
-        à gauche: 17 18 19
-        à droite: 11 19
-    Formal <formal> (60)
-        à gauche: 20
-        à droite: 18 19
-    Block <block> (61)
+        à gauche: 17 18
+        à droite: 11
+    FormalsContinued <formals> (60)
+        à gauche: 19 20
+        à droite: 18 20
+    Formal <formal> (61)
         à gauche: 21
-        à droite: 11 48
-    BlockExpr (62)
-        à gauche: 22 23
-        à droite: 21 23
-    Expr <expression> (63)
-        à gauche: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48
-        à droite: 10 21 23 27 28 29 30 31 32 33 34 35 36 37 38 39 41 47 49 50 51 52 53 55 57
-    If <expression> (64)
-        à gauche: 49 50
-        à droite: 24
-    While <expression> (65)
-        à gauche: 51
+        à droite: 18 20
+    Block <args> (62)
+        à gauche: 22
+        à droite: 11 49
+    BlockExpr <args> (63)
+        à gauche: 23 24
+        à droite: 22 24
+    Expr <expression> (64)
+        à gauche: 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
+        à droite: 10 22 24 28 29 30 31 32 33 34 35 36 37 38 39 40 42 48 50 51 52 53 54 56 58
+    If <expression> (65)
+        à gauche: 50 51
         à droite: 25
-    Let <expression> (66)
-        à gauche: 52 53
+    While <expression> (66)
+        à gauche: 52
         à droite: 26
-    Args (67)
-        à gauche: 54 55
-        à droite: 40 41
-    ArgsExprList (68)
-        à gauche: 56 57
-        à droite: 55 57
-    Literal <expression> (69)
-        à gauche: 58 59 60 61
-        à droite: 45
+    Let <expression> (67)
+        à gauche: 53 54
+        à droite: 27
+    Args <args> (68)
+        à gauche: 55 56
+        à droite: 41 42
+    ArgsExprList <args> (69)
+        à gauche: 57 58
+        à droite: 56 58
+    Literal <expression> (70)
+        à gauche: 59 60 61 62
+        à droite: 46
 
 
 État 0
@@ -370,7 +375,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 18
 
-   20 Formal: OBJECT_IDENTIFIER • ":" Type
+   21 Formal: OBJECT_IDENTIFIER • ":" Type
 
     ":"  décalage et aller à l'état 27
 
@@ -378,17 +383,19 @@ Non-terminaux, suivis des règles où ils apparaissent
 État 19
 
    11 Method: OBJECT_IDENTIFIER "(" Formals • ")" ":" Type Block
-   19 Formals: Formals • "," Formal
 
     ")"  décalage et aller à l'état 28
-    ","  décalage et aller à l'état 29
 
 
 État 20
 
-   18 Formals: Formal •
+   18 Formals: Formal • FormalsContinued
 
-    $défaut  réduction par utilisation de la règle 18 (Formals)
+    ","  décalage et aller à l'état 29
+
+    $défaut  réduction par utilisation de la règle 19 (FormalsContinued)
+
+    FormalsContinued  aller à l'état 30
 
 
 État 21
@@ -431,13 +438,13 @@ Non-terminaux, suivis des règles où ils apparaissent
     9 Field: OBJECT_IDENTIFIER ":" Type • ";"
    10      | OBJECT_IDENTIFIER ":" Type • "<-" Expr ";"
 
-    ";"   décalage et aller à l'état 30
-    "<-"  décalage et aller à l'état 31
+    ";"   décalage et aller à l'état 31
+    "<-"  décalage et aller à l'état 32
 
 
 État 27
 
-   20 Formal: OBJECT_IDENTIFIER ":" • Type
+   21 Formal: OBJECT_IDENTIFIER ":" • Type
 
     "bool"             décalage et aller à l'état 21
     "int32"            décalage et aller à l'état 22
@@ -445,68 +452,75 @@ Non-terminaux, suivis des règles où ils apparaissent
     "unit"             décalage et aller à l'état 24
     "type-identifier"  décalage et aller à l'état 25
 
-    Type  aller à l'état 32
+    Type  aller à l'état 33
 
 
 État 28
 
    11 Method: OBJECT_IDENTIFIER "(" Formals ")" • ":" Type Block
 
-    ":"  décalage et aller à l'état 33
+    ":"  décalage et aller à l'état 34
 
 
 État 29
 
-   19 Formals: Formals "," • Formal
+   20 FormalsContinued: "," • Formal FormalsContinued
 
     OBJECT_IDENTIFIER  décalage et aller à l'état 18
 
-    Formal  aller à l'état 34
+    Formal  aller à l'état 35
 
 
 État 30
+
+   18 Formals: Formal FormalsContinued •
+
+    $défaut  réduction par utilisation de la règle 18 (Formals)
+
+
+État 31
 
     9 Field: OBJECT_IDENTIFIER ":" Type ";" •
 
     $défaut  réduction par utilisation de la règle 9 (Field)
 
 
-État 31
+État 32
 
    10 Field: OBJECT_IDENTIFIER ":" Type "<-" • Expr ";"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
-    Expr     aller à l'état 51
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
-État 32
-
-   20 Formal: OBJECT_IDENTIFIER ":" Type •
-
-    $défaut  réduction par utilisation de la règle 20 (Formal)
+    Block    aller à l'état 51
+    Expr     aller à l'état 52
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 33
+
+   21 Formal: OBJECT_IDENTIFIER ":" Type •
+
+    $défaut  réduction par utilisation de la règle 21 (Formal)
+
+
+État 34
 
    11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" • Type Block
 
@@ -516,915 +530,926 @@ Non-terminaux, suivis des règles où ils apparaissent
     "unit"             décalage et aller à l'état 24
     "type-identifier"  décalage et aller à l'état 25
 
-    Type  aller à l'état 56
-
-
-État 34
-
-   19 Formals: Formals "," Formal •
-
-    $défaut  réduction par utilisation de la règle 19 (Formals)
+    Type  aller à l'état 57
 
 
 État 35
 
-   61 Literal: "false" •
+   20 FormalsContinued: "," Formal • FormalsContinued
 
-    $défaut  réduction par utilisation de la règle 61 (Literal)
+    ","  décalage et aller à l'état 29
+
+    $défaut  réduction par utilisation de la règle 19 (FormalsContinued)
+
+    FormalsContinued  aller à l'état 58
 
 
 État 36
 
-   49 If: "if" • Expr "then" Expr
-   50   | "if" • Expr "then" Expr "else" Expr
+   62 Literal: "false" •
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 57
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    $défaut  réduction par utilisation de la règle 62 (Literal)
 
 
 État 37
 
-   39 Expr: "isnull" • Expr
+   50 If: "if" • Expr "then" Expr
+   51   | "if" • Expr "then" Expr "else" Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
-    Expr     aller à l'état 58
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    Block    aller à l'état 51
+    Expr     aller à l'état 59
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 38
 
-   52 Let: "let" • OBJECT_IDENTIFIER ":" Type "in" Expr
-   53    | "let" • OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
+   40 Expr: "isnull" • Expr
 
-    OBJECT_IDENTIFIER  décalage et aller à l'état 59
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 60
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 39
 
-   42 Expr: "new" • "type-identifier"
+   53 Let: "let" • OBJECT_IDENTIFIER ":" Type "in" Expr
+   54    | "let" • OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
 
-    "type-identifier"  décalage et aller à l'état 60
+    OBJECT_IDENTIFIER  décalage et aller à l'état 61
 
 
 État 40
 
-   28 Expr: "not" • Expr
+   43 Expr: "new" • "type-identifier"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 61
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    "type-identifier"  décalage et aller à l'état 62
 
 
 État 41
 
-   44 Expr: "self" •
+   29 Expr: "not" • Expr
 
-    $défaut  réduction par utilisation de la règle 44 (Expr)
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 63
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 42
 
-   60 Literal: "true" •
+   45 Expr: "self" •
 
-    $défaut  réduction par utilisation de la règle 60 (Literal)
+    $défaut  réduction par utilisation de la règle 45 (Expr)
 
 
 État 43
 
-   51 While: "while" • Expr "do" Expr
+   61 Literal: "true" •
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 62
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    $défaut  réduction par utilisation de la règle 61 (Literal)
 
 
 État 44
 
-   21 Block: "{" • Expr BlockExpr "}"
+   52 While: "while" • Expr "do" Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
-    Expr     aller à l'état 63
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    Block    aller à l'état 51
+    Expr     aller à l'état 64
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 45
 
-   46 Expr: "(" • ")"
-   47     | "(" • Expr ")"
+   22 Block: "{" • Expr BlockExpr "}"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    ")"                décalage et aller à l'état 64
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
+    Block    aller à l'état 51
     Expr     aller à l'état 65
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 46
 
-   38 Expr: "-" • Expr
+   47 Expr: "(" • ")"
+   48     | "(" • Expr ")"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    ")"                décalage et aller à l'état 66
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
-    Expr     aller à l'état 66
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    Block    aller à l'état 51
+    Expr     aller à l'état 67
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 47
 
-   58 Literal: INTEGER_LITERAL •
+   39 Expr: "-" • Expr
 
-    $défaut  réduction par utilisation de la règle 58 (Literal)
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 68
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 48
 
-   27 Expr: OBJECT_IDENTIFIER • "<-" Expr
-   40     | OBJECT_IDENTIFIER • "(" Args ")"
-   43     | OBJECT_IDENTIFIER •
-
-    "("   décalage et aller à l'état 67
-    "<-"  décalage et aller à l'état 68
-
-    $défaut  réduction par utilisation de la règle 43 (Expr)
-
-
-État 49
-
-   59 Literal: STRING_LITERAL •
+   59 Literal: INTEGER_LITERAL •
 
     $défaut  réduction par utilisation de la règle 59 (Literal)
 
 
+État 49
+
+   28 Expr: OBJECT_IDENTIFIER • "<-" Expr
+   41     | OBJECT_IDENTIFIER • "(" Args ")"
+   44     | OBJECT_IDENTIFIER •
+
+    "("   décalage et aller à l'état 69
+    "<-"  décalage et aller à l'état 70
+
+    $défaut  réduction par utilisation de la règle 44 (Expr)
+
+
 État 50
 
-   48 Expr: Block •
+   60 Literal: STRING_LITERAL •
 
-    $défaut  réduction par utilisation de la règle 48 (Expr)
+    $défaut  réduction par utilisation de la règle 60 (Literal)
 
 
 État 51
 
-   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr • ";"
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   49 Expr: Block •
 
-    "and"  décalage et aller à l'état 69
-    ";"    décalage et aller à l'état 70
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
+    $défaut  réduction par utilisation de la règle 49 (Expr)
 
 
 État 52
 
-   24 Expr: If •
+   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr • ";"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    $défaut  réduction par utilisation de la règle 24 (Expr)
+    "and"  décalage et aller à l'état 71
+    ";"    décalage et aller à l'état 72
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
 
 
 État 53
 
-   25 Expr: While •
+   25 Expr: If •
 
     $défaut  réduction par utilisation de la règle 25 (Expr)
 
 
 État 54
 
-   26 Expr: Let •
+   26 Expr: While •
 
     $défaut  réduction par utilisation de la règle 26 (Expr)
 
 
 État 55
 
-   45 Expr: Literal •
+   27 Expr: Let •
 
-    $défaut  réduction par utilisation de la règle 45 (Expr)
+    $défaut  réduction par utilisation de la règle 27 (Expr)
 
 
 État 56
 
-   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type • Block
-
-    "{"  décalage et aller à l'état 44
-
-    Block  aller à l'état 80
-
-
-État 57
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   49 If: "if" Expr • "then" Expr
-   50   | "if" Expr • "then" Expr "else" Expr
-
-    "and"   décalage et aller à l'état 69
-    "then"  décalage et aller à l'état 81
-    "+"     décalage et aller à l'état 71
-    "-"     décalage et aller à l'état 72
-    "*"     décalage et aller à l'état 73
-    "/"     décalage et aller à l'état 74
-    "^"     décalage et aller à l'état 75
-    "."     décalage et aller à l'état 76
-    "="     décalage et aller à l'état 77
-    "<"     décalage et aller à l'état 78
-    "<="    décalage et aller à l'état 79
-
-
-État 58
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   39     | "isnull" Expr •
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
-
-    $défaut  réduction par utilisation de la règle 39 (Expr)
-
-
-État 59
-
-   52 Let: "let" OBJECT_IDENTIFIER • ":" Type "in" Expr
-   53    | "let" OBJECT_IDENTIFIER • ":" Type "<-" Expr "in" Expr
-
-    ":"  décalage et aller à l'état 82
-
-
-État 60
-
-   42 Expr: "new" "type-identifier" •
-
-    $défaut  réduction par utilisation de la règle 42 (Expr)
-
-
-État 61
-
-   28 Expr: "not" Expr •
-   29     | Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-
-    "+"   décalage et aller à l'état 71
-    "-"   décalage et aller à l'état 72
-    "*"   décalage et aller à l'état 73
-    "/"   décalage et aller à l'état 74
-    "^"   décalage et aller à l'état 75
-    "."   décalage et aller à l'état 76
-    "="   décalage et aller à l'état 77
-    "<"   décalage et aller à l'état 78
-    "<="  décalage et aller à l'état 79
-
-    $défaut  réduction par utilisation de la règle 28 (Expr)
-
-
-État 62
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   51 While: "while" Expr • "do" Expr
-
-    "and"  décalage et aller à l'état 69
-    "do"   décalage et aller à l'état 83
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
-
-
-État 63
-
-   21 Block: "{" Expr • BlockExpr "}"
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-
-    "and"  décalage et aller à l'état 69
-    ";"    décalage et aller à l'état 84
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
-
-    $défaut  réduction par utilisation de la règle 22 (BlockExpr)
-
-    BlockExpr  aller à l'état 85
-
-
-État 64
-
-   46 Expr: "(" ")" •
+   46 Expr: Literal •
 
     $défaut  réduction par utilisation de la règle 46 (Expr)
 
 
+État 57
+
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type • Block
+
+    "{"  décalage et aller à l'état 45
+
+    Block  aller à l'état 82
+
+
+État 58
+
+   20 FormalsContinued: "," Formal FormalsContinued •
+
+    $défaut  réduction par utilisation de la règle 20 (FormalsContinued)
+
+
+État 59
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   50 If: "if" Expr • "then" Expr
+   51   | "if" Expr • "then" Expr "else" Expr
+
+    "and"   décalage et aller à l'état 71
+    "then"  décalage et aller à l'état 83
+    "+"     décalage et aller à l'état 73
+    "-"     décalage et aller à l'état 74
+    "*"     décalage et aller à l'état 75
+    "/"     décalage et aller à l'état 76
+    "^"     décalage et aller à l'état 77
+    "."     décalage et aller à l'état 78
+    "="     décalage et aller à l'état 79
+    "<"     décalage et aller à l'état 80
+    "<="    décalage et aller à l'état 81
+
+
+État 60
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   40     | "isnull" Expr •
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
+
+    $défaut  réduction par utilisation de la règle 40 (Expr)
+
+
+État 61
+
+   53 Let: "let" OBJECT_IDENTIFIER • ":" Type "in" Expr
+   54    | "let" OBJECT_IDENTIFIER • ":" Type "<-" Expr "in" Expr
+
+    ":"  décalage et aller à l'état 84
+
+
+État 62
+
+   43 Expr: "new" "type-identifier" •
+
+    $défaut  réduction par utilisation de la règle 43 (Expr)
+
+
+État 63
+
+   29 Expr: "not" Expr •
+   30     | Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"   décalage et aller à l'état 73
+    "-"   décalage et aller à l'état 74
+    "*"   décalage et aller à l'état 75
+    "/"   décalage et aller à l'état 76
+    "^"   décalage et aller à l'état 77
+    "."   décalage et aller à l'état 78
+    "="   décalage et aller à l'état 79
+    "<"   décalage et aller à l'état 80
+    "<="  décalage et aller à l'état 81
+
+    $défaut  réduction par utilisation de la règle 29 (Expr)
+
+
+État 64
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   52 While: "while" Expr • "do" Expr
+
+    "and"  décalage et aller à l'état 71
+    "do"   décalage et aller à l'état 85
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
+
+
 État 65
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   47     | "(" Expr • ")"
+   22 Block: "{" Expr • BlockExpr "}"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "and"  décalage et aller à l'état 69
-    ")"    décalage et aller à l'état 86
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
+    "and"  décalage et aller à l'état 71
+    ";"    décalage et aller à l'état 86
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
+
+    $défaut  réduction par utilisation de la règle 23 (BlockExpr)
+
+    BlockExpr  aller à l'état 87
 
 
 État 66
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   38     | "-" Expr •
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   47 Expr: "(" ")" •
 
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
-
-    $défaut  réduction par utilisation de la règle 38 (Expr)
+    $défaut  réduction par utilisation de la règle 47 (Expr)
 
 
 État 67
 
-   40 Expr: OBJECT_IDENTIFIER "(" • Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   48     | "(" Expr • ")"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    $défaut  réduction par utilisation de la règle 54 (Args)
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 87
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Args     aller à l'état 88
-    Literal  aller à l'état 55
+    "and"  décalage et aller à l'état 71
+    ")"    décalage et aller à l'état 88
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
 
 
 État 68
 
-   27 Expr: OBJECT_IDENTIFIER "<-" • Expr
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   39     | "-" Expr •
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
 
-    Block    aller à l'état 50
-    Expr     aller à l'état 89
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    $défaut  réduction par utilisation de la règle 39 (Expr)
 
 
 État 69
 
-   29 Expr: Expr "and" • Expr
+   41 Expr: OBJECT_IDENTIFIER "(" • Args ")"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
-    Expr     aller à l'état 90
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    $défaut  réduction par utilisation de la règle 55 (Args)
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 89
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Args     aller à l'état 90
+    Literal  aller à l'état 56
 
 
 État 70
+
+   28 Expr: OBJECT_IDENTIFIER "<-" • Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 91
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 71
+
+   30 Expr: Expr "and" • Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 92
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 72
 
    10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr ";" •
 
     $défaut  réduction par utilisation de la règle 10 (Field)
 
 
-État 71
-
-   34 Expr: Expr "+" • Expr
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 91
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
-État 72
-
-   33 Expr: Expr "-" • Expr
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 92
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
 État 73
 
-   36 Expr: Expr "*" • Expr
+   35 Expr: Expr "+" • Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
+    Block    aller à l'état 51
     Expr     aller à l'état 93
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 74
 
-   35 Expr: Expr "/" • Expr
+   34 Expr: Expr "-" • Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
+    Block    aller à l'état 51
     Expr     aller à l'état 94
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 75
 
-   37 Expr: Expr "^" • Expr
+   37 Expr: Expr "*" • Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
+    Block    aller à l'état 51
     Expr     aller à l'état 95
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 76
 
-   41 Expr: Expr "." • OBJECT_IDENTIFIER "(" Args ")"
+   36 Expr: Expr "/" • Expr
 
-    OBJECT_IDENTIFIER  décalage et aller à l'état 96
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 96
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 77
 
-   32 Expr: Expr "=" • Expr
+   38 Expr: Expr "^" • Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
+    Block    aller à l'état 51
     Expr     aller à l'état 97
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 78
 
-   31 Expr: Expr "<" • Expr
+   42 Expr: Expr "." • OBJECT_IDENTIFIER "(" Args ")"
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 98
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    OBJECT_IDENTIFIER  décalage et aller à l'état 98
 
 
 État 79
 
-   30 Expr: Expr "<=" • Expr
+   33 Expr: Expr "=" • Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
+    Block    aller à l'état 51
     Expr     aller à l'état 99
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 80
+
+   32 Expr: Expr "<" • Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 100
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 81
+
+   31 Expr: Expr "<=" • Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 101
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 82
 
    11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block •
 
     $défaut  réduction par utilisation de la règle 11 (Method)
 
 
-État 81
+État 83
 
-   49 If: "if" Expr "then" • Expr
-   50   | "if" Expr "then" • Expr "else" Expr
+   50 If: "if" Expr "then" • Expr
+   51   | "if" Expr "then" • Expr "else" Expr
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
 
-    Block    aller à l'état 50
-    Expr     aller à l'état 100
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    Block    aller à l'état 51
+    Expr     aller à l'état 102
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
-État 82
+État 84
 
-   52 Let: "let" OBJECT_IDENTIFIER ":" • Type "in" Expr
-   53    | "let" OBJECT_IDENTIFIER ":" • Type "<-" Expr "in" Expr
+   53 Let: "let" OBJECT_IDENTIFIER ":" • Type "in" Expr
+   54    | "let" OBJECT_IDENTIFIER ":" • Type "<-" Expr "in" Expr
 
     "bool"             décalage et aller à l'état 21
     "int32"            décalage et aller à l'état 22
@@ -1432,303 +1457,331 @@ Non-terminaux, suivis des règles où ils apparaissent
     "unit"             décalage et aller à l'état 24
     "type-identifier"  décalage et aller à l'état 25
 
-    Type  aller à l'état 101
-
-
-État 83
-
-   51 While: "while" Expr "do" • Expr
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 102
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
-État 84
-
-   23 BlockExpr: ";" • Expr BlockExpr
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 103
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    Type  aller à l'état 103
 
 
 État 85
 
-   21 Block: "{" Expr BlockExpr • "}"
+   52 While: "while" Expr "do" • Expr
 
-    "}"  décalage et aller à l'état 104
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 104
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 86
 
-   47 Expr: "(" Expr ")" •
+   24 BlockExpr: ";" • Expr BlockExpr
 
-    $défaut  réduction par utilisation de la règle 47 (Expr)
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 105
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
 
 
 État 87
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   55 Args: Expr • ArgsExprList
+   22 Block: "{" Expr BlockExpr • "}"
 
-    "and"  décalage et aller à l'état 69
-    ","    décalage et aller à l'état 105
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
-
-    $défaut  réduction par utilisation de la règle 56 (ArgsExprList)
-
-    ArgsExprList  aller à l'état 106
+    "}"  décalage et aller à l'état 106
 
 
 État 88
 
-   40 Expr: OBJECT_IDENTIFIER "(" Args • ")"
+   48 Expr: "(" Expr ")" •
 
-    ")"  décalage et aller à l'état 107
+    $défaut  réduction par utilisation de la règle 48 (Expr)
 
 
 État 89
 
-   27 Expr: OBJECT_IDENTIFIER "<-" Expr •
-   29     | Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   56 Args: Expr • ArgsExprList
 
-    "and"  décalage et aller à l'état 69
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
+    "and"  décalage et aller à l'état 71
+    ","    décalage et aller à l'état 107
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
 
-    $défaut  réduction par utilisation de la règle 27 (Expr)
+    $défaut  réduction par utilisation de la règle 57 (ArgsExprList)
+
+    ArgsExprList  aller à l'état 108
 
 
 État 90
 
-   29 Expr: Expr • "and" Expr
-   29     | Expr "and" Expr •
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   41 Expr: OBJECT_IDENTIFIER "(" Args • ")"
 
-    "+"   décalage et aller à l'état 71
-    "-"   décalage et aller à l'état 72
-    "*"   décalage et aller à l'état 73
-    "/"   décalage et aller à l'état 74
-    "^"   décalage et aller à l'état 75
-    "."   décalage et aller à l'état 76
-    "="   décalage et aller à l'état 77
-    "<"   décalage et aller à l'état 78
-    "<="  décalage et aller à l'état 79
-
-    $défaut  réduction par utilisation de la règle 29 (Expr)
+    ")"  décalage et aller à l'état 109
 
 
 État 91
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   34     | Expr "+" Expr •
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   28 Expr: OBJECT_IDENTIFIER "<-" Expr •
+   30     | Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "*"  décalage et aller à l'état 73
-    "/"  décalage et aller à l'état 74
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
+    "and"  décalage et aller à l'état 71
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
 
-    $défaut  réduction par utilisation de la règle 34 (Expr)
+    $défaut  réduction par utilisation de la règle 28 (Expr)
 
 
 État 92
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   33     | Expr "-" Expr •
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   30     | Expr "and" Expr •
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "*"  décalage et aller à l'état 73
-    "/"  décalage et aller à l'état 74
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
+    "+"   décalage et aller à l'état 73
+    "-"   décalage et aller à l'état 74
+    "*"   décalage et aller à l'état 75
+    "/"   décalage et aller à l'état 76
+    "^"   décalage et aller à l'état 77
+    "."   décalage et aller à l'état 78
+    "="   décalage et aller à l'état 79
+    "<"   décalage et aller à l'état 80
+    "<="  décalage et aller à l'état 81
 
-    $défaut  réduction par utilisation de la règle 33 (Expr)
+    $défaut  réduction par utilisation de la règle 30 (Expr)
 
 
 État 93
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   36     | Expr "*" Expr •
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   35     | Expr "+" Expr •
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
-
-    $défaut  réduction par utilisation de la règle 36 (Expr)
-
-
-État 94
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   35     | Expr "/" Expr •
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
+    "*"  décalage et aller à l'état 75
+    "/"  décalage et aller à l'état 76
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
 
     $défaut  réduction par utilisation de la règle 35 (Expr)
 
 
+État 94
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   34     | Expr "-" Expr •
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "*"  décalage et aller à l'état 75
+    "/"  décalage et aller à l'état 76
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
+
+    $défaut  réduction par utilisation de la règle 34 (Expr)
+
+
 État 95
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   37     | Expr "^" Expr •
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   37     | Expr "*" Expr •
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
 
     $défaut  réduction par utilisation de la règle 37 (Expr)
 
 
 État 96
 
-   41 Expr: Expr "." OBJECT_IDENTIFIER • "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   36     | Expr "/" Expr •
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "("  décalage et aller à l'état 108
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
+
+    $défaut  réduction par utilisation de la règle 36 (Expr)
 
 
 État 97
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   32     | Expr "=" Expr •
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   38     | Expr "^" Expr •
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "+"  décalage et aller à l'état 71
-    "-"  décalage et aller à l'état 72
-    "*"  décalage et aller à l'état 73
-    "/"  décalage et aller à l'état 74
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
+
+    $défaut  réduction par utilisation de la règle 38 (Expr)
+
+
+État 98
+
+   42 Expr: Expr "." OBJECT_IDENTIFIER • "(" Args ")"
+
+    "("  décalage et aller à l'état 110
+
+
+État 99
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   33     | Expr "=" Expr •
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"  décalage et aller à l'état 73
+    "-"  décalage et aller à l'état 74
+    "*"  décalage et aller à l'état 75
+    "/"  décalage et aller à l'état 76
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
+
+    "="   erreur (non-associative)
+    "<"   erreur (non-associative)
+    "<="  erreur (non-associative)
+
+    $défaut  réduction par utilisation de la règle 33 (Expr)
+
+
+État 100
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   32     | Expr "<" Expr •
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"  décalage et aller à l'état 73
+    "-"  décalage et aller à l'état 74
+    "*"  décalage et aller à l'état 75
+    "/"  décalage et aller à l'état 76
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
 
     "="   erreur (non-associative)
     "<"   erreur (non-associative)
@@ -1737,26 +1790,26 @@ Non-terminaux, suivis des règles où ils apparaissent
     $défaut  réduction par utilisation de la règle 32 (Expr)
 
 
-État 98
+État 101
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   31     | Expr "<" Expr •
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   31     | Expr "<=" Expr •
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "+"  décalage et aller à l'état 71
-    "-"  décalage et aller à l'état 72
-    "*"  décalage et aller à l'état 73
-    "/"  décalage et aller à l'état 74
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
+    "+"  décalage et aller à l'état 73
+    "-"  décalage et aller à l'état 74
+    "*"  décalage et aller à l'état 75
+    "/"  décalage et aller à l'état 76
+    "^"  décalage et aller à l'état 77
+    "."  décalage et aller à l'état 78
 
     "="   erreur (non-associative)
     "<"   erreur (non-associative)
@@ -1765,435 +1818,407 @@ Non-terminaux, suivis des règles où ils apparaissent
     $défaut  réduction par utilisation de la règle 31 (Expr)
 
 
-État 99
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   30     | Expr "<=" Expr •
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-
-    "+"  décalage et aller à l'état 71
-    "-"  décalage et aller à l'état 72
-    "*"  décalage et aller à l'état 73
-    "/"  décalage et aller à l'état 74
-    "^"  décalage et aller à l'état 75
-    "."  décalage et aller à l'état 76
-
-    "="   erreur (non-associative)
-    "<"   erreur (non-associative)
-    "<="  erreur (non-associative)
-
-    $défaut  réduction par utilisation de la règle 30 (Expr)
-
-
-État 100
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   49 If: "if" Expr "then" Expr •
-   50   | "if" Expr "then" Expr • "else" Expr
-
-    "else"  décalage et aller à l'état 109
-
-    $défaut  réduction par utilisation de la règle 49 (If)
-
-
-État 101
-
-   52 Let: "let" OBJECT_IDENTIFIER ":" Type • "in" Expr
-   53    | "let" OBJECT_IDENTIFIER ":" Type • "<-" Expr "in" Expr
-
-    "in"  décalage et aller à l'état 110
-    "<-"  décalage et aller à l'état 111
-
-
 État 102
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   51 While: "while" Expr "do" Expr •
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   50 If: "if" Expr "then" Expr •
+   51   | "if" Expr "then" Expr • "else" Expr
 
-    $défaut  réduction par utilisation de la règle 51 (While)
-
-
-État 103
-
-   23 BlockExpr: ";" Expr • BlockExpr
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-
-    "and"  décalage et aller à l'état 69
-    ";"    décalage et aller à l'état 84
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
-
-    $défaut  réduction par utilisation de la règle 22 (BlockExpr)
-
-    BlockExpr  aller à l'état 112
-
-
-État 104
-
-   21 Block: "{" Expr BlockExpr "}" •
-
-    $défaut  réduction par utilisation de la règle 21 (Block)
-
-
-État 105
-
-   57 ArgsExprList: "," • Expr ArgsExprList
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 113
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
-État 106
-
-   55 Args: Expr ArgsExprList •
-
-    $défaut  réduction par utilisation de la règle 55 (Args)
-
-
-État 107
-
-   40 Expr: OBJECT_IDENTIFIER "(" Args ")" •
-
-    $défaut  réduction par utilisation de la règle 40 (Expr)
-
-
-État 108
-
-   41 Expr: Expr "." OBJECT_IDENTIFIER "(" • Args ")"
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    $défaut  réduction par utilisation de la règle 54 (Args)
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 87
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Args     aller à l'état 114
-    Literal  aller à l'état 55
-
-
-État 109
-
-   50 If: "if" Expr "then" Expr "else" • Expr
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 115
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
-État 110
-
-   52 Let: "let" OBJECT_IDENTIFIER ":" Type "in" • Expr
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 116
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
-État 111
-
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" • Expr "in" Expr
-
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 117
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
-
-
-État 112
-
-   23 BlockExpr: ";" Expr BlockExpr •
-
-    $défaut  réduction par utilisation de la règle 23 (BlockExpr)
-
-
-État 113
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   57 ArgsExprList: "," Expr • ArgsExprList
-
-    "and"  décalage et aller à l'état 69
-    ","    décalage et aller à l'état 105
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
-
-    $défaut  réduction par utilisation de la règle 56 (ArgsExprList)
-
-    ArgsExprList  aller à l'état 118
-
-
-État 114
-
-   41 Expr: Expr "." OBJECT_IDENTIFIER "(" Args • ")"
-
-    ")"  décalage et aller à l'état 119
-
-
-État 115
-
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   50 If: "if" Expr "then" Expr "else" Expr •
+    "else"  décalage et aller à l'état 111
 
     $défaut  réduction par utilisation de la règle 50 (If)
 
 
-État 116
+État 103
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   52 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr •
+   53 Let: "let" OBJECT_IDENTIFIER ":" Type • "in" Expr
+   54    | "let" OBJECT_IDENTIFIER ":" Type • "<-" Expr "in" Expr
 
-    $défaut  réduction par utilisation de la règle 52 (Let)
+    "in"  décalage et aller à l'état 112
+    "<-"  décalage et aller à l'état 113
 
 
-État 117
+État 104
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr • "in" Expr
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   52 While: "while" Expr "do" Expr •
 
-    "and"  décalage et aller à l'état 69
-    "in"   décalage et aller à l'état 120
-    "+"    décalage et aller à l'état 71
-    "-"    décalage et aller à l'état 72
-    "*"    décalage et aller à l'état 73
-    "/"    décalage et aller à l'état 74
-    "^"    décalage et aller à l'état 75
-    "."    décalage et aller à l'état 76
-    "="    décalage et aller à l'état 77
-    "<"    décalage et aller à l'état 78
-    "<="   décalage et aller à l'état 79
+    $défaut  réduction par utilisation de la règle 52 (While)
 
 
-État 118
+État 105
 
-   57 ArgsExprList: "," Expr ArgsExprList •
+   24 BlockExpr: ";" Expr • BlockExpr
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    $défaut  réduction par utilisation de la règle 57 (ArgsExprList)
+    "and"  décalage et aller à l'état 71
+    ";"    décalage et aller à l'état 86
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
+
+    $défaut  réduction par utilisation de la règle 23 (BlockExpr)
+
+    BlockExpr  aller à l'état 114
 
 
-État 119
+État 106
 
-   41 Expr: Expr "." OBJECT_IDENTIFIER "(" Args ")" •
+   22 Block: "{" Expr BlockExpr "}" •
+
+    $défaut  réduction par utilisation de la règle 22 (Block)
+
+
+État 107
+
+   58 ArgsExprList: "," • Expr ArgsExprList
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 115
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 108
+
+   56 Args: Expr ArgsExprList •
+
+    $défaut  réduction par utilisation de la règle 56 (Args)
+
+
+État 109
+
+   41 Expr: OBJECT_IDENTIFIER "(" Args ")" •
 
     $défaut  réduction par utilisation de la règle 41 (Expr)
 
 
+État 110
+
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" • Args ")"
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    $défaut  réduction par utilisation de la règle 55 (Args)
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 89
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Args     aller à l'état 116
+    Literal  aller à l'état 56
+
+
+État 111
+
+   51 If: "if" Expr "then" Expr "else" • Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 117
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 112
+
+   53 Let: "let" OBJECT_IDENTIFIER ":" Type "in" • Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 118
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 113
+
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" • Expr "in" Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 119
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 114
+
+   24 BlockExpr: ";" Expr BlockExpr •
+
+    $défaut  réduction par utilisation de la règle 24 (BlockExpr)
+
+
+État 115
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   58 ArgsExprList: "," Expr • ArgsExprList
+
+    "and"  décalage et aller à l'état 71
+    ","    décalage et aller à l'état 107
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
+
+    $défaut  réduction par utilisation de la règle 57 (ArgsExprList)
+
+    ArgsExprList  aller à l'état 120
+
+
+État 116
+
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args • ")"
+
+    ")"  décalage et aller à l'état 121
+
+
+État 117
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   51 If: "if" Expr "then" Expr "else" Expr •
+
+    $défaut  réduction par utilisation de la règle 51 (If)
+
+
+État 118
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   53 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr •
+
+    $défaut  réduction par utilisation de la règle 53 (Let)
+
+
+État 119
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr • "in" Expr
+
+    "and"  décalage et aller à l'état 71
+    "in"   décalage et aller à l'état 122
+    "+"    décalage et aller à l'état 73
+    "-"    décalage et aller à l'état 74
+    "*"    décalage et aller à l'état 75
+    "/"    décalage et aller à l'état 76
+    "^"    décalage et aller à l'état 77
+    "."    décalage et aller à l'état 78
+    "="    décalage et aller à l'état 79
+    "<"    décalage et aller à l'état 80
+    "<="   décalage et aller à l'état 81
+
+
 État 120
 
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" • Expr
+   58 ArgsExprList: "," Expr ArgsExprList •
 
-    "false"            décalage et aller à l'état 35
-    "if"               décalage et aller à l'état 36
-    "isnull"           décalage et aller à l'état 37
-    "let"              décalage et aller à l'état 38
-    "new"              décalage et aller à l'état 39
-    "not"              décalage et aller à l'état 40
-    "self"             décalage et aller à l'état 41
-    "true"             décalage et aller à l'état 42
-    "while"            décalage et aller à l'état 43
-    "{"                décalage et aller à l'état 44
-    "("                décalage et aller à l'état 45
-    "-"                décalage et aller à l'état 46
-    INTEGER_LITERAL    décalage et aller à l'état 47
-    OBJECT_IDENTIFIER  décalage et aller à l'état 48
-    STRING_LITERAL     décalage et aller à l'état 49
-
-    Block    aller à l'état 50
-    Expr     aller à l'état 121
-    If       aller à l'état 52
-    While    aller à l'état 53
-    Let      aller à l'état 54
-    Literal  aller à l'état 55
+    $défaut  réduction par utilisation de la règle 58 (ArgsExprList)
 
 
 État 121
 
-   29 Expr: Expr • "and" Expr
-   30     | Expr • "<=" Expr
-   31     | Expr • "<" Expr
-   32     | Expr • "=" Expr
-   33     | Expr • "-" Expr
-   34     | Expr • "+" Expr
-   35     | Expr • "/" Expr
-   36     | Expr • "*" Expr
-   37     | Expr • "^" Expr
-   41     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr •
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args ")" •
 
-    $défaut  réduction par utilisation de la règle 53 (Let)
+    $défaut  réduction par utilisation de la règle 42 (Expr)
+
+
+État 122
+
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" • Expr
+
+    "false"            décalage et aller à l'état 36
+    "if"               décalage et aller à l'état 37
+    "isnull"           décalage et aller à l'état 38
+    "let"              décalage et aller à l'état 39
+    "new"              décalage et aller à l'état 40
+    "not"              décalage et aller à l'état 41
+    "self"             décalage et aller à l'état 42
+    "true"             décalage et aller à l'état 43
+    "while"            décalage et aller à l'état 44
+    "{"                décalage et aller à l'état 45
+    "("                décalage et aller à l'état 46
+    "-"                décalage et aller à l'état 47
+    INTEGER_LITERAL    décalage et aller à l'état 48
+    OBJECT_IDENTIFIER  décalage et aller à l'état 49
+    STRING_LITERAL     décalage et aller à l'état 50
+
+    Block    aller à l'état 51
+    Expr     aller à l'état 123
+    If       aller à l'état 53
+    While    aller à l'état 54
+    Let      aller à l'état 55
+    Literal  aller à l'état 56
+
+
+État 123
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr •
+
+    $défaut  réduction par utilisation de la règle 54 (Let)

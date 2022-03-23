@@ -61,7 +61,16 @@ Method::Method(const std::string name, Formals* formals, const std::string retTy
 
 std::string Method::eval() const 
 {
-    return "Method(" + Method::name + ", " + Method::formals->eval() + ", " + Method::retType + ", " + block->eval() + ")";
+    std::string formals = "[]";
+    std::string block = "[]";
+
+    if(Method::formals)
+        formals = Method::formals->eval();
+    
+    if(Method::block)
+        block = Method::block->eval();
+
+    return "Method(" + Method::name + ", " + formals + ", " + Method::retType + ", " + block + ")";
 }
 
 Formal::Formal(const std::string name, const std::string type): name(name), type(type){}
@@ -75,24 +84,28 @@ Formals::Formals(){}
 
 std::string Formals::eval() const
 {
-    auto firstFormal = Formals::formals.begin();
-    std::string formals = (*firstFormal)->eval();
+    std::string formals = "";
 
-    for(auto it = Formals::formals.begin() + 1; it != Formals::formals.end(); ++it)
-        formals += ", " + (*it)->eval();
-    
+    if(Formals::formals.size() != 0)
+    {
+        auto firstFormal = Formals::formals.begin();
+        formals = (*firstFormal)->eval();
+
+        for(auto it = Formals::formals.begin() + 1; it != Formals::formals.end(); ++it)
+            formals += ", " + (*it)->eval();
+    }
+
     return "[" + formals + "]";
 }
 
-Block::Block(std::vector<Expr*>& exprList): exprList(exprList){}
+Block::Block(Args *exprList): exprList(exprList){}
 
 std::string Block::eval() const
 {
-    auto firstExpr = Block::exprList.begin();
-    std::string listExpr = (*firstExpr)->eval();
+    std::string listExpr = "[]";
 
-    for(auto it = Block::exprList.begin() + 1; it != Block::exprList.end(); ++it)
-        listExpr += ", " + (*it)->eval();
+    if(Block::exprList)
+        listExpr = Block::exprList->eval();
     
     return listExpr;
 }
@@ -173,21 +186,39 @@ Equal::Equal(Expr *leftExpr, Expr *rightExpr): BinOp("=", leftExpr, rightExpr){}
 
 Pow::Pow(Expr *leftExpr, Expr *rightExpr): BinOp("^", leftExpr, rightExpr){}
 
-Call::Call(Expr *objExpr, const std::string methodName, std::vector<Expr*>& listExpr): objExpr(objExpr), methodName(methodName), listExpr(listExpr){}
+Args::Args(){}
+
+std::string Args::eval() const
+{
+    std::string exprList = "";
+
+    if(Args::exprList.size() != 0)
+    {
+        auto firstFormal = Args::exprList.begin();
+        exprList = (*firstFormal)->eval();
+
+        for(auto it = Args::exprList.begin() + 1; it != Args::exprList.end(); ++it)
+            exprList += ", " + (*it)->eval();
+    }
+
+    return "[" + exprList + "]";
+}
+
+Call::Call(Expr *objExpr, const std::string methodName, Args *listExpr): objExpr(objExpr), methodName(methodName), listExpr(listExpr){}
 
 std::string Call::eval() const
 {
     std::string objExpr = "self";
-    auto firstExpr = Call::listExpr.begin();
-    std::string listExpr = (*firstExpr)->eval();
+   
+    std::string listExpr = "[]";
+
+    if(Call::listExpr)
+        listExpr = Call::listExpr->eval();
 
     if(Call::objExpr)
         objExpr = Call::objExpr->eval();
 
-    for(auto it = Call::listExpr.begin() + 1; it != Call::listExpr.end(); ++it)
-        listExpr += ", " + (*it)->eval();
-
-    return "Call(" + objExpr + ", " + Call::methodName + ", " + "[" + listExpr + "]" + ")";
+    return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ")";
 }
 
 New::New(const std::string typeName): typeName(typeName){}
@@ -268,4 +299,3 @@ std::string Unit::eval() const
 {
     return "unit";
 }
-

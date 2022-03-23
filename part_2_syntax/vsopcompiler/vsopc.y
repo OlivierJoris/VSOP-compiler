@@ -34,7 +34,7 @@
     Expr *expression;
     Formal *formal;
     Formals *formals;
-    Block *block;
+    Args *args;
     Class *cls;
     ClassBody *classBody;
     Field *field;
@@ -112,9 +112,9 @@
 %nterm <classBody> ClassBody ClassBodyFieldMethod
 %nterm <field> Field
 %nterm <method> Method
-%nterm <block> Block
-%nterm <formals> Formals
-%nterm <formal> Formal
+%nterm <args> Block BlockExpr Args ArgsExprList
+%nterm <formals> Formals FormalsContinued
+%nterm <formal> Formal 
 
 %locations
 
@@ -144,7 +144,7 @@ Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL);}
         | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {$$ = new Field($1, $3, $5);}
         ;
 
-Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, $7);};
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, new Block($7));};
 
 Type: TYPE_IDENTIFIER {$$ = $1;}
         | INT32       {$$ = (char *) "int32";}
@@ -154,16 +154,21 @@ Type: TYPE_IDENTIFIER {$$ = $1;}
         ;
 
 Formals: /* */ {$$ = new Formals();}
-        | Formal 
-        | Formals COMMA Formal {$1->addFormal($3);
-                                $$ = $1;}
+        | Formal FormalsContinued {$2->addFormal($1);
+                                   $$ = $2;}
         ;
+        
+FormalsContinued: /* */ {$$ = new Formals();}
+                 | COMMA Formal FormalsContinued {$3->addFormal($2);
+                                                  $$ = $3;};
 
 Formal: OBJECT_IDENTIFIER COLON Type {$$ = new Formal($1, $3);};
 
-Block: LBRACE Expr BlockExpr RBRACE {};
-BlockExpr: /* */
-        | SEMICOLON Expr BlockExpr
+Block: LBRACE Expr BlockExpr RBRACE {$3->addExpr($2);
+                                     $$ = $3;};
+BlockExpr: /* */ {$$ = new Args();}
+        | SEMICOLON Expr BlockExpr {$3->addExpr($2);
+                                    $$ = $3;}
         ;
 
 Expr:     If
@@ -182,15 +187,15 @@ Expr:     If
         | Expr POW Expr {$$ = new Pow($1, $3);}
         | MINUS Expr %prec UNARYMINUS {$$ = new UnaryMinus($2);}
         | ISNULL Expr {$$ = new IsNull($2);}
-        | OBJECT_IDENTIFIER LPAR Args RPAR
-        | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR
-        | NEW TYPE_IDENTIFIER
+        | OBJECT_IDENTIFIER LPAR Args RPAR {$$ = new Call(NULL, $1, $3);}
+        | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR {$$ = new Call($1, $3, $5);}
+        | NEW TYPE_IDENTIFIER {$$ = new New($2);}
         | OBJECT_IDENTIFIER {$$ = new ObjectIdentifier($1);}
         | SELF {$$ = new Self();}
         | Literal
         | LPAR RPAR {$$ = new Unit();}
-        | LPAR Expr RPAR
-        | Block
+        | LPAR Expr RPAR {$$ = $2;}
+        | Block {$$ = new Block($1);}
         ;
 
 If: IF Expr THEN Expr {$$ = new If($2, $4, NULL);}
@@ -203,11 +208,13 @@ Let: LET OBJECT_IDENTIFIER COLON Type IN Expr %prec EMBEDDED {$$ = new Let($2, $
         | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr %prec EMBEDDED {$$ = new Let($2, $4, $8, $6);}
         ;
 
-Args: /* */
-        | Expr ArgsExprList
+Args: /* */ {$$ = new Args();}
+        | Expr ArgsExprList {$2->addExpr($1); 
+                             $$ = $2;}
         ;
-ArgsExprList: /* */
-        | COMMA Expr ArgsExprList
+ArgsExprList: /* */ {$$ = new Args();}
+        | COMMA Expr ArgsExprList {$3->addExpr($2);
+                                   $$ = $3;}
         ;
 
 Literal: INTEGER_LITERAL {$$ = new IntegerLiteral($1);}
@@ -451,16 +458,15 @@ int main(int argc, char** argv){
 
     /* Start parser */
     if(flag == "-p") {
-        std::cout << "* ENTERING PARSING MODE *" << std::endl;
         abstractSyntaxTree = new Program();
         if(yyparse()) {
             return EXIT_FAILURE;
         }else{
             std::cout << abstractSyntaxTree->eval() << std::endl;
-            std::cout << "* Parsing done *" << std::endl;
         }
     }
 
     fclose(yyin);
+    
     return EXIT_SUCCESS;
 }

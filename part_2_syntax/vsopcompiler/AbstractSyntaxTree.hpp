@@ -22,13 +22,24 @@ class Field : public Expr
         std::string eval() const override;
 };
 
-class Block : public Expr
+class Args : public Expr
 {
     private:
         std::vector<Expr*> exprList;
 
     public:
-        Block(std::vector<Expr*>& exprList);
+        Args();
+        void addExpr(Expr *expr) {exprList.push_back(expr);}
+        std::string eval() const override;
+};
+
+class Block : public Expr
+{
+    private:
+        Args *exprList;
+
+    public:
+        Block(Args *exprList);
         std::string eval() const override;
 };
 
@@ -253,10 +264,10 @@ class Call : public Expr
     private:
         Expr *objExpr;
         std::string methodName;
-        std::vector<Expr*> listExpr;
+        Args *listExpr;
 
     public:
-        Call(Expr *objExpr, const std::string methodName, std::vector<Expr*>& listExpr);
+        Call(Expr *objExpr, const std::string methodName, Args *listExpr);
         std::string eval() const override;
 };  
 
