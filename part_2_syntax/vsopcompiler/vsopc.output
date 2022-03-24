@@ -1,3 +1,8 @@
+Terminaux inutilisés dans la grammaire
+
+    EMBEDDED
+
+
 Grammaire
 
     0 $accept: Program $end
@@ -7,8 +12,8 @@ Grammaire
     2 ProgramContinued: %empty
     3                 | Class ProgramContinued
 
-    4 Class: "class" "type-identifier" "{" ClassBody "}"
-    5      | "class" "type-identifier" "extends" "type-identifier" "{" ClassBody "}"
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody "}"
+    5      | "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}"
 
     6 ClassBody: %empty
     7          | Field ClassBody
@@ -19,7 +24,7 @@ Grammaire
 
    11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block
 
-   12 Type: "type-identifier"
+   12 Type: TYPE_IDENTIFIER
    13     | "int32"
    14     | "bool"
    15     | "string"
@@ -56,7 +61,7 @@ Grammaire
    40     | "isnull" Expr
    41     | OBJECT_IDENTIFIER "(" Args ")"
    42     | Expr "." OBJECT_IDENTIFIER "(" Args ")"
-   43     | "new" "type-identifier"
+   43     | "new" TYPE_IDENTIFIER
    44     | OBJECT_IDENTIFIER
    45     | "self"
    46     | Literal
@@ -136,7 +141,7 @@ Terminaux, suivis des règles où ils apparaissent
     INVALID_EOF_COMMENT (298) 67
     INVALID_INTEGER_LITERAL <stringValue> (299) 65
     INTEGER_LITERAL <intValue> (300) 59
-    "type-identifier" <stringValue> (301) 4 5 12 43
+    TYPE_IDENTIFIER <stringValue> (301) 4 5 12 43
     OBJECT_IDENTIFIER <stringValue> (302) 9 10 11 21 28 41 42 44 53 54
     STRING_LITERAL <stringValue> (303) 60
     UNARYMINUS (304)
@@ -218,10 +223,10 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 1
 
-    4 Class: "class" • "type-identifier" "{" ClassBody "}"
-    5      | "class" • "type-identifier" "extends" "type-identifier" "{" ClassBody "}"
+    4 Class: "class" • TYPE_IDENTIFIER "{" ClassBody "}"
+    5      | "class" • TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}"
 
-    "type-identifier"  décalage et aller à l'état 4
+    TYPE_IDENTIFIER  décalage et aller à l'état 4
 
 
 État 2
@@ -245,8 +250,8 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 4
 
-    4 Class: "class" "type-identifier" • "{" ClassBody "}"
-    5      | "class" "type-identifier" • "extends" "type-identifier" "{" ClassBody "}"
+    4 Class: "class" TYPE_IDENTIFIER • "{" ClassBody "}"
+    5      | "class" TYPE_IDENTIFIER • "extends" TYPE_IDENTIFIER "{" ClassBody "}"
 
     "extends"  décalage et aller à l'état 8
     "{"        décalage et aller à l'état 9
@@ -280,14 +285,14 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 8
 
-    5 Class: "class" "type-identifier" "extends" • "type-identifier" "{" ClassBody "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" • TYPE_IDENTIFIER "{" ClassBody "}"
 
-    "type-identifier"  décalage et aller à l'état 11
+    TYPE_IDENTIFIER  décalage et aller à l'état 11
 
 
 État 9
 
-    4 Class: "class" "type-identifier" "{" • ClassBody "}"
+    4 Class: "class" TYPE_IDENTIFIER "{" • ClassBody "}"
 
     OBJECT_IDENTIFIER  décalage et aller à l'état 12
 
@@ -307,7 +312,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 11
 
-    5 Class: "class" "type-identifier" "extends" "type-identifier" • "{" ClassBody "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER • "{" ClassBody "}"
 
     "{"  décalage et aller à l'état 16
 
@@ -324,7 +329,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 13
 
-    4 Class: "class" "type-identifier" "{" ClassBody • "}"
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody • "}"
 
     "}"  décalage et aller à l'état 19
 
@@ -357,7 +362,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 16
 
-    5 Class: "class" "type-identifier" "extends" "type-identifier" "{" • ClassBody "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" • ClassBody "}"
 
     OBJECT_IDENTIFIER  décalage et aller à l'état 12
 
@@ -385,18 +390,18 @@ Non-terminaux, suivis des règles où ils apparaissent
     9 Field: OBJECT_IDENTIFIER ":" • Type ";"
    10      | OBJECT_IDENTIFIER ":" • Type "<-" Expr ";"
 
-    "bool"             décalage et aller à l'état 26
-    "int32"            décalage et aller à l'état 27
-    "string"           décalage et aller à l'état 28
-    "unit"             décalage et aller à l'état 29
-    "type-identifier"  décalage et aller à l'état 30
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
     Type  aller à l'état 31
 
 
 État 19
 
-    4 Class: "class" "type-identifier" "{" ClassBody "}" •
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody "}" •
 
     $défaut  réduction par utilisation de la règle 4 (Class)
 
@@ -417,7 +422,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 22
 
-    5 Class: "class" "type-identifier" "extends" "type-identifier" "{" ClassBody • "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody • "}"
 
     "}"  décalage et aller à l'état 32
 
@@ -477,7 +482,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 30
 
-   12 Type: "type-identifier" •
+   12 Type: TYPE_IDENTIFIER •
 
     $défaut  réduction par utilisation de la règle 12 (Type)
 
@@ -493,7 +498,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 32
 
-    5 Class: "class" "type-identifier" "extends" "type-identifier" "{" ClassBody "}" •
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}" •
 
     $défaut  réduction par utilisation de la règle 5 (Class)
 
@@ -502,11 +507,11 @@ Non-terminaux, suivis des règles où ils apparaissent
 
    21 Formal: OBJECT_IDENTIFIER ":" • Type
 
-    "bool"             décalage et aller à l'état 26
-    "int32"            décalage et aller à l'état 27
-    "string"           décalage et aller à l'état 28
-    "unit"             décalage et aller à l'état 29
-    "type-identifier"  décalage et aller à l'état 30
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
     Type  aller à l'état 39
 
@@ -585,11 +590,11 @@ Non-terminaux, suivis des règles où ils apparaissent
 
    11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" • Type Block
 
-    "bool"             décalage et aller à l'état 26
-    "int32"            décalage et aller à l'état 27
-    "string"           décalage et aller à l'état 28
-    "unit"             décalage et aller à l'état 29
-    "type-identifier"  décalage et aller à l'état 30
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
     Type  aller à l'état 68
 
@@ -689,9 +694,9 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 46
 
-   43 Expr: "new" • "type-identifier"
+   43 Expr: "new" • TYPE_IDENTIFIER
 
-    "type-identifier"  décalage et aller à l'état 73
+    TYPE_IDENTIFIER  décalage et aller à l'état 73
 
 
 État 47
@@ -1072,7 +1077,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 73
 
-   43 Expr: "new" "type-identifier" •
+   43 Expr: "new" TYPE_IDENTIFIER •
 
     $défaut  réduction par utilisation de la règle 43 (Expr)
 
@@ -1642,11 +1647,11 @@ Non-terminaux, suivis des règles où ils apparaissent
    53 Let: "let" OBJECT_IDENTIFIER ":" • Type "in" Expr
    54    | "let" OBJECT_IDENTIFIER ":" • Type "<-" Expr "in" Expr
 
-    "bool"             décalage et aller à l'état 26
-    "int32"            décalage et aller à l'état 27
-    "string"           décalage et aller à l'état 28
-    "unit"             décalage et aller à l'état 29
-    "type-identifier"  décalage et aller à l'état 30
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
     Type  aller à l'état 114
 
@@ -2034,7 +2039,17 @@ Non-terminaux, suivis des règles où ils apparaissent
    50 If: "if" Expr "then" Expr •
    51   | "if" Expr "then" Expr • "else" Expr
 
+    "and"   décalage et aller à l'état 82
     "else"  décalage et aller à l'état 122
+    "+"     décalage et aller à l'état 84
+    "-"     décalage et aller à l'état 85
+    "*"     décalage et aller à l'état 86
+    "/"     décalage et aller à l'état 87
+    "^"     décalage et aller à l'état 88
+    "."     décalage et aller à l'état 89
+    "="     décalage et aller à l'état 90
+    "<"     décalage et aller à l'état 91
+    "<="    décalage et aller à l'état 92
 
     $défaut  réduction par utilisation de la règle 50 (If)
 
@@ -2061,6 +2076,17 @@ Non-terminaux, suivis des règles où ils apparaissent
    38     | Expr • "^" Expr
    42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
    52 While: "while" Expr "do" Expr •
+
+    "and"  décalage et aller à l'état 82
+    "+"    décalage et aller à l'état 84
+    "-"    décalage et aller à l'état 85
+    "*"    décalage et aller à l'état 86
+    "/"    décalage et aller à l'état 87
+    "^"    décalage et aller à l'état 88
+    "."    décalage et aller à l'état 89
+    "="    décalage et aller à l'état 90
+    "<"    décalage et aller à l'état 91
+    "<="   décalage et aller à l'état 92
 
     $défaut  réduction par utilisation de la règle 52 (While)
 
@@ -2344,6 +2370,17 @@ Non-terminaux, suivis des règles où ils apparaissent
    42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
    51 If: "if" Expr "then" Expr "else" Expr •
 
+    "and"  décalage et aller à l'état 82
+    "+"    décalage et aller à l'état 84
+    "-"    décalage et aller à l'état 85
+    "*"    décalage et aller à l'état 86
+    "/"    décalage et aller à l'état 87
+    "^"    décalage et aller à l'état 88
+    "."    décalage et aller à l'état 89
+    "="    décalage et aller à l'état 90
+    "<"    décalage et aller à l'état 91
+    "<="   décalage et aller à l'état 92
+
     $défaut  réduction par utilisation de la règle 51 (If)
 
 
@@ -2360,6 +2397,17 @@ Non-terminaux, suivis des règles où ils apparaissent
    38     | Expr • "^" Expr
    42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
    53 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr •
+
+    "and"  décalage et aller à l'état 82
+    "+"    décalage et aller à l'état 84
+    "-"    décalage et aller à l'état 85
+    "*"    décalage et aller à l'état 86
+    "/"    décalage et aller à l'état 87
+    "^"    décalage et aller à l'état 88
+    "."    décalage et aller à l'état 89
+    "="    décalage et aller à l'état 90
+    "<"    décalage et aller à l'état 91
+    "<="   décalage et aller à l'état 92
 
     $défaut  réduction par utilisation de la règle 53 (Let)
 
@@ -2451,5 +2499,16 @@ Non-terminaux, suivis des règles où ils apparaissent
    38     | Expr • "^" Expr
    42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
    54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr •
+
+    "and"  décalage et aller à l'état 82
+    "+"    décalage et aller à l'état 84
+    "-"    décalage et aller à l'état 85
+    "*"    décalage et aller à l'état 86
+    "/"    décalage et aller à l'état 87
+    "^"    décalage et aller à l'état 88
+    "."    décalage et aller à l'état 89
+    "="    décalage et aller à l'état 90
+    "<"    décalage et aller à l'état 91
+    "<="   décalage et aller à l'état 92
 
     $défaut  réduction par utilisation de la règle 54 (Let)

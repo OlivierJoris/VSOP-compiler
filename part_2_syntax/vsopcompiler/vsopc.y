@@ -87,9 +87,12 @@
 %token INVALID_EOF_COMMENT
 %token <stringValue> INVALID_INTEGER_LITERAL
 %token <intValue> INTEGER_LITERAL
-%token <stringValue> TYPE_IDENTIFIER "type-identifier"
+%token <stringValue> TYPE_IDENTIFIER 
 %token <stringValue> OBJECT_IDENTIFIER
 %token <stringValue> STRING_LITERAL
+
+%precedence IF THEN WHILE LET DO IN
+%precedence ELSE
 
 %right ASSIGN
 %left AND
@@ -101,9 +104,6 @@
 %right POW
 %left DOT
 %right EMBEDDED
-
-%precedence IF THEN WHILE LET DO IN
-%precedence ELSE
 
 %nterm <stringValue> Type 
 %nterm <expression> Expr Let While If Literal
@@ -209,8 +209,8 @@ If: IF Expr THEN Expr {$$ = new If($2, $4, NULL);}
 
 While: WHILE Expr DO Expr {$$ = new While($2, $4);};
 
-Let: LET OBJECT_IDENTIFIER COLON Type IN Expr %prec EMBEDDED {$$ = new Let($2, $4, $6, NULL);}
-        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr %prec EMBEDDED {$$ = new Let($2, $4, $8, $6);}
+Let: LET OBJECT_IDENTIFIER COLON Type IN Expr {$$ = new Let($2, $4, $6, NULL);}
+        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr {$$ = new Let($2, $4, $8, $6);}
         ;
 
 Args: /* */ {$$ = new Args();}
