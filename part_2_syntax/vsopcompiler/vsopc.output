@@ -1,9 +1,9 @@
-Terminals unused in grammar
+Terminaux inutilisés dans la grammaire
 
     EMBEDDED
 
 
-Grammar
+Grammaire
 
     0 $accept: Program $end
 
@@ -68,63 +68,65 @@ Grammar
    47     | "(" ")"
    48     | "(" Expr ")"
    49     | Block
+   50     | InvalidToken
 
-   50 If: "if" Expr "then" Expr
-   51   | "if" Expr "then" Expr "else" Expr
+   51 If: "if" Expr "then" Expr
+   52   | "if" Expr "then" Expr "else" Expr
 
-   52 While: "while" Expr "do" Expr
+   53 While: "while" Expr "do" Expr
 
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr
-   54    | "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr
+   55    | "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
 
-   55 Args: %empty
-   56     | Expr ArgsExprList
+   56 Args: %empty
+   57     | Expr ArgsExprList
 
-   57 ArgsExprList: %empty
-   58             | "," Expr ArgsExprList
+   58 ArgsExprList: %empty
+   59             | "," Expr ArgsExprList
 
-   59 Literal: INTEGER_LITERAL
-   60        | STRING_LITERAL
-   61        | "true"
-   62        | "false"
-   63        | INVALID_CHAR
-   64        | INVALID_HEX_NUMBER
-   65        | INVALID_INTEGER_LITERAL
-   66        | INVALID_EOF_STRING
-   67        | INVALID_EOF_COMMENT
+   60 Literal: INTEGER_LITERAL
+   61        | STRING_LITERAL
+   62        | "true"
+   63        | "false"
+
+   64 InvalidToken: INVALID_CHAR
+   65             | INVALID_HEX_NUMBER
+   66             | INVALID_INTEGER_LITERAL
+   67             | INVALID_EOF_STRING
+   68             | INVALID_EOF_COMMENT
 
 
-Terminals, with rules where they appear
+Terminaux, suivis des règles où ils apparaissent
 
     $end (0) 0
     error (256)
     "and" (258) 30
     "bool" <stringValue> (259) 14
     "class" (260) 4 5
-    "do" (261) 52
-    "else" (262) 51
+    "do" (261) 53
+    "else" (262) 52
     "extends" (263) 5
-    "false" (264) 62
-    "if" (265) 50 51
-    "in" (266) 53 54
+    "false" (264) 63
+    "if" (265) 51 52
+    "in" (266) 54 55
     "int32" <stringValue> (267) 13
     "isnull" (268) 40
-    "let" (269) 53 54
+    "let" (269) 54 55
     "new" (270) 43
     "not" (271) 29
     "self" (272) 45
     "string" <stringValue> (273) 15
-    "then" (274) 50 51
-    "true" (275) 61
+    "then" (274) 51 52
+    "true" (275) 62
     "unit" <stringValue> (276) 16
-    "while" (277) 52
+    "while" (277) 53
     "{" (278) 4 5 22
     "}" (279) 4 5 22
     "(" (280) 11 41 42 47 48
     ")" (281) 11 41 42 47 48
-    ":" (282) 9 10 11 21 53 54
+    ":" (282) 9 10 11 21 54 55
     ";" (283) 9 10 24
-    "," (284) 20 58
+    "," (284) 20 59
     "+" (285) 35
     "-" (286) 34 39
     "*" (287) 37
@@ -134,2381 +136,2419 @@ Terminals, with rules where they appear
     "=" (291) 33
     "<" (292) 32
     "<=" (293) 31
-    "<-" (294) 10 28 54
-    INVALID_HEX_NUMBER <stringValue> (295) 64
-    INVALID_CHAR <stringValue> (296) 63
-    INVALID_EOF_STRING (297) 66
-    INVALID_EOF_COMMENT (298) 67
-    INVALID_INTEGER_LITERAL <stringValue> (299) 65
-    INTEGER_LITERAL <intValue> (300) 59
+    "<-" (294) 10 28 55
+    INVALID_HEX_NUMBER <stringValue> (295) 65
+    INVALID_CHAR <stringValue> (296) 64
+    INVALID_EOF_STRING (297) 67
+    INVALID_EOF_COMMENT (298) 68
+    INVALID_INTEGER_LITERAL <stringValue> (299) 66
+    INTEGER_LITERAL <intValue> (300) 60
     TYPE_IDENTIFIER <stringValue> (301) 4 5 12 43
-    OBJECT_IDENTIFIER <stringValue> (302) 9 10 11 21 28 41 42 44 53 54
-    STRING_LITERAL <stringValue> (303) 60
+    OBJECT_IDENTIFIER <stringValue> (302) 9 10 11 21 28 41 42 44 54 55
+    STRING_LITERAL <stringValue> (303) 61
     UNARYMINUS (304)
     EMBEDDED (305)
 
 
-Nonterminals, with rules where they appear
+Non-terminaux, suivis des règles où ils apparaissent
 
     $accept (51)
-        on left: 0
+        à gauche: 0
     Program <program> (52)
-        on left: 1
-        on right: 0
+        à gauche: 1
+        à droite: 0
     ProgramContinued <program> (53)
-        on left: 2 3
-        on right: 1 3
+        à gauche: 2 3
+        à droite: 1 3
     Class <cls> (54)
-        on left: 4 5
-        on right: 1 3
+        à gauche: 4 5
+        à droite: 1 3
     ClassBody <classBody> (55)
-        on left: 6 7 8
-        on right: 4 5 7 8
+        à gauche: 6 7 8
+        à droite: 4 5 7 8
     Field <field> (56)
-        on left: 9 10
-        on right: 7
+        à gauche: 9 10
+        à droite: 7
     Method <method> (57)
-        on left: 11
-        on right: 8
+        à gauche: 11
+        à droite: 8
     Type <stringValue> (58)
-        on left: 12 13 14 15 16
-        on right: 9 10 11 21 53 54
+        à gauche: 12 13 14 15 16
+        à droite: 9 10 11 21 54 55
     Formals <formals> (59)
-        on left: 17 18
-        on right: 11
+        à gauche: 17 18
+        à droite: 11
     FormalsContinued <formals> (60)
-        on left: 19 20
-        on right: 18 20
+        à gauche: 19 20
+        à droite: 18 20
     Formal <formal> (61)
-        on left: 21
-        on right: 18 20
+        à gauche: 21
+        à droite: 18 20
     Block <args> (62)
-        on left: 22
-        on right: 11 49
+        à gauche: 22
+        à droite: 11 49
     BlockExpr <args> (63)
-        on left: 23 24
-        on right: 22 24
+        à gauche: 23 24
+        à droite: 22 24
     Expr <expression> (64)
-        on left: 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
-        on right: 10 22 24 28 29 30 31 32 33 34 35 36 37 38 39 40 42 48 50 51 52 53 54 56 58
+        à gauche: 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+        à droite: 10 22 24 28 29 30 31 32 33 34 35 36 37 38 39 40 42 48 51 52 53 54 55 57 59
     If <expression> (65)
-        on left: 50 51
-        on right: 25
+        à gauche: 51 52
+        à droite: 25
     While <expression> (66)
-        on left: 52
-        on right: 26
+        à gauche: 53
+        à droite: 26
     Let <expression> (67)
-        on left: 53 54
-        on right: 27
+        à gauche: 54 55
+        à droite: 27
     Args <args> (68)
-        on left: 55 56
-        on right: 41 42
+        à gauche: 56 57
+        à droite: 41 42
     ArgsExprList <args> (69)
-        on left: 57 58
-        on right: 56 58
+        à gauche: 58 59
+        à droite: 57 59
     Literal <expression> (70)
-        on left: 59 60 61 62 63 64 65 66 67
-        on right: 46
+        à gauche: 60 61 62 63
+        à droite: 46
+    InvalidToken <expression> (71)
+        à gauche: 64 65 66 67 68
+        à droite: 50
 
 
-State 0
+État 0
 
-    0 $accept: . Program $end
+    0 $accept: • Program $end
 
-    "class"  shift, and go to state 1
+    "class"  décalage et aller à l'état 1
 
-    Program  go to state 2
-    Class    go to state 3
+    Program  aller à l'état 2
+    Class    aller à l'état 3
 
 
-State 1
+État 1
 
-    4 Class: "class" . TYPE_IDENTIFIER "{" ClassBody "}"
-    5      | "class" . TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}"
+    4 Class: "class" • TYPE_IDENTIFIER "{" ClassBody "}"
+    5      | "class" • TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}"
 
-    TYPE_IDENTIFIER  shift, and go to state 4
+    TYPE_IDENTIFIER  décalage et aller à l'état 4
 
 
-State 2
+État 2
 
-    0 $accept: Program . $end
+    0 $accept: Program • $end
 
-    $end  shift, and go to state 5
+    $end  décalage et aller à l'état 5
 
 
-State 3
+État 3
 
-    1 Program: Class . ProgramContinued
+    1 Program: Class • ProgramContinued
 
-    "class"  shift, and go to state 1
+    "class"  décalage et aller à l'état 1
 
-    $default  reduce using rule 2 (ProgramContinued)
+    $défaut  réduction par utilisation de la règle 2 (ProgramContinued)
 
-    ProgramContinued  go to state 6
-    Class             go to state 7
+    ProgramContinued  aller à l'état 6
+    Class             aller à l'état 7
 
 
-State 4
+État 4
 
-    4 Class: "class" TYPE_IDENTIFIER . "{" ClassBody "}"
-    5      | "class" TYPE_IDENTIFIER . "extends" TYPE_IDENTIFIER "{" ClassBody "}"
+    4 Class: "class" TYPE_IDENTIFIER • "{" ClassBody "}"
+    5      | "class" TYPE_IDENTIFIER • "extends" TYPE_IDENTIFIER "{" ClassBody "}"
 
-    "extends"  shift, and go to state 8
-    "{"        shift, and go to state 9
+    "extends"  décalage et aller à l'état 8
+    "{"        décalage et aller à l'état 9
 
 
-State 5
+État 5
 
-    0 $accept: Program $end .
+    0 $accept: Program $end •
 
-    $default  accept
+    $défaut  accepter
 
 
-State 6
+État 6
 
-    1 Program: Class ProgramContinued .
+    1 Program: Class ProgramContinued •
 
-    $default  reduce using rule 1 (Program)
+    $défaut  réduction par utilisation de la règle 1 (Program)
 
 
-State 7
+État 7
 
-    3 ProgramContinued: Class . ProgramContinued
+    3 ProgramContinued: Class • ProgramContinued
 
-    "class"  shift, and go to state 1
+    "class"  décalage et aller à l'état 1
 
-    $default  reduce using rule 2 (ProgramContinued)
+    $défaut  réduction par utilisation de la règle 2 (ProgramContinued)
 
-    ProgramContinued  go to state 10
-    Class             go to state 7
+    ProgramContinued  aller à l'état 10
+    Class             aller à l'état 7
 
 
-State 8
+État 8
 
-    5 Class: "class" TYPE_IDENTIFIER "extends" . TYPE_IDENTIFIER "{" ClassBody "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" • TYPE_IDENTIFIER "{" ClassBody "}"
 
-    TYPE_IDENTIFIER  shift, and go to state 11
+    TYPE_IDENTIFIER  décalage et aller à l'état 11
 
 
-State 9
+État 9
 
-    4 Class: "class" TYPE_IDENTIFIER "{" . ClassBody "}"
+    4 Class: "class" TYPE_IDENTIFIER "{" • ClassBody "}"
 
-    OBJECT_IDENTIFIER  shift, and go to state 12
+    OBJECT_IDENTIFIER  décalage et aller à l'état 12
 
-    $default  reduce using rule 6 (ClassBody)
+    $défaut  réduction par utilisation de la règle 6 (ClassBody)
 
-    ClassBody  go to state 13
-    Field      go to state 14
-    Method     go to state 15
+    ClassBody  aller à l'état 13
+    Field      aller à l'état 14
+    Method     aller à l'état 15
 
 
-State 10
+État 10
 
-    3 ProgramContinued: Class ProgramContinued .
+    3 ProgramContinued: Class ProgramContinued •
 
-    $default  reduce using rule 3 (ProgramContinued)
+    $défaut  réduction par utilisation de la règle 3 (ProgramContinued)
 
 
-State 11
+État 11
 
-    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER . "{" ClassBody "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER • "{" ClassBody "}"
 
-    "{"  shift, and go to state 16
+    "{"  décalage et aller à l'état 16
 
 
-State 12
+État 12
 
-    9 Field: OBJECT_IDENTIFIER . ":" Type ";"
-   10      | OBJECT_IDENTIFIER . ":" Type "<-" Expr ";"
-   11 Method: OBJECT_IDENTIFIER . "(" Formals ")" ":" Type Block
+    9 Field: OBJECT_IDENTIFIER • ":" Type ";"
+   10      | OBJECT_IDENTIFIER • ":" Type "<-" Expr ";"
+   11 Method: OBJECT_IDENTIFIER • "(" Formals ")" ":" Type Block
 
-    "("  shift, and go to state 17
-    ":"  shift, and go to state 18
+    "("  décalage et aller à l'état 17
+    ":"  décalage et aller à l'état 18
 
 
-State 13
+État 13
 
-    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody . "}"
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody • "}"
 
-    "}"  shift, and go to state 19
+    "}"  décalage et aller à l'état 19
 
 
-State 14
+État 14
 
-    7 ClassBody: Field . ClassBody
+    7 ClassBody: Field • ClassBody
 
-    OBJECT_IDENTIFIER  shift, and go to state 12
+    OBJECT_IDENTIFIER  décalage et aller à l'état 12
 
-    $default  reduce using rule 6 (ClassBody)
+    $défaut  réduction par utilisation de la règle 6 (ClassBody)
 
-    ClassBody  go to state 20
-    Field      go to state 14
-    Method     go to state 15
+    ClassBody  aller à l'état 20
+    Field      aller à l'état 14
+    Method     aller à l'état 15
 
 
-State 15
+État 15
 
-    8 ClassBody: Method . ClassBody
+    8 ClassBody: Method • ClassBody
 
-    OBJECT_IDENTIFIER  shift, and go to state 12
+    OBJECT_IDENTIFIER  décalage et aller à l'état 12
 
-    $default  reduce using rule 6 (ClassBody)
+    $défaut  réduction par utilisation de la règle 6 (ClassBody)
 
-    ClassBody  go to state 21
-    Field      go to state 14
-    Method     go to state 15
+    ClassBody  aller à l'état 21
+    Field      aller à l'état 14
+    Method     aller à l'état 15
 
 
-State 16
+État 16
 
-    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" . ClassBody "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" • ClassBody "}"
 
-    OBJECT_IDENTIFIER  shift, and go to state 12
+    OBJECT_IDENTIFIER  décalage et aller à l'état 12
 
-    $default  reduce using rule 6 (ClassBody)
+    $défaut  réduction par utilisation de la règle 6 (ClassBody)
 
-    ClassBody  go to state 22
-    Field      go to state 14
-    Method     go to state 15
+    ClassBody  aller à l'état 22
+    Field      aller à l'état 14
+    Method     aller à l'état 15
 
 
-State 17
+État 17
 
-   11 Method: OBJECT_IDENTIFIER "(" . Formals ")" ":" Type Block
+   11 Method: OBJECT_IDENTIFIER "(" • Formals ")" ":" Type Block
 
-    OBJECT_IDENTIFIER  shift, and go to state 23
+    OBJECT_IDENTIFIER  décalage et aller à l'état 23
 
-    $default  reduce using rule 17 (Formals)
+    $défaut  réduction par utilisation de la règle 17 (Formals)
 
-    Formals  go to state 24
-    Formal   go to state 25
+    Formals  aller à l'état 24
+    Formal   aller à l'état 25
 
 
-State 18
+État 18
 
-    9 Field: OBJECT_IDENTIFIER ":" . Type ";"
-   10      | OBJECT_IDENTIFIER ":" . Type "<-" Expr ";"
+    9 Field: OBJECT_IDENTIFIER ":" • Type ";"
+   10      | OBJECT_IDENTIFIER ":" • Type "<-" Expr ";"
 
-    "bool"           shift, and go to state 26
-    "int32"          shift, and go to state 27
-    "string"         shift, and go to state 28
-    "unit"           shift, and go to state 29
-    TYPE_IDENTIFIER  shift, and go to state 30
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
-    Type  go to state 31
+    Type  aller à l'état 31
 
 
-State 19
+État 19
 
-    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody "}" .
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody "}" •
 
-    $default  reduce using rule 4 (Class)
+    $défaut  réduction par utilisation de la règle 4 (Class)
 
 
-State 20
+État 20
 
-    7 ClassBody: Field ClassBody .
+    7 ClassBody: Field ClassBody •
 
-    $default  reduce using rule 7 (ClassBody)
+    $défaut  réduction par utilisation de la règle 7 (ClassBody)
 
 
-State 21
+État 21
 
-    8 ClassBody: Method ClassBody .
+    8 ClassBody: Method ClassBody •
 
-    $default  reduce using rule 8 (ClassBody)
+    $défaut  réduction par utilisation de la règle 8 (ClassBody)
 
 
-State 22
+État 22
 
-    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody . "}"
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody • "}"
 
-    "}"  shift, and go to state 32
+    "}"  décalage et aller à l'état 32
 
 
-State 23
+État 23
 
-   21 Formal: OBJECT_IDENTIFIER . ":" Type
+   21 Formal: OBJECT_IDENTIFIER • ":" Type
 
-    ":"  shift, and go to state 33
+    ":"  décalage et aller à l'état 33
 
 
-State 24
+État 24
 
-   11 Method: OBJECT_IDENTIFIER "(" Formals . ")" ":" Type Block
+   11 Method: OBJECT_IDENTIFIER "(" Formals • ")" ":" Type Block
 
-    ")"  shift, and go to state 34
+    ")"  décalage et aller à l'état 34
 
 
-State 25
+État 25
 
-   18 Formals: Formal . FormalsContinued
+   18 Formals: Formal • FormalsContinued
 
-    ","  shift, and go to state 35
+    ","  décalage et aller à l'état 35
 
-    $default  reduce using rule 19 (FormalsContinued)
+    $défaut  réduction par utilisation de la règle 19 (FormalsContinued)
 
-    FormalsContinued  go to state 36
+    FormalsContinued  aller à l'état 36
 
 
-State 26
+État 26
 
-   14 Type: "bool" .
+   14 Type: "bool" •
 
-    $default  reduce using rule 14 (Type)
+    $défaut  réduction par utilisation de la règle 14 (Type)
 
 
-State 27
+État 27
 
-   13 Type: "int32" .
+   13 Type: "int32" •
 
-    $default  reduce using rule 13 (Type)
+    $défaut  réduction par utilisation de la règle 13 (Type)
 
 
-State 28
+État 28
 
-   15 Type: "string" .
+   15 Type: "string" •
 
-    $default  reduce using rule 15 (Type)
+    $défaut  réduction par utilisation de la règle 15 (Type)
 
 
-State 29
+État 29
 
-   16 Type: "unit" .
+   16 Type: "unit" •
 
-    $default  reduce using rule 16 (Type)
+    $défaut  réduction par utilisation de la règle 16 (Type)
 
 
-State 30
+État 30
 
-   12 Type: TYPE_IDENTIFIER .
+   12 Type: TYPE_IDENTIFIER •
 
-    $default  reduce using rule 12 (Type)
+    $défaut  réduction par utilisation de la règle 12 (Type)
 
 
-State 31
+État 31
 
-    9 Field: OBJECT_IDENTIFIER ":" Type . ";"
-   10      | OBJECT_IDENTIFIER ":" Type . "<-" Expr ";"
+    9 Field: OBJECT_IDENTIFIER ":" Type • ";"
+   10      | OBJECT_IDENTIFIER ":" Type • "<-" Expr ";"
 
-    ";"   shift, and go to state 37
-    "<-"  shift, and go to state 38
+    ";"   décalage et aller à l'état 37
+    "<-"  décalage et aller à l'état 38
 
 
-State 32
+État 32
 
-    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}" .
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}" •
 
-    $default  reduce using rule 5 (Class)
+    $défaut  réduction par utilisation de la règle 5 (Class)
 
 
-State 33
+État 33
 
-   21 Formal: OBJECT_IDENTIFIER ":" . Type
+   21 Formal: OBJECT_IDENTIFIER ":" • Type
 
-    "bool"           shift, and go to state 26
-    "int32"          shift, and go to state 27
-    "string"         shift, and go to state 28
-    "unit"           shift, and go to state 29
-    TYPE_IDENTIFIER  shift, and go to state 30
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
-    Type  go to state 39
+    Type  aller à l'état 39
 
 
-State 34
+État 34
 
-   11 Method: OBJECT_IDENTIFIER "(" Formals ")" . ":" Type Block
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" • ":" Type Block
 
-    ":"  shift, and go to state 40
+    ":"  décalage et aller à l'état 40
 
 
-State 35
+État 35
 
-   20 FormalsContinued: "," . Formal FormalsContinued
+   20 FormalsContinued: "," • Formal FormalsContinued
 
-    OBJECT_IDENTIFIER  shift, and go to state 23
+    OBJECT_IDENTIFIER  décalage et aller à l'état 23
 
-    Formal  go to state 41
+    Formal  aller à l'état 41
 
 
-State 36
+État 36
 
-   18 Formals: Formal FormalsContinued .
+   18 Formals: Formal FormalsContinued •
 
-    $default  reduce using rule 18 (Formals)
+    $défaut  réduction par utilisation de la règle 18 (Formals)
 
 
-State 37
+État 37
 
-    9 Field: OBJECT_IDENTIFIER ":" Type ";" .
+    9 Field: OBJECT_IDENTIFIER ":" Type ";" •
 
-    $default  reduce using rule 9 (Field)
+    $défaut  réduction par utilisation de la règle 9 (Field)
 
 
-State 38
+État 38
 
-   10 Field: OBJECT_IDENTIFIER ":" Type "<-" . Expr ";"
+   10 Field: OBJECT_IDENTIFIER ":" Type "<-" • Expr ";"
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 63
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 63
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 39
+État 39
 
-   21 Formal: OBJECT_IDENTIFIER ":" Type .
+   21 Formal: OBJECT_IDENTIFIER ":" Type •
 
-    $default  reduce using rule 21 (Formal)
+    $défaut  réduction par utilisation de la règle 21 (Formal)
 
 
-State 40
+État 40
 
-   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" . Type Block
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" • Type Block
 
-    "bool"           shift, and go to state 26
-    "int32"          shift, and go to state 27
-    "string"         shift, and go to state 28
-    "unit"           shift, and go to state 29
-    TYPE_IDENTIFIER  shift, and go to state 30
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
-    Type  go to state 68
+    Type  aller à l'état 69
 
 
-State 41
+État 41
 
-   20 FormalsContinued: "," Formal . FormalsContinued
+   20 FormalsContinued: "," Formal • FormalsContinued
 
-    ","  shift, and go to state 35
+    ","  décalage et aller à l'état 35
 
-    $default  reduce using rule 19 (FormalsContinued)
+    $défaut  réduction par utilisation de la règle 19 (FormalsContinued)
 
-    FormalsContinued  go to state 69
+    FormalsContinued  aller à l'état 70
 
 
-State 42
+État 42
 
-   62 Literal: "false" .
+   63 Literal: "false" •
 
-    $default  reduce using rule 62 (Literal)
+    $défaut  réduction par utilisation de la règle 63 (Literal)
 
 
-State 43
+État 43
 
-   50 If: "if" . Expr "then" Expr
-   51   | "if" . Expr "then" Expr "else" Expr
+   51 If: "if" • Expr "then" Expr
+   52   | "if" • Expr "then" Expr "else" Expr
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 70
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 71
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 44
+État 44
 
-   40 Expr: "isnull" . Expr
+   40 Expr: "isnull" • Expr
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 71
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 72
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 45
+État 45
 
-   53 Let: "let" . OBJECT_IDENTIFIER ":" Type "in" Expr
-   54    | "let" . OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
+   54 Let: "let" • OBJECT_IDENTIFIER ":" Type "in" Expr
+   55    | "let" • OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
 
-    OBJECT_IDENTIFIER  shift, and go to state 72
+    OBJECT_IDENTIFIER  décalage et aller à l'état 73
 
 
-State 46
+État 46
 
-   43 Expr: "new" . TYPE_IDENTIFIER
+   43 Expr: "new" • TYPE_IDENTIFIER
 
-    TYPE_IDENTIFIER  shift, and go to state 73
+    TYPE_IDENTIFIER  décalage et aller à l'état 74
 
 
-State 47
+État 47
 
-   29 Expr: "not" . Expr
+   29 Expr: "not" • Expr
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 74
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 75
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 48
+État 48
 
-   45 Expr: "self" .
+   45 Expr: "self" •
 
-    $default  reduce using rule 45 (Expr)
+    $défaut  réduction par utilisation de la règle 45 (Expr)
 
 
-State 49
+État 49
 
-   61 Literal: "true" .
+   62 Literal: "true" •
 
-    $default  reduce using rule 61 (Literal)
+    $défaut  réduction par utilisation de la règle 62 (Literal)
 
 
-State 50
+État 50
 
-   52 While: "while" . Expr "do" Expr
+   53 While: "while" • Expr "do" Expr
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 75
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 76
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 51
+État 51
 
-   22 Block: "{" . Expr BlockExpr "}"
+   22 Block: "{" • Expr BlockExpr "}"
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 76
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 77
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 52
+État 52
 
-   47 Expr: "(" . ")"
-   48     | "(" . Expr ")"
+   47 Expr: "(" • ")"
+   48     | "(" • Expr ")"
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    ")"                      shift, and go to state 77
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    ")"                      décalage et aller à l'état 78
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 78
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 79
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 53
+État 53
 
-   39 Expr: "-" . Expr
+   39 Expr: "-" • Expr
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    Block    go to state 62
-    Expr     go to state 79
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
+    Block         aller à l'état 62
+    Expr          aller à l'état 80
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 54
+État 54
 
-   64 Literal: INVALID_HEX_NUMBER .
+   65 InvalidToken: INVALID_HEX_NUMBER •
 
-    $default  reduce using rule 64 (Literal)
+    $défaut  réduction par utilisation de la règle 65 (InvalidToken)
 
 
-State 55
+État 55
 
-   63 Literal: INVALID_CHAR .
+   64 InvalidToken: INVALID_CHAR •
 
-    $default  reduce using rule 63 (Literal)
+    $défaut  réduction par utilisation de la règle 64 (InvalidToken)
 
 
-State 56
+État 56
 
-   66 Literal: INVALID_EOF_STRING .
+   67 InvalidToken: INVALID_EOF_STRING •
 
-    $default  reduce using rule 66 (Literal)
+    $défaut  réduction par utilisation de la règle 67 (InvalidToken)
 
 
-State 57
+État 57
 
-   67 Literal: INVALID_EOF_COMMENT .
+   68 InvalidToken: INVALID_EOF_COMMENT •
 
-    $default  reduce using rule 67 (Literal)
+    $défaut  réduction par utilisation de la règle 68 (InvalidToken)
 
 
-State 58
+État 58
 
-   65 Literal: INVALID_INTEGER_LITERAL .
+   66 InvalidToken: INVALID_INTEGER_LITERAL •
 
-    $default  reduce using rule 65 (Literal)
+    $défaut  réduction par utilisation de la règle 66 (InvalidToken)
 
 
-State 59
+État 59
 
-   59 Literal: INTEGER_LITERAL .
+   60 Literal: INTEGER_LITERAL •
 
-    $default  reduce using rule 59 (Literal)
+    $défaut  réduction par utilisation de la règle 60 (Literal)
 
 
-State 60
+État 60
 
-   28 Expr: OBJECT_IDENTIFIER . "<-" Expr
-   41     | OBJECT_IDENTIFIER . "(" Args ")"
-   44     | OBJECT_IDENTIFIER .
+   28 Expr: OBJECT_IDENTIFIER • "<-" Expr
+   41     | OBJECT_IDENTIFIER • "(" Args ")"
+   44     | OBJECT_IDENTIFIER •
 
-    "("   shift, and go to state 80
-    "<-"  shift, and go to state 81
+    "("   décalage et aller à l'état 81
+    "<-"  décalage et aller à l'état 82
 
-    $default  reduce using rule 44 (Expr)
+    $défaut  réduction par utilisation de la règle 44 (Expr)
 
 
-State 61
+État 61
 
-   60 Literal: STRING_LITERAL .
+   61 Literal: STRING_LITERAL •
 
-    $default  reduce using rule 60 (Literal)
+    $défaut  réduction par utilisation de la règle 61 (Literal)
 
 
-State 62
+État 62
 
-   49 Expr: Block .
+   49 Expr: Block •
 
-    $default  reduce using rule 49 (Expr)
+    $défaut  réduction par utilisation de la règle 49 (Expr)
 
 
-State 63
+État 63
 
-   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr . ";"
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr • ";"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-    "and"  shift, and go to state 82
-    ";"    shift, and go to state 83
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    "and"  décalage et aller à l'état 83
+    ";"    décalage et aller à l'état 84
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
 
-State 64
+État 64
 
-   25 Expr: If .
+   25 Expr: If •
 
-    $default  reduce using rule 25 (Expr)
+    $défaut  réduction par utilisation de la règle 25 (Expr)
 
 
-State 65
+État 65
 
-   26 Expr: While .
+   26 Expr: While •
 
-    $default  reduce using rule 26 (Expr)
+    $défaut  réduction par utilisation de la règle 26 (Expr)
 
 
-State 66
+État 66
 
-   27 Expr: Let .
+   27 Expr: Let •
 
-    $default  reduce using rule 27 (Expr)
+    $défaut  réduction par utilisation de la règle 27 (Expr)
 
 
-State 67
+État 67
 
-   46 Expr: Literal .
+   46 Expr: Literal •
 
-    $default  reduce using rule 46 (Expr)
+    $défaut  réduction par utilisation de la règle 46 (Expr)
 
 
-State 68
+État 68
 
-   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type . Block
+   50 Expr: InvalidToken •
 
-    "{"  shift, and go to state 51
+    $défaut  réduction par utilisation de la règle 50 (Expr)
 
-    Block  go to state 93
 
+État 69
 
-State 69
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type • Block
 
-   20 FormalsContinued: "," Formal FormalsContinued .
+    "{"  décalage et aller à l'état 51
 
-    $default  reduce using rule 20 (FormalsContinued)
+    Block  aller à l'état 94
 
 
-State 70
+État 70
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   50 If: "if" Expr . "then" Expr
-   51   | "if" Expr . "then" Expr "else" Expr
+   20 FormalsContinued: "," Formal FormalsContinued •
 
-    "and"   shift, and go to state 82
-    "then"  shift, and go to state 94
-    "+"     shift, and go to state 84
-    "-"     shift, and go to state 85
-    "*"     shift, and go to state 86
-    "/"     shift, and go to state 87
-    "^"     shift, and go to state 88
-    "."     shift, and go to state 89
-    "="     shift, and go to state 90
-    "<"     shift, and go to state 91
-    "<="    shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 20 (FormalsContinued)
 
 
-State 71
+État 71
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   40     | "isnull" Expr .
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   51 If: "if" Expr • "then" Expr
+   52   | "if" Expr • "then" Expr "else" Expr
 
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    "and"   décalage et aller à l'état 83
+    "then"  décalage et aller à l'état 95
+    "+"     décalage et aller à l'état 85
+    "-"     décalage et aller à l'état 86
+    "*"     décalage et aller à l'état 87
+    "/"     décalage et aller à l'état 88
+    "^"     décalage et aller à l'état 89
+    "."     décalage et aller à l'état 90
+    "="     décalage et aller à l'état 91
+    "<"     décalage et aller à l'état 92
+    "<="    décalage et aller à l'état 93
 
-    $default  reduce using rule 40 (Expr)
 
+État 72
 
-State 72
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   40     | "isnull" Expr •
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   53 Let: "let" OBJECT_IDENTIFIER . ":" Type "in" Expr
-   54    | "let" OBJECT_IDENTIFIER . ":" Type "<-" Expr "in" Expr
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-    ":"  shift, and go to state 95
+    $défaut  réduction par utilisation de la règle 40 (Expr)
 
 
-State 73
+État 73
 
-   43 Expr: "new" TYPE_IDENTIFIER .
+   54 Let: "let" OBJECT_IDENTIFIER • ":" Type "in" Expr
+   55    | "let" OBJECT_IDENTIFIER • ":" Type "<-" Expr "in" Expr
 
-    $default  reduce using rule 43 (Expr)
+    ":"  décalage et aller à l'état 96
 
 
-State 74
+État 74
 
-   29 Expr: "not" Expr .
-   30     | Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   43 Expr: "new" TYPE_IDENTIFIER •
 
-    "+"   shift, and go to state 84
-    "-"   shift, and go to state 85
-    "*"   shift, and go to state 86
-    "/"   shift, and go to state 87
-    "^"   shift, and go to state 88
-    "."   shift, and go to state 89
-    "="   shift, and go to state 90
-    "<"   shift, and go to state 91
-    "<="  shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 43 (Expr)
 
-    $default  reduce using rule 29 (Expr)
 
+État 75
 
-State 75
+   29 Expr: "not" Expr •
+   30     | Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   52 While: "while" Expr . "do" Expr
+    "+"   décalage et aller à l'état 85
+    "-"   décalage et aller à l'état 86
+    "*"   décalage et aller à l'état 87
+    "/"   décalage et aller à l'état 88
+    "^"   décalage et aller à l'état 89
+    "."   décalage et aller à l'état 90
+    "="   décalage et aller à l'état 91
+    "<"   décalage et aller à l'état 92
+    "<="  décalage et aller à l'état 93
 
-    "and"  shift, and go to state 82
-    "do"   shift, and go to state 96
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 29 (Expr)
 
 
-State 76
+État 76
 
-   22 Block: "{" Expr . BlockExpr "}"
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   53 While: "while" Expr • "do" Expr
 
-    "and"  shift, and go to state 82
-    ";"    shift, and go to state 97
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    "and"  décalage et aller à l'état 83
+    "do"   décalage et aller à l'état 97
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-    $default  reduce using rule 23 (BlockExpr)
 
-    BlockExpr  go to state 98
+État 77
 
+   22 Block: "{" Expr • BlockExpr "}"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-State 77
+    "and"  décalage et aller à l'état 83
+    ";"    décalage et aller à l'état 98
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-   47 Expr: "(" ")" .
+    $défaut  réduction par utilisation de la règle 23 (BlockExpr)
 
-    $default  reduce using rule 47 (Expr)
+    BlockExpr  aller à l'état 99
 
 
-State 78
+État 78
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   48     | "(" Expr . ")"
+   47 Expr: "(" ")" •
 
-    "and"  shift, and go to state 82
-    ")"    shift, and go to state 99
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 47 (Expr)
 
 
-State 79
+État 79
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   39     | "-" Expr .
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   48     | "(" Expr • ")"
 
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    "and"  décalage et aller à l'état 83
+    ")"    décalage et aller à l'état 100
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-    $default  reduce using rule 39 (Expr)
 
+État 80
 
-State 80
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   39     | "-" Expr •
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   41 Expr: OBJECT_IDENTIFIER "(" . Args ")"
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    $défaut  réduction par utilisation de la règle 39 (Expr)
 
-    $default  reduce using rule 55 (Args)
 
-    Block    go to state 62
-    Expr     go to state 100
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Args     go to state 101
-    Literal  go to state 67
+État 81
 
+   41 Expr: OBJECT_IDENTIFIER "(" • Args ")"
 
-State 81
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-   28 Expr: OBJECT_IDENTIFIER "<-" . Expr
+    $défaut  réduction par utilisation de la règle 56 (Args)
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 101
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Args          aller à l'état 102
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 102
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 82
 
-State 82
+   28 Expr: OBJECT_IDENTIFIER "<-" • Expr
 
-   30 Expr: Expr "and" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 103
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 103
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 83
 
-State 83
+   30 Expr: Expr "and" • Expr
 
-   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr ";" .
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    $default  reduce using rule 10 (Field)
+    Block         aller à l'état 62
+    Expr          aller à l'état 104
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 84
+État 84
 
-   35 Expr: Expr "+" . Expr
+   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr ";" •
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    $défaut  réduction par utilisation de la règle 10 (Field)
 
-    Block    go to state 62
-    Expr     go to state 104
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 85
 
-State 85
+   35 Expr: Expr "+" • Expr
 
-   34 Expr: Expr "-" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 105
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 105
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 86
 
-State 86
+   34 Expr: Expr "-" • Expr
 
-   37 Expr: Expr "*" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 106
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 106
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 87
 
-State 87
+   37 Expr: Expr "*" • Expr
 
-   36 Expr: Expr "/" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 107
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 107
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 88
 
-State 88
+   36 Expr: Expr "/" • Expr
 
-   38 Expr: Expr "^" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 108
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 108
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 89
 
-State 89
+   38 Expr: Expr "^" • Expr
 
-   42 Expr: Expr "." . OBJECT_IDENTIFIER "(" Args ")"
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    OBJECT_IDENTIFIER  shift, and go to state 109
+    Block         aller à l'état 62
+    Expr          aller à l'état 109
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 90
+État 90
 
-   33 Expr: Expr "=" . Expr
+   42 Expr: Expr "." • OBJECT_IDENTIFIER "(" Args ")"
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    OBJECT_IDENTIFIER  décalage et aller à l'état 110
 
-    Block    go to state 62
-    Expr     go to state 110
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 91
 
-State 91
+   33 Expr: Expr "=" • Expr
 
-   32 Expr: Expr "<" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 111
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 111
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 92
 
-State 92
+   32 Expr: Expr "<" • Expr
 
-   31 Expr: Expr "<=" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 112
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 112
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 93
 
-State 93
+   31 Expr: Expr "<=" • Expr
 
-   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block .
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    $default  reduce using rule 11 (Method)
+    Block         aller à l'état 62
+    Expr          aller à l'état 113
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 94
+État 94
 
-   50 If: "if" Expr "then" . Expr
-   51   | "if" Expr "then" . Expr "else" Expr
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block •
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    $défaut  réduction par utilisation de la règle 11 (Method)
 
-    Block    go to state 62
-    Expr     go to state 113
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 95
 
-State 95
+   51 If: "if" Expr "then" • Expr
+   52   | "if" Expr "then" • Expr "else" Expr
 
-   53 Let: "let" OBJECT_IDENTIFIER ":" . Type "in" Expr
-   54    | "let" OBJECT_IDENTIFIER ":" . Type "<-" Expr "in" Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "bool"           shift, and go to state 26
-    "int32"          shift, and go to state 27
-    "string"         shift, and go to state 28
-    "unit"           shift, and go to state 29
-    TYPE_IDENTIFIER  shift, and go to state 30
+    Block         aller à l'état 62
+    Expr          aller à l'état 114
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Type  go to state 114
 
+État 96
 
-State 96
+   54 Let: "let" OBJECT_IDENTIFIER ":" • Type "in" Expr
+   55    | "let" OBJECT_IDENTIFIER ":" • Type "<-" Expr "in" Expr
 
-   52 While: "while" Expr "do" . Expr
+    "bool"           décalage et aller à l'état 26
+    "int32"          décalage et aller à l'état 27
+    "string"         décalage et aller à l'état 28
+    "unit"           décalage et aller à l'état 29
+    TYPE_IDENTIFIER  décalage et aller à l'état 30
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Type  aller à l'état 115
 
-    Block    go to state 62
-    Expr     go to state 115
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 97
 
-State 97
+   53 While: "while" Expr "do" • Expr
 
-   24 BlockExpr: ";" . Expr BlockExpr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 116
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 116
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 98
 
-State 98
+   24 BlockExpr: ";" • Expr BlockExpr
 
-   22 Block: "{" Expr BlockExpr . "}"
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "}"  shift, and go to state 117
+    Block         aller à l'état 62
+    Expr          aller à l'état 117
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 99
+État 99
 
-   48 Expr: "(" Expr ")" .
+   22 Block: "{" Expr BlockExpr • "}"
 
-    $default  reduce using rule 48 (Expr)
+    "}"  décalage et aller à l'état 118
 
 
-State 100
+État 100
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   56 Args: Expr . ArgsExprList
+   48 Expr: "(" Expr ")" •
 
-    "and"  shift, and go to state 82
-    ","    shift, and go to state 118
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 48 (Expr)
 
-    $default  reduce using rule 57 (ArgsExprList)
 
-    ArgsExprList  go to state 119
+État 101
 
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   57 Args: Expr • ArgsExprList
 
-State 101
+    "and"  décalage et aller à l'état 83
+    ","    décalage et aller à l'état 119
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-   41 Expr: OBJECT_IDENTIFIER "(" Args . ")"
+    $défaut  réduction par utilisation de la règle 58 (ArgsExprList)
 
-    ")"  shift, and go to state 120
+    ArgsExprList  aller à l'état 120
 
 
-State 102
+État 102
 
-   28 Expr: OBJECT_IDENTIFIER "<-" Expr .
-   30     | Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   41 Expr: OBJECT_IDENTIFIER "(" Args • ")"
 
-    "and"  shift, and go to state 82
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    ")"  décalage et aller à l'état 121
 
-    $default  reduce using rule 28 (Expr)
 
+État 103
 
-State 103
+   28 Expr: OBJECT_IDENTIFIER "<-" Expr •
+   30     | Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   30 Expr: Expr . "and" Expr
-   30     | Expr "and" Expr .
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "and"  décalage et aller à l'état 83
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-    "+"   shift, and go to state 84
-    "-"   shift, and go to state 85
-    "*"   shift, and go to state 86
-    "/"   shift, and go to state 87
-    "^"   shift, and go to state 88
-    "."   shift, and go to state 89
-    "="   shift, and go to state 90
-    "<"   shift, and go to state 91
-    "<="  shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 28 (Expr)
 
-    $default  reduce using rule 30 (Expr)
 
+État 104
 
-State 104
+   30 Expr: Expr • "and" Expr
+   30     | Expr "and" Expr •
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   35     | Expr "+" Expr .
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "+"   décalage et aller à l'état 85
+    "-"   décalage et aller à l'état 86
+    "*"   décalage et aller à l'état 87
+    "/"   décalage et aller à l'état 88
+    "^"   décalage et aller à l'état 89
+    "."   décalage et aller à l'état 90
+    "="   décalage et aller à l'état 91
+    "<"   décalage et aller à l'état 92
+    "<="  décalage et aller à l'état 93
 
-    "*"  shift, and go to state 86
-    "/"  shift, and go to state 87
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    $défaut  réduction par utilisation de la règle 30 (Expr)
 
-    $default  reduce using rule 35 (Expr)
 
+État 105
 
-State 105
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   35     | Expr "+" Expr •
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   34     | Expr "-" Expr .
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "*"  décalage et aller à l'état 87
+    "/"  décalage et aller à l'état 88
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-    "*"  shift, and go to state 86
-    "/"  shift, and go to state 87
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    $défaut  réduction par utilisation de la règle 35 (Expr)
 
-    $default  reduce using rule 34 (Expr)
 
+État 106
 
-State 106
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   34     | Expr "-" Expr •
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   37     | Expr "*" Expr .
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "*"  décalage et aller à l'état 87
+    "/"  décalage et aller à l'état 88
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    $défaut  réduction par utilisation de la règle 34 (Expr)
 
-    $default  reduce using rule 37 (Expr)
 
+État 107
 
-State 107
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   37     | Expr "*" Expr •
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   36     | Expr "/" Expr .
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    $défaut  réduction par utilisation de la règle 37 (Expr)
 
-    $default  reduce using rule 36 (Expr)
 
+État 108
 
-State 108
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   36     | Expr "/" Expr •
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   38     | Expr "^" Expr .
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    $défaut  réduction par utilisation de la règle 36 (Expr)
 
-    $default  reduce using rule 38 (Expr)
 
+État 109
 
-State 109
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   38     | Expr "^" Expr •
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-   42 Expr: Expr "." OBJECT_IDENTIFIER . "(" Args ")"
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-    "("  shift, and go to state 121
+    $défaut  réduction par utilisation de la règle 38 (Expr)
 
 
-State 110
+État 110
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   33     | Expr "=" Expr .
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   42 Expr: Expr "." OBJECT_IDENTIFIER • "(" Args ")"
 
-    "+"  shift, and go to state 84
-    "-"  shift, and go to state 85
-    "*"  shift, and go to state 86
-    "/"  shift, and go to state 87
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    "("  décalage et aller à l'état 122
 
-    "="   error (nonassociative)
-    "<"   error (nonassociative)
-    "<="  error (nonassociative)
 
-    $default  reduce using rule 33 (Expr)
+État 111
 
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   33     | Expr "=" Expr •
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-State 111
+    "+"  décalage et aller à l'état 85
+    "-"  décalage et aller à l'état 86
+    "*"  décalage et aller à l'état 87
+    "/"  décalage et aller à l'état 88
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   32     | Expr "<" Expr .
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "="   erreur (non-associative)
+    "<"   erreur (non-associative)
+    "<="  erreur (non-associative)
 
-    "+"  shift, and go to state 84
-    "-"  shift, and go to state 85
-    "*"  shift, and go to state 86
-    "/"  shift, and go to state 87
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    $défaut  réduction par utilisation de la règle 33 (Expr)
 
-    "="   error (nonassociative)
-    "<"   error (nonassociative)
-    "<="  error (nonassociative)
 
-    $default  reduce using rule 32 (Expr)
+État 112
 
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   32     | Expr "<" Expr •
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-State 112
+    "+"  décalage et aller à l'état 85
+    "-"  décalage et aller à l'état 86
+    "*"  décalage et aller à l'état 87
+    "/"  décalage et aller à l'état 88
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   31     | Expr "<=" Expr .
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "="   erreur (non-associative)
+    "<"   erreur (non-associative)
+    "<="  erreur (non-associative)
 
-    "+"  shift, and go to state 84
-    "-"  shift, and go to state 85
-    "*"  shift, and go to state 86
-    "/"  shift, and go to state 87
-    "^"  shift, and go to state 88
-    "."  shift, and go to state 89
+    $défaut  réduction par utilisation de la règle 32 (Expr)
 
-    "="   error (nonassociative)
-    "<"   error (nonassociative)
-    "<="  error (nonassociative)
 
-    $default  reduce using rule 31 (Expr)
+État 113
 
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   31     | Expr "<=" Expr •
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-State 113
+    "+"  décalage et aller à l'état 85
+    "-"  décalage et aller à l'état 86
+    "*"  décalage et aller à l'état 87
+    "/"  décalage et aller à l'état 88
+    "^"  décalage et aller à l'état 89
+    "."  décalage et aller à l'état 90
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   50 If: "if" Expr "then" Expr .
-   51   | "if" Expr "then" Expr . "else" Expr
+    "="   erreur (non-associative)
+    "<"   erreur (non-associative)
+    "<="  erreur (non-associative)
 
-    "and"   shift, and go to state 82
-    "else"  shift, and go to state 122
-    "+"     shift, and go to state 84
-    "-"     shift, and go to state 85
-    "*"     shift, and go to state 86
-    "/"     shift, and go to state 87
-    "^"     shift, and go to state 88
-    "."     shift, and go to state 89
-    "="     shift, and go to state 90
-    "<"     shift, and go to state 91
-    "<="    shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 31 (Expr)
 
-    $default  reduce using rule 50 (If)
 
+État 114
 
-State 114
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   51 If: "if" Expr "then" Expr •
+   52   | "if" Expr "then" Expr • "else" Expr
 
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type . "in" Expr
-   54    | "let" OBJECT_IDENTIFIER ":" Type . "<-" Expr "in" Expr
+    "and"   décalage et aller à l'état 83
+    "else"  décalage et aller à l'état 123
+    "+"     décalage et aller à l'état 85
+    "-"     décalage et aller à l'état 86
+    "*"     décalage et aller à l'état 87
+    "/"     décalage et aller à l'état 88
+    "^"     décalage et aller à l'état 89
+    "."     décalage et aller à l'état 90
+    "="     décalage et aller à l'état 91
+    "<"     décalage et aller à l'état 92
+    "<="    décalage et aller à l'état 93
 
-    "in"  shift, and go to state 123
-    "<-"  shift, and go to state 124
+    $défaut  réduction par utilisation de la règle 51 (If)
 
 
-State 115
+État 115
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   52 While: "while" Expr "do" Expr .
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type • "in" Expr
+   55    | "let" OBJECT_IDENTIFIER ":" Type • "<-" Expr "in" Expr
 
-    "and"  shift, and go to state 82
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    "in"  décalage et aller à l'état 124
+    "<-"  décalage et aller à l'état 125
 
-    $default  reduce using rule 52 (While)
 
+État 116
 
-State 116
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   53 While: "while" Expr "do" Expr •
 
-   24 BlockExpr: ";" Expr . BlockExpr
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+    "and"  décalage et aller à l'état 83
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-    "and"  shift, and go to state 82
-    ";"    shift, and go to state 97
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 53 (While)
 
-    $default  reduce using rule 23 (BlockExpr)
 
-    BlockExpr  go to state 125
+État 117
 
+   24 BlockExpr: ";" Expr • BlockExpr
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
 
-State 117
+    "and"  décalage et aller à l'état 83
+    ";"    décalage et aller à l'état 98
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-   22 Block: "{" Expr BlockExpr "}" .
+    $défaut  réduction par utilisation de la règle 23 (BlockExpr)
 
-    $default  reduce using rule 22 (Block)
+    BlockExpr  aller à l'état 126
 
 
-State 118
+État 118
 
-   58 ArgsExprList: "," . Expr ArgsExprList
+   22 Block: "{" Expr BlockExpr "}" •
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    $défaut  réduction par utilisation de la règle 22 (Block)
 
-    Block    go to state 62
-    Expr     go to state 126
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 119
 
-State 119
+   59 ArgsExprList: "," • Expr ArgsExprList
 
-   56 Args: Expr ArgsExprList .
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    $default  reduce using rule 56 (Args)
+    Block         aller à l'état 62
+    Expr          aller à l'état 127
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 120
+État 120
 
-   41 Expr: OBJECT_IDENTIFIER "(" Args ")" .
+   57 Args: Expr ArgsExprList •
 
-    $default  reduce using rule 41 (Expr)
+    $défaut  réduction par utilisation de la règle 57 (Args)
 
 
-State 121
+État 121
 
-   42 Expr: Expr "." OBJECT_IDENTIFIER "(" . Args ")"
+   41 Expr: OBJECT_IDENTIFIER "(" Args ")" •
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    $défaut  réduction par utilisation de la règle 41 (Expr)
 
-    $default  reduce using rule 55 (Args)
 
-    Block    go to state 62
-    Expr     go to state 100
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Args     go to state 127
-    Literal  go to state 67
+État 122
 
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" • Args ")"
 
-State 122
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-   51 If: "if" Expr "then" Expr "else" . Expr
+    $défaut  réduction par utilisation de la règle 56 (Args)
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 101
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Args          aller à l'état 128
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 128
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 123
 
-State 123
+   52 If: "if" Expr "then" Expr "else" • Expr
 
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type "in" . Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 129
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 129
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 124
 
-State 124
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "in" • Expr
 
-   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" . Expr "in" Expr
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    Block         aller à l'état 62
+    Expr          aller à l'état 130
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    Block    go to state 62
-    Expr     go to state 130
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 125
 
-State 125
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" • Expr "in" Expr
 
-   24 BlockExpr: ";" Expr BlockExpr .
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    $default  reduce using rule 24 (BlockExpr)
+    Block         aller à l'état 62
+    Expr          aller à l'état 131
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
 
-State 126
+État 126
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   58 ArgsExprList: "," Expr . ArgsExprList
+   24 BlockExpr: ";" Expr BlockExpr •
 
-    "and"  shift, and go to state 82
-    ","    shift, and go to state 118
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 24 (BlockExpr)
 
-    $default  reduce using rule 57 (ArgsExprList)
 
-    ArgsExprList  go to state 131
+État 127
 
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   59 ArgsExprList: "," Expr • ArgsExprList
 
-State 127
+    "and"  décalage et aller à l'état 83
+    ","    décalage et aller à l'état 119
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args . ")"
+    $défaut  réduction par utilisation de la règle 58 (ArgsExprList)
 
-    ")"  shift, and go to state 132
+    ArgsExprList  aller à l'état 132
 
 
-State 128
+État 128
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   51 If: "if" Expr "then" Expr "else" Expr .
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args • ")"
 
-    "and"  shift, and go to state 82
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    ")"  décalage et aller à l'état 133
 
-    $default  reduce using rule 51 (If)
 
+État 129
 
-State 129
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   52 If: "if" Expr "then" Expr "else" Expr •
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   53 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr .
+    "and"  décalage et aller à l'état 83
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-    "and"  shift, and go to state 82
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 52 (If)
 
-    $default  reduce using rule 53 (Let)
 
+État 130
 
-State 130
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr •
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr . "in" Expr
+    "and"  décalage et aller à l'état 83
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
-    "and"  shift, and go to state 82
-    "in"   shift, and go to state 133
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    $défaut  réduction par utilisation de la règle 54 (Let)
 
 
-State 131
+État 131
 
-   58 ArgsExprList: "," Expr ArgsExprList .
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr • "in" Expr
 
-    $default  reduce using rule 58 (ArgsExprList)
+    "and"  décalage et aller à l'état 83
+    "in"   décalage et aller à l'état 134
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
 
 
-State 132
+État 132
 
-   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args ")" .
+   59 ArgsExprList: "," Expr ArgsExprList •
 
-    $default  reduce using rule 42 (Expr)
+    $défaut  réduction par utilisation de la règle 59 (ArgsExprList)
 
 
-State 133
+État 133
 
-   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" . Expr
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args ")" •
 
-    "false"                  shift, and go to state 42
-    "if"                     shift, and go to state 43
-    "isnull"                 shift, and go to state 44
-    "let"                    shift, and go to state 45
-    "new"                    shift, and go to state 46
-    "not"                    shift, and go to state 47
-    "self"                   shift, and go to state 48
-    "true"                   shift, and go to state 49
-    "while"                  shift, and go to state 50
-    "{"                      shift, and go to state 51
-    "("                      shift, and go to state 52
-    "-"                      shift, and go to state 53
-    INVALID_HEX_NUMBER       shift, and go to state 54
-    INVALID_CHAR             shift, and go to state 55
-    INVALID_EOF_STRING       shift, and go to state 56
-    INVALID_EOF_COMMENT      shift, and go to state 57
-    INVALID_INTEGER_LITERAL  shift, and go to state 58
-    INTEGER_LITERAL          shift, and go to state 59
-    OBJECT_IDENTIFIER        shift, and go to state 60
-    STRING_LITERAL           shift, and go to state 61
+    $défaut  réduction par utilisation de la règle 42 (Expr)
 
-    Block    go to state 62
-    Expr     go to state 134
-    If       go to state 64
-    While    go to state 65
-    Let      go to state 66
-    Literal  go to state 67
 
+État 134
 
-State 134
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" • Expr
 
-   30 Expr: Expr . "and" Expr
-   31     | Expr . "<=" Expr
-   32     | Expr . "<" Expr
-   33     | Expr . "=" Expr
-   34     | Expr . "-" Expr
-   35     | Expr . "+" Expr
-   36     | Expr . "/" Expr
-   37     | Expr . "*" Expr
-   38     | Expr . "^" Expr
-   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
-   54 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr .
+    "false"                  décalage et aller à l'état 42
+    "if"                     décalage et aller à l'état 43
+    "isnull"                 décalage et aller à l'état 44
+    "let"                    décalage et aller à l'état 45
+    "new"                    décalage et aller à l'état 46
+    "not"                    décalage et aller à l'état 47
+    "self"                   décalage et aller à l'état 48
+    "true"                   décalage et aller à l'état 49
+    "while"                  décalage et aller à l'état 50
+    "{"                      décalage et aller à l'état 51
+    "("                      décalage et aller à l'état 52
+    "-"                      décalage et aller à l'état 53
+    INVALID_HEX_NUMBER       décalage et aller à l'état 54
+    INVALID_CHAR             décalage et aller à l'état 55
+    INVALID_EOF_STRING       décalage et aller à l'état 56
+    INVALID_EOF_COMMENT      décalage et aller à l'état 57
+    INVALID_INTEGER_LITERAL  décalage et aller à l'état 58
+    INTEGER_LITERAL          décalage et aller à l'état 59
+    OBJECT_IDENTIFIER        décalage et aller à l'état 60
+    STRING_LITERAL           décalage et aller à l'état 61
 
-    "and"  shift, and go to state 82
-    "+"    shift, and go to state 84
-    "-"    shift, and go to state 85
-    "*"    shift, and go to state 86
-    "/"    shift, and go to state 87
-    "^"    shift, and go to state 88
-    "."    shift, and go to state 89
-    "="    shift, and go to state 90
-    "<"    shift, and go to state 91
-    "<="   shift, and go to state 92
+    Block         aller à l'état 62
+    Expr          aller à l'état 135
+    If            aller à l'état 64
+    While         aller à l'état 65
+    Let           aller à l'état 66
+    Literal       aller à l'état 67
+    InvalidToken  aller à l'état 68
 
-    $default  reduce using rule 54 (Let)
+
+État 135
+
+   30 Expr: Expr • "and" Expr
+   31     | Expr • "<=" Expr
+   32     | Expr • "<" Expr
+   33     | Expr • "=" Expr
+   34     | Expr • "-" Expr
+   35     | Expr • "+" Expr
+   36     | Expr • "/" Expr
+   37     | Expr • "*" Expr
+   38     | Expr • "^" Expr
+   42     | Expr • "." OBJECT_IDENTIFIER "(" Args ")"
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr •
+
+    "and"  décalage et aller à l'état 83
+    "+"    décalage et aller à l'état 85
+    "-"    décalage et aller à l'état 86
+    "*"    décalage et aller à l'état 87
+    "/"    décalage et aller à l'état 88
+    "^"    décalage et aller à l'état 89
+    "."    décalage et aller à l'état 90
+    "="    décalage et aller à l'état 91
+    "<"    décalage et aller à l'état 92
+    "<="   décalage et aller à l'état 93
+
+    $défaut  réduction par utilisation de la règle 55 (Let)

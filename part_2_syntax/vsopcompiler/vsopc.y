@@ -106,7 +106,7 @@
 %right EMBEDDED
 
 %nterm <stringValue> Type 
-%nterm <expression> Expr Let While If Literal
+%nterm <expression> Expr Let While If Literal InvalidToken
 %nterm <program> Program ProgramContinued
 %nterm <cls> Class 
 %nterm <classBody> ClassBody 
@@ -149,7 +149,8 @@ Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL);}
         | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {$$ = new Field($1, $3, $5);}
         ;
 
-Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, new Block($7));};
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, new Block($7));}
+        ;
 
 Type: TYPE_IDENTIFIER {$$ = $1;}
         | INT32       {$$ = (char *) "int32";}
@@ -165,12 +166,16 @@ Formals: /* */ {$$ = new Formals();}
         
 FormalsContinued: /* */ {$$ = new Formals();}
                  | COMMA Formal FormalsContinued {$3->addFormal($2);
-                                                  $$ = $3;};
+                                                  $$ = $3;}
+                 ;
 
-Formal: OBJECT_IDENTIFIER COLON Type {$$ = new Formal($1, $3);};
+Formal: OBJECT_IDENTIFIER COLON Type {$$ = new Formal($1, $3);}
+        ;
 
 Block: LBRACE Expr BlockExpr RBRACE {$3->addExpr($2);
-                                     $$ = $3;};
+                                     $$ = $3;}
+       ;
+
 BlockExpr: /* */ {$$ = new Args();}
         | SEMICOLON Expr BlockExpr {$3->addExpr($2);
                                     $$ = $3;}
@@ -201,13 +206,15 @@ Expr:     If
         | LPAR RPAR {$$ = new Unit();}
         | LPAR Expr RPAR {$$ = $2;}
         | Block {$$ = new Block($1);}
+        | InvalidToken
         ;
 
 If: IF Expr THEN Expr {$$ = new If($2, $4, NULL);}
         | IF Expr THEN Expr ELSE Expr {$$ = new If($2, $4, $6);}
         ;
 
-While: WHILE Expr DO Expr {$$ = new While($2, $4);};
+While: WHILE Expr DO Expr {$$ = new While($2, $4);}
+        ;
 
 Let: LET OBJECT_IDENTIFIER COLON Type IN Expr {$$ = new Let($2, $4, $6, NULL);}
         | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr {$$ = new Let($2, $4, $8, $6);}
@@ -226,7 +233,9 @@ Literal: INTEGER_LITERAL {$$ = new IntegerLiteral($1);}
         | STRING_LITERAL {$$ = new StringLiteral($1);}
         | TRUE {$$ = new BooleanLiteral(true);}
         | FALSE {$$ = new BooleanLiteral(false);} 
-        | INVALID_CHAR {lexicalError(std::string("invalid character ") + std::string($1));
+        ;
+
+InvalidToken: INVALID_CHAR {lexicalError(std::string("invalid character ") + std::string($1));
                         YYERROR;}
         | INVALID_HEX_NUMBER {lexicalError(std::string("invalid hexadecimal number ") + std::string($1));
                         YYERROR;}
@@ -236,7 +245,6 @@ Literal: INTEGER_LITERAL {$$ = new IntegerLiteral($1);}
                         YYERROR;}
         | INVALID_EOF_COMMENT {lexicalError(std::string("unexpected end-of-file without *) closing"));
                         YYERROR;}
-        ;
 
 %%
 
