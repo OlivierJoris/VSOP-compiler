@@ -152,26 +152,30 @@ regular-char [^\"\\\0\n]
 }
 
 {error-hex-integer-literal} /* invalid hex integer literal */ {
-    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    yylval.stringValue = (char*)malloc(sizeof(char) * (yyleng + 1));
     strncpy(yylval.stringValue, yytext, yyleng);
+    yylval.stringValue[yyleng] = '\0';
     return INVALID_HEX_NUMBER;
 }
 
 {error-integer-literal} {
-    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    yylval.stringValue = (char*)malloc(sizeof(char) * (yyleng + 1));
     strncpy(yylval.stringValue, yytext, yyleng);
+    yylval.stringValue[yyleng] = '\0';
     return INVALID_INTEGER_LITERAL;
 }
 
 {type-identifier} {
-    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    yylval.stringValue = (char*)malloc(sizeof(char) * (yyleng + 1));
     strncpy(yylval.stringValue, yytext, yyleng);
+    yylval.stringValue[yyleng] = '\0';
     return TYPE_IDENTIFIER;
 }
 
 {object-identifier} {
-    yylval.stringValue = (char*)malloc(sizeof(char) * yyleng);
+    yylval.stringValue = (char*)malloc(sizeof(char) * (yyleng + 1));
     strncpy(yylval.stringValue, yytext, yyleng);
+    yylval.stringValue[yyleng] = '\0';
     return OBJECT_IDENTIFIER;
 }
 
