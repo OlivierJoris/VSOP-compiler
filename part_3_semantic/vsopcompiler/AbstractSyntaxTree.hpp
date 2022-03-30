@@ -128,7 +128,7 @@ class Program : public Expr
         void addClass(Class* cls) {classes.push_back(cls);}
         std::string eval() const override;
         std::vector<Class*> getClasses() {return classes;}
-        std::map<std::string, Class *> classesMap;
+        std::map<std::string, Class*> classesMap;
 };
 
 class If : public Expr 

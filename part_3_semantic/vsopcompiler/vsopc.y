@@ -502,7 +502,7 @@ int main(int argc, char** argv){
         if(yyparse()) {
             return EXIT_FAILURE;
         }else{
-            
+
             /* Check for class, field, method, and formal redefinitions */
             for(Class *cls: abstractSyntaxTree->getClasses())
             {
@@ -550,8 +550,16 @@ int main(int argc, char** argv){
                 while(parent != "Object")
                 {
                     if(parentSet.find(parent) != parentSet.end())
-                        semanticError("class " + cls->getName() + " cannot extends child class " + parent);
-                    
+                    {
+                        semanticError("class " + cls->getName() + " cannot extends parent class " + parent);
+                        break;
+                    }
+                    else
+                    {
+                        parentSet.insert(parent);
+                        Class *parentClass = abstractSyntaxTree->classesMap[parent];
+                        parent = parentClass->getName();
+                    }
                 }
             }
         }
