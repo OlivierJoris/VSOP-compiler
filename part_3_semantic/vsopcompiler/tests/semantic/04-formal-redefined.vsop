@@ -1,0 +1,6 @@
+class List extends MyAmazingClass {
+    head : int32 <- 1;
+    isNil(max : int32, max : string) : bool {
+        head <- hd
+    }
+}

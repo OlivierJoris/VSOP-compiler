@@ -1,0 +1,4 @@
+class List {
+    head : int32 <- true;
+    tail : int32 <- 32;
+}

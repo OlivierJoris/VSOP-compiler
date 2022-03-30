@@ -1,0 +1,6 @@
+class List {
+    head : int32 <- 1;
+    isNil() : bool {
+        head <- hd
+    }
+}
