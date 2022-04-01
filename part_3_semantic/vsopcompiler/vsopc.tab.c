@@ -2795,10 +2795,24 @@ int main(int argc, char** argv){
             }
 
             /* Check for overrides */ 
-            // for(Class *cls: abstractSyntaxTree->getClasses())
-            // {
-
-            // }
+            for(Class *cls: abstractSyntaxTree->getClasses())
+            {
+                /* Field */
+                for(Field *field: cls->getFields())
+                {
+                    std::string parent = cls->getParent();
+                    while(parent != "Object")
+                    {
+                        if(abstractSyntaxTree->classesMap[parent]->fieldsMap.find(field->getName()) != abstractSyntaxTree->classesMap[parent]->fieldsMap.end())
+                        {
+                            semanticError("field " + field->getName() + " of class " + cls->getName() + " is overriden");
+                            break;
+                        }
+                        
+                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
+                    }
+                }
+            }
         }
     }
 
