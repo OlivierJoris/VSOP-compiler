@@ -541,7 +541,7 @@ int main(int argc, char** argv){
                 }
             }
 
-            /* Check for cycles in inheritance */
+            /* Check for inheritance */
             std::set<std::string> parentSet;
 
             for(Class *cls: abstractSyntaxTree->getClasses())
@@ -549,6 +549,7 @@ int main(int argc, char** argv){
                 std::string parent = cls->getParent();
                 while(parent != "Object")
                 {
+                    /* Cycle in inheritance */
                     if(parentSet.find(parent) != parentSet.end())
                     {
                         semanticError("class " + cls->getName() + " cannot extends parent class " + parent);
@@ -556,12 +557,26 @@ int main(int argc, char** argv){
                     }
                     else
                     {
+                        /* Parent class has not been defined */
+                        if(abstractSyntaxTree->classesMap.find(parent) == abstractSyntaxTree->classesMap.end())
+                        {
+                           semanticError("class " + parent + " is not defined");
+                           break; 
+                        }
+
                         parentSet.insert(parent);
-                        Class *parentClass = abstractSyntaxTree->classesMap[parent];
-                        parent = parentClass->getName();
+                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
                     }
                 }
+
+                parentSet.clear(); 
             }
+
+            /* Check for overrides */ 
+            // for(Class *cls: abstractSyntaxTree->getClasses())
+            // {
+
+            // }
         }
     }
 
