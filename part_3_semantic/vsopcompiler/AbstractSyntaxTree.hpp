@@ -55,6 +55,7 @@ class Formal : public Expr
         Formal(const std::string name, const std::string type);
         std::string eval() const override;
         std::string getName() {return name;}
+        std::string getType() {return type;}
 };
 
 class Formals : public Expr
@@ -67,6 +68,7 @@ class Formals : public Expr
         void addFormal(Formal *formal){formals.push_back(formal);};
         std::string eval() const override;
         std::vector<Formal*> getFormals() {return formals;}
+        Formal *getFormals(unsigned int i) {return formals[i];}
 };
 
 class Method : public Expr 
@@ -82,6 +84,8 @@ class Method : public Expr
         std::string eval() const override;
         std::string getName() {return name;}
         std::vector<Formal*> getFormals() {return formals->getFormals();}
+        Formal *getFormals(unsigned int i) {return formals->getFormals(i);}
+        std::string getRetType() {return retType;}
         std::map<std::string, Formal*> formalsMap;
 };
 
@@ -125,6 +129,9 @@ class Program : public Expr
 
     public:
         Program();
+        void checkRedefinition();
+        void checkInheritance();
+        void checkOverrides();
         void addClass(Class* cls) {classes.push_back(cls);}
         std::string eval() const override;
         std::vector<Class*> getClasses() {return classes;}

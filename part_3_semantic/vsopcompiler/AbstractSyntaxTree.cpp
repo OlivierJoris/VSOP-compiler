@@ -7,6 +7,21 @@ Program::Program()
     Program::classesMap.insert(std::pair<std::string, Class *>("Object", NULL));
 }
 
+void Program::checkRedefinition()
+{
+    
+}
+
+void Program::checkInheritance()
+{
+
+}
+
+void Program::checkOverrides()
+{
+
+}
+
 std::string Program::eval() const 
 {
     auto firstClass = Program::classes.rbegin();
