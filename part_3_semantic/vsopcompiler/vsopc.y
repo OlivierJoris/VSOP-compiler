@@ -1,7 +1,6 @@
 %{
     #include <iostream>
     #include <vector>
-    #include <set>
     #include <cstring>
 
     #include "AbstractSyntaxTree.hpp"
@@ -504,121 +503,19 @@ int main(int argc, char** argv){
         }else{
 
             /* Check for class, field, method, and formal redefinitions */
-            for(Class *cls: abstractSyntaxTree->getClasses())
-            {
-                std::string className = cls->getName();
-                if(abstractSyntaxTree->classesMap.find(className) != abstractSyntaxTree->classesMap.end())
-                    semanticError("redefinition of class " + className);
-                else 
-                    abstractSyntaxTree->classesMap[className] = cls;
-
-                for(Field *field: cls->getFields())
-                {
-                    std::string fieldName = field->getName();
-                    if(cls->fieldsMap.find(fieldName) != cls->fieldsMap.end())
-                        semanticError("redefinition of field " + fieldName);
-                    else
-                        cls->fieldsMap[fieldName] = field;
-                }
-
-                for(Method *method: cls->getMethods())
-                {
-                    std::string methodName = method->getName();
-                    if(cls->methodsMap.find(methodName) != cls->methodsMap.end())
-                        semanticError("redefinition of method " + methodName);
-                    else
-                        cls->methodsMap[methodName] = method;
-                    
-
-                    for(Formal *formal: method->getFormals())
-                    {
-                        std::string formalName = formal->getName();
-                        if(method->formalsMap.find(formalName) != method->formalsMap.end())
-                            semanticError("redefinition of the formal " + formalName);
-                        else 
-                            method->formalsMap[formalName] = formal;
-                    }
-                }
-            }
+            abstractSyntaxTree->checkRedefinition();
 
             /* Check for inheritance */
-            std::set<std::string> parentSet;
-
-            for(Class *cls: abstractSyntaxTree->getClasses())
-            {
-                std::string parent = cls->getParent();
-                while(parent != "Object")
-                {
-                    /* Cycle in inheritance */
-                    if(parentSet.find(parent) != parentSet.end())
-                    {
-                        semanticError("class " + cls->getName() + " cannot extends parent class " + parent);
-                        break;
-                    }
-                    else
-                    {
-                        /* Parent class has not been defined */
-                        if(abstractSyntaxTree->classesMap.find(parent) == abstractSyntaxTree->classesMap.end())
-                        {
-                           semanticError("class " + parent + " is not defined");
-                           break; 
-                        }
-
-                        parentSet.insert(parent);
-                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
-                    }
-                }
-
-                parentSet.clear(); 
-            }
+            abstractSyntaxTree->checkInheritance();
 
             /* Check for overrides */ 
-            for(Class *cls: abstractSyntaxTree->getClasses())
+            abstractSyntaxTree->checkOverrides();
+
+            /* Display errors if any */
+            if(abstractSyntaxTree->errors.size() > 0)
             {
-                /* Field */
-                for(Field *field: cls->getFields())
-                {
-                    std::string parent = cls->getParent();
-                    while(parent != "Object")
-                    {
-                        if(abstractSyntaxTree->classesMap[parent]->fieldsMap.find(field->getName()) != abstractSyntaxTree->classesMap[parent]->fieldsMap.end())
-                            semanticError("field " + field->getName() + " of class " + cls->getName() + " is overriden");
-                        
-                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
-                    }
-                }
-
-                for(Method *method: cls->getMethods())
-                {
-                    std::string parent = cls->getParent();
-                    while(parent != "Object")
-                    {
-                        if(abstractSyntaxTree->classesMap[parent]->methodsMap.find(method->getName()) != abstractSyntaxTree->classesMap[parent]->methodsMap.end())
-                        {
-                            Method *m =  abstractSyntaxTree->classesMap[parent]->methodsMap[method->getName()];
-                            if(m->getRetType() != method->getRetType())
-                                semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
-                            
-                            if(m->getFormals().size() != method->getFormals().size())
-                            {
-                                semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with " + std::to_string(method->getFormals().size()) + " formals but parent class has " + std::to_string(m->getFormals().size()) + " formals");
-                                break;
-                            }
-
-                            unsigned int i = 0;
-                            for(Formal *formal: method->getFormals())
-                            {
-                                if(m->getFormals(i)->getName() != formal->getName())
-                                    semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
-                                
-                                if(m->getFormals(i)->getType() != formal->getType())
-                                    semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
-                            }
-                        }
-
-                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
-                    }
-                }
+                for(std::string error: abstractSyntaxTree->errors)
+                    semanticError(error);
             }
         }
     }

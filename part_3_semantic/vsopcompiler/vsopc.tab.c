@@ -71,7 +71,6 @@
 
     #include <iostream>
     #include <vector>
-    #include <set>
     #include <cstring>
 
     #include "AbstractSyntaxTree.hpp"
@@ -90,7 +89,7 @@
     void lexicalError(const std::string& message);
     void syntaxError(const std::string& message);
 
-#line 94 "vsopc.tab.c"
+#line 93 "vsopc.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -554,13 +553,13 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   126,   126,   130,   131,   134,   137,   142,   143,   145,
-     149,   150,   153,   156,   157,   158,   159,   160,   163,   164,
-     168,   169,   173,   176,   180,   181,   185,   186,   187,   188,
-     189,   190,   191,   192,   193,   194,   195,   196,   197,   198,
-     199,   200,   201,   202,   203,   204,   205,   206,   207,   208,
-     209,   210,   213,   214,   217,   220,   221,   224,   225,   228,
-     229,   233,   234,   235,   236,   239,   241,   243,   245,   247
+       0,   125,   125,   129,   130,   133,   136,   141,   142,   144,
+     148,   149,   152,   155,   156,   157,   158,   159,   162,   163,
+     167,   168,   172,   175,   179,   180,   184,   185,   186,   187,
+     188,   189,   190,   191,   192,   193,   194,   195,   196,   197,
+     198,   199,   200,   201,   202,   203,   204,   205,   206,   207,
+     208,   209,   212,   213,   216,   219,   220,   223,   224,   227,
+     228,   232,   233,   234,   235,   238,   240,   242,   244,   246
 };
 #endif
 
@@ -1829,405 +1828,405 @@ yyreduce:
     switch (yyn)
       {
   case 2: /* Program: Class ProgramContinued  */
-#line 126 "vsopc.y"
+#line 125 "vsopc.y"
                                 {(yyvsp[0].program)->addClass((yyvsp[-1].cls)); 
                                  (yyval.program) = (yyvsp[0].program); 
                                  abstractSyntaxTree = (yyval.program);}
-#line 1837 "vsopc.tab.c"
+#line 1836 "vsopc.tab.c"
     break;
 
   case 3: /* ProgramContinued: %empty  */
-#line 130 "vsopc.y"
+#line 129 "vsopc.y"
                               { (yyval.program) = new Program(); }
-#line 1843 "vsopc.tab.c"
+#line 1842 "vsopc.tab.c"
     break;
 
   case 4: /* ProgramContinued: Class ProgramContinued  */
-#line 131 "vsopc.y"
+#line 130 "vsopc.y"
                                                          {(yyvsp[0].program)->addClass((yyvsp[-1].cls)); 
                                           (yyval.program) = (yyvsp[0].program);}
-#line 1850 "vsopc.tab.c"
+#line 1849 "vsopc.tab.c"
     break;
 
   case 5: /* Class: "class" TYPE_IDENTIFIER "{" ClassBody "}"  */
-#line 134 "vsopc.y"
+#line 133 "vsopc.y"
                                                      {std::vector<Field*> fields = (yyvsp[-1].classBody)->getFields();
                                                                std::vector<Method*> methods = (yyvsp[-1].classBody)->getMethods();
                                                                (yyval.cls) = new Class((yyvsp[-3].stringValue), "Object", fields, methods);}
-#line 1858 "vsopc.tab.c"
+#line 1857 "vsopc.tab.c"
     break;
 
   case 6: /* Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}"  */
-#line 137 "vsopc.y"
+#line 136 "vsopc.y"
                                                                                 {std::vector<Field*> fields = (yyvsp[-1].classBody)->getFields();
                                                                                        std::vector<Method*> methods = (yyvsp[-1].classBody)->getMethods();
                                                                                        (yyval.cls) = new Class((yyvsp[-5].stringValue), (yyvsp[-3].stringValue), fields, methods);}
-#line 1866 "vsopc.tab.c"
+#line 1865 "vsopc.tab.c"
     break;
 
   case 7: /* ClassBody: %empty  */
-#line 142 "vsopc.y"
+#line 141 "vsopc.y"
                  {(yyval.classBody) = new ClassBody();}
-#line 1872 "vsopc.tab.c"
+#line 1871 "vsopc.tab.c"
     break;
 
   case 8: /* ClassBody: Field ClassBody  */
-#line 143 "vsopc.y"
+#line 142 "vsopc.y"
                           {(yyvsp[0].classBody)->addField((yyvsp[-1].field));
                                       (yyval.classBody) = (yyvsp[0].classBody);}
-#line 1879 "vsopc.tab.c"
+#line 1878 "vsopc.tab.c"
     break;
 
   case 9: /* ClassBody: Method ClassBody  */
-#line 145 "vsopc.y"
+#line 144 "vsopc.y"
                            {(yyvsp[0].classBody)->addMethod((yyvsp[-1].method));
                                        (yyval.classBody) = (yyvsp[0].classBody);}
-#line 1886 "vsopc.tab.c"
+#line 1885 "vsopc.tab.c"
     break;
 
   case 10: /* Field: OBJECT_IDENTIFIER ":" Type ";"  */
-#line 149 "vsopc.y"
+#line 148 "vsopc.y"
                                               {(yyval.field) = new Field((yyvsp[-3].stringValue), (yyvsp[-1].stringValue), NULL);}
-#line 1892 "vsopc.tab.c"
+#line 1891 "vsopc.tab.c"
     break;
 
   case 11: /* Field: OBJECT_IDENTIFIER ":" Type "<-" Expr ";"  */
-#line 150 "vsopc.y"
+#line 149 "vsopc.y"
                                                              {(yyval.field) = new Field((yyvsp[-5].stringValue), (yyvsp[-3].stringValue), (yyvsp[-1].expression));}
-#line 1898 "vsopc.tab.c"
+#line 1897 "vsopc.tab.c"
     break;
 
   case 12: /* Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block  */
-#line 153 "vsopc.y"
+#line 152 "vsopc.y"
                                                             {(yyval.method) = new Method((yyvsp[-6].stringValue), (yyvsp[-4].formals), (yyvsp[-1].stringValue), new Block((yyvsp[0].args)));}
-#line 1904 "vsopc.tab.c"
+#line 1903 "vsopc.tab.c"
     break;
 
   case 13: /* Type: TYPE_IDENTIFIER  */
-#line 156 "vsopc.y"
+#line 155 "vsopc.y"
                       {(yyval.stringValue) = (yyvsp[0].stringValue);}
-#line 1910 "vsopc.tab.c"
+#line 1909 "vsopc.tab.c"
     break;
 
   case 14: /* Type: "int32"  */
-#line 157 "vsopc.y"
+#line 156 "vsopc.y"
                       {(yyval.stringValue) = (char *) "int32";}
-#line 1916 "vsopc.tab.c"
+#line 1915 "vsopc.tab.c"
     break;
 
   case 15: /* Type: "bool"  */
-#line 158 "vsopc.y"
+#line 157 "vsopc.y"
                       {(yyval.stringValue) = (char *) "bool";}
-#line 1922 "vsopc.tab.c"
+#line 1921 "vsopc.tab.c"
     break;
 
   case 16: /* Type: "string"  */
-#line 159 "vsopc.y"
+#line 158 "vsopc.y"
                       {(yyval.stringValue) = (char *) "string";}
-#line 1928 "vsopc.tab.c"
+#line 1927 "vsopc.tab.c"
     break;
 
   case 17: /* Type: "unit"  */
-#line 160 "vsopc.y"
+#line 159 "vsopc.y"
                       {(yyval.stringValue) = (char *) "unit";}
-#line 1934 "vsopc.tab.c"
+#line 1933 "vsopc.tab.c"
     break;
 
   case 18: /* Formals: %empty  */
-#line 163 "vsopc.y"
+#line 162 "vsopc.y"
                {(yyval.formals) = new Formals();}
-#line 1940 "vsopc.tab.c"
+#line 1939 "vsopc.tab.c"
     break;
 
   case 19: /* Formals: Formal FormalsContinued  */
-#line 164 "vsopc.y"
+#line 163 "vsopc.y"
                                   {(yyvsp[0].formals)->addFormal((yyvsp[-1].formal));
                                    (yyval.formals) = (yyvsp[0].formals);}
-#line 1947 "vsopc.tab.c"
+#line 1946 "vsopc.tab.c"
     break;
 
   case 20: /* FormalsContinued: %empty  */
-#line 168 "vsopc.y"
+#line 167 "vsopc.y"
                         {(yyval.formals) = new Formals();}
-#line 1953 "vsopc.tab.c"
+#line 1952 "vsopc.tab.c"
     break;
 
   case 21: /* FormalsContinued: "," Formal FormalsContinued  */
-#line 169 "vsopc.y"
+#line 168 "vsopc.y"
                                                  {(yyvsp[0].formals)->addFormal((yyvsp[-1].formal));
                                                   (yyval.formals) = (yyvsp[0].formals);}
-#line 1960 "vsopc.tab.c"
+#line 1959 "vsopc.tab.c"
     break;
 
   case 22: /* Formal: OBJECT_IDENTIFIER ":" Type  */
-#line 173 "vsopc.y"
+#line 172 "vsopc.y"
                                      {(yyval.formal) = new Formal((yyvsp[-2].stringValue), (yyvsp[0].stringValue));}
-#line 1966 "vsopc.tab.c"
+#line 1965 "vsopc.tab.c"
     break;
 
   case 23: /* Block: "{" Expr BlockExpr "}"  */
-#line 176 "vsopc.y"
+#line 175 "vsopc.y"
                                     {(yyvsp[-1].args)->addExpr((yyvsp[-2].expression));
                                      (yyval.args) = (yyvsp[-1].args);}
-#line 1973 "vsopc.tab.c"
+#line 1972 "vsopc.tab.c"
     break;
 
   case 24: /* BlockExpr: %empty  */
-#line 180 "vsopc.y"
+#line 179 "vsopc.y"
                  {(yyval.args) = new Args();}
-#line 1979 "vsopc.tab.c"
+#line 1978 "vsopc.tab.c"
     break;
 
   case 25: /* BlockExpr: ";" Expr BlockExpr  */
-#line 181 "vsopc.y"
+#line 180 "vsopc.y"
                                    {(yyvsp[0].args)->addExpr((yyvsp[-1].expression));
                                     (yyval.args) = (yyvsp[0].args);}
-#line 1986 "vsopc.tab.c"
+#line 1985 "vsopc.tab.c"
     break;
 
   case 29: /* Expr: OBJECT_IDENTIFIER "<-" Expr  */
-#line 188 "vsopc.y"
+#line 187 "vsopc.y"
                                         {(yyval.expression) = new Assign((yyvsp[-2].stringValue), (yyvsp[0].expression));}
-#line 1992 "vsopc.tab.c"
+#line 1991 "vsopc.tab.c"
     break;
 
   case 30: /* Expr: "not" Expr  */
-#line 189 "vsopc.y"
+#line 188 "vsopc.y"
                    {(yyval.expression) = new Not((yyvsp[0].expression));}
-#line 1998 "vsopc.tab.c"
+#line 1997 "vsopc.tab.c"
     break;
 
   case 31: /* Expr: Expr "and" Expr  */
-#line 190 "vsopc.y"
+#line 189 "vsopc.y"
                         {(yyval.expression) = new And((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2004 "vsopc.tab.c"
+#line 2003 "vsopc.tab.c"
     break;
 
   case 32: /* Expr: Expr "<=" Expr  */
-#line 191 "vsopc.y"
+#line 190 "vsopc.y"
                                 {(yyval.expression) = new LowerEqual((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2010 "vsopc.tab.c"
+#line 2009 "vsopc.tab.c"
     break;
 
   case 33: /* Expr: Expr "<" Expr  */
-#line 192 "vsopc.y"
+#line 191 "vsopc.y"
                           {(yyval.expression) = new Lower((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2016 "vsopc.tab.c"
+#line 2015 "vsopc.tab.c"
     break;
 
   case 34: /* Expr: Expr "=" Expr  */
-#line 193 "vsopc.y"
+#line 192 "vsopc.y"
                           {(yyval.expression) = new Equal((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2022 "vsopc.tab.c"
+#line 2021 "vsopc.tab.c"
     break;
 
   case 35: /* Expr: Expr "-" Expr  */
-#line 194 "vsopc.y"
+#line 193 "vsopc.y"
                           {(yyval.expression) = new Minus((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2028 "vsopc.tab.c"
+#line 2027 "vsopc.tab.c"
     break;
 
   case 36: /* Expr: Expr "+" Expr  */
-#line 195 "vsopc.y"
+#line 194 "vsopc.y"
                          {(yyval.expression) = new Plus((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2034 "vsopc.tab.c"
+#line 2033 "vsopc.tab.c"
     break;
 
   case 37: /* Expr: Expr "/" Expr  */
-#line 196 "vsopc.y"
+#line 195 "vsopc.y"
                         {(yyval.expression) = new Div((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2040 "vsopc.tab.c"
+#line 2039 "vsopc.tab.c"
     break;
 
   case 38: /* Expr: Expr "*" Expr  */
-#line 197 "vsopc.y"
+#line 196 "vsopc.y"
                           {(yyval.expression) = new Times((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2046 "vsopc.tab.c"
+#line 2045 "vsopc.tab.c"
     break;
 
   case 39: /* Expr: Expr "^" Expr  */
-#line 198 "vsopc.y"
+#line 197 "vsopc.y"
                         {(yyval.expression) = new Pow((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2052 "vsopc.tab.c"
+#line 2051 "vsopc.tab.c"
     break;
 
   case 40: /* Expr: "-" Expr  */
-#line 199 "vsopc.y"
+#line 198 "vsopc.y"
                                       {(yyval.expression) = new UnaryMinus((yyvsp[0].expression));}
-#line 2058 "vsopc.tab.c"
+#line 2057 "vsopc.tab.c"
     break;
 
   case 41: /* Expr: "isnull" Expr  */
-#line 200 "vsopc.y"
+#line 199 "vsopc.y"
                       {(yyval.expression) = new IsNull((yyvsp[0].expression));}
-#line 2064 "vsopc.tab.c"
+#line 2063 "vsopc.tab.c"
     break;
 
   case 42: /* Expr: OBJECT_IDENTIFIER "(" Args ")"  */
-#line 201 "vsopc.y"
+#line 200 "vsopc.y"
                                            {(yyval.expression) = new Call(NULL, (yyvsp[-3].stringValue), (yyvsp[-1].args));}
-#line 2070 "vsopc.tab.c"
+#line 2069 "vsopc.tab.c"
     break;
 
   case 43: /* Expr: Expr "." OBJECT_IDENTIFIER "(" Args ")"  */
-#line 202 "vsopc.y"
+#line 201 "vsopc.y"
                                                     {(yyval.expression) = new Call((yyvsp[-5].expression), (yyvsp[-3].stringValue), (yyvsp[-1].args));}
-#line 2076 "vsopc.tab.c"
+#line 2075 "vsopc.tab.c"
     break;
 
   case 44: /* Expr: "new" TYPE_IDENTIFIER  */
-#line 203 "vsopc.y"
+#line 202 "vsopc.y"
                               {(yyval.expression) = new New((yyvsp[0].stringValue));}
-#line 2082 "vsopc.tab.c"
+#line 2081 "vsopc.tab.c"
     break;
 
   case 45: /* Expr: OBJECT_IDENTIFIER  */
-#line 204 "vsopc.y"
+#line 203 "vsopc.y"
                             {(yyval.expression) = new ObjectIdentifier((yyvsp[0].stringValue));}
-#line 2088 "vsopc.tab.c"
+#line 2087 "vsopc.tab.c"
     break;
 
   case 46: /* Expr: "self"  */
-#line 205 "vsopc.y"
+#line 204 "vsopc.y"
                {(yyval.expression) = new Self();}
-#line 2094 "vsopc.tab.c"
+#line 2093 "vsopc.tab.c"
     break;
 
   case 48: /* Expr: "(" ")"  */
-#line 207 "vsopc.y"
+#line 206 "vsopc.y"
                     {(yyval.expression) = new Unit();}
-#line 2100 "vsopc.tab.c"
+#line 2099 "vsopc.tab.c"
     break;
 
   case 49: /* Expr: "(" Expr ")"  */
-#line 208 "vsopc.y"
+#line 207 "vsopc.y"
                          {(yyval.expression) = (yyvsp[-1].expression);}
-#line 2106 "vsopc.tab.c"
+#line 2105 "vsopc.tab.c"
     break;
 
   case 50: /* Expr: Block  */
-#line 209 "vsopc.y"
+#line 208 "vsopc.y"
                 {(yyval.expression) = new Block((yyvsp[0].args));}
-#line 2112 "vsopc.tab.c"
+#line 2111 "vsopc.tab.c"
     break;
 
   case 52: /* If: "if" Expr "then" Expr  */
-#line 213 "vsopc.y"
+#line 212 "vsopc.y"
                       {(yyval.expression) = new If((yyvsp[-2].expression), (yyvsp[0].expression), NULL);}
-#line 2118 "vsopc.tab.c"
+#line 2117 "vsopc.tab.c"
     break;
 
   case 53: /* If: "if" Expr "then" Expr "else" Expr  */
-#line 214 "vsopc.y"
+#line 213 "vsopc.y"
                                       {(yyval.expression) = new If((yyvsp[-4].expression), (yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2124 "vsopc.tab.c"
+#line 2123 "vsopc.tab.c"
     break;
 
   case 54: /* While: "while" Expr "do" Expr  */
-#line 217 "vsopc.y"
+#line 216 "vsopc.y"
                           {(yyval.expression) = new While((yyvsp[-2].expression), (yyvsp[0].expression));}
-#line 2130 "vsopc.tab.c"
+#line 2129 "vsopc.tab.c"
     break;
 
   case 55: /* Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr  */
-#line 220 "vsopc.y"
+#line 219 "vsopc.y"
                                               {(yyval.expression) = new Let((yyvsp[-4].stringValue), (yyvsp[-2].stringValue), (yyvsp[0].expression), NULL);}
-#line 2136 "vsopc.tab.c"
+#line 2135 "vsopc.tab.c"
     break;
 
   case 56: /* Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr  */
-#line 221 "vsopc.y"
+#line 220 "vsopc.y"
                                                                {(yyval.expression) = new Let((yyvsp[-6].stringValue), (yyvsp[-4].stringValue), (yyvsp[0].expression), (yyvsp[-2].expression));}
-#line 2142 "vsopc.tab.c"
+#line 2141 "vsopc.tab.c"
     break;
 
   case 57: /* Args: %empty  */
-#line 224 "vsopc.y"
+#line 223 "vsopc.y"
             {(yyval.args) = new Args();}
-#line 2148 "vsopc.tab.c"
+#line 2147 "vsopc.tab.c"
     break;
 
   case 58: /* Args: Expr ArgsExprList  */
-#line 225 "vsopc.y"
+#line 224 "vsopc.y"
                             {(yyvsp[0].args)->addExpr((yyvsp[-1].expression)); 
                              (yyval.args) = (yyvsp[0].args);}
-#line 2155 "vsopc.tab.c"
+#line 2154 "vsopc.tab.c"
     break;
 
   case 59: /* ArgsExprList: %empty  */
-#line 228 "vsopc.y"
+#line 227 "vsopc.y"
                     {(yyval.args) = new Args();}
-#line 2161 "vsopc.tab.c"
+#line 2160 "vsopc.tab.c"
     break;
 
   case 60: /* ArgsExprList: "," Expr ArgsExprList  */
-#line 229 "vsopc.y"
+#line 228 "vsopc.y"
                                   {(yyvsp[0].args)->addExpr((yyvsp[-1].expression));
                                    (yyval.args) = (yyvsp[0].args);}
-#line 2168 "vsopc.tab.c"
+#line 2167 "vsopc.tab.c"
     break;
 
   case 61: /* Literal: INTEGER_LITERAL  */
-#line 233 "vsopc.y"
+#line 232 "vsopc.y"
                          {(yyval.expression) = new IntegerLiteral((yyvsp[0].intValue));}
-#line 2174 "vsopc.tab.c"
+#line 2173 "vsopc.tab.c"
     break;
 
   case 62: /* Literal: STRING_LITERAL  */
-#line 234 "vsopc.y"
+#line 233 "vsopc.y"
                          {(yyval.expression) = new StringLiteral((yyvsp[0].stringValue));}
-#line 2180 "vsopc.tab.c"
+#line 2179 "vsopc.tab.c"
     break;
 
   case 63: /* Literal: "true"  */
-#line 235 "vsopc.y"
+#line 234 "vsopc.y"
                {(yyval.expression) = new BooleanLiteral(true);}
-#line 2186 "vsopc.tab.c"
+#line 2185 "vsopc.tab.c"
     break;
 
   case 64: /* Literal: "false"  */
-#line 236 "vsopc.y"
+#line 235 "vsopc.y"
                 {(yyval.expression) = new BooleanLiteral(false);}
-#line 2192 "vsopc.tab.c"
+#line 2191 "vsopc.tab.c"
     break;
 
   case 65: /* InvalidToken: INVALID_CHAR  */
-#line 239 "vsopc.y"
+#line 238 "vsopc.y"
                            {lexicalError(std::string("invalid character ") + std::string((yyvsp[0].stringValue)));
                         YYERROR;}
-#line 2199 "vsopc.tab.c"
+#line 2198 "vsopc.tab.c"
     break;
 
   case 66: /* InvalidToken: INVALID_HEX_NUMBER  */
-#line 241 "vsopc.y"
+#line 240 "vsopc.y"
                              {lexicalError(std::string("invalid hexadecimal number ") + std::string((yyvsp[0].stringValue)));
                         YYERROR;}
-#line 2206 "vsopc.tab.c"
+#line 2205 "vsopc.tab.c"
     break;
 
   case 67: /* InvalidToken: INVALID_INTEGER_LITERAL  */
-#line 243 "vsopc.y"
+#line 242 "vsopc.y"
                                   {lexicalError(std::string("invalid literal value ") + std::string((yyvsp[0].stringValue)));
                         YYERROR;}
-#line 2213 "vsopc.tab.c"
+#line 2212 "vsopc.tab.c"
     break;
 
   case 68: /* InvalidToken: INVALID_EOF_STRING  */
-#line 245 "vsopc.y"
+#line 244 "vsopc.y"
                              {lexicalError(std::string("unexpected end-of-file without \" closing "));
                         YYERROR;}
-#line 2220 "vsopc.tab.c"
+#line 2219 "vsopc.tab.c"
     break;
 
   case 69: /* InvalidToken: INVALID_EOF_COMMENT  */
-#line 247 "vsopc.y"
+#line 246 "vsopc.y"
                               {lexicalError(std::string("unexpected end-of-file without *) closing"));
                         YYERROR;}
-#line 2227 "vsopc.tab.c"
+#line 2226 "vsopc.tab.c"
     break;
 
 
-#line 2231 "vsopc.tab.c"
+#line 2230 "vsopc.tab.c"
 
         default: break;
       }
@@ -2468,7 +2467,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 250 "vsopc.y"
+#line 249 "vsopc.y"
 
 
 void yyerror(const std::string message){
@@ -2726,122 +2725,22 @@ int main(int argc, char** argv){
         }else{
 
             /* Check for class, field, method, and formal redefinitions */
-            for(Class *cls: abstractSyntaxTree->getClasses())
-            {
-                std::string className = cls->getName();
-                if(abstractSyntaxTree->classesMap.find(className) != abstractSyntaxTree->classesMap.end())
-                    semanticError("redefinition of class " + className);
-                else 
-                    abstractSyntaxTree->classesMap[className] = cls;
-
-                for(Field *field: cls->getFields())
-                {
-                    std::string fieldName = field->getName();
-                    if(cls->fieldsMap.find(fieldName) != cls->fieldsMap.end())
-                        semanticError("redefinition of field " + fieldName);
-                    else
-                        cls->fieldsMap[fieldName] = field;
-                }
-
-                for(Method *method: cls->getMethods())
-                {
-                    std::string methodName = method->getName();
-                    if(cls->methodsMap.find(methodName) != cls->methodsMap.end())
-                        semanticError("redefinition of method " + methodName);
-                    else
-                        cls->methodsMap[methodName] = method;
-                    
-
-                    for(Formal *formal: method->getFormals())
-                    {
-                        std::string formalName = formal->getName();
-                        if(method->formalsMap.find(formalName) != method->formalsMap.end())
-                            semanticError("redefinition of the formal " + formalName);
-                        else 
-                            method->formalsMap[formalName] = formal;
-                    }
-                }
-            }
+            abstractSyntaxTree->checkRedefinition();
 
             /* Check for inheritance */
-            std::set<std::string> parentSet;
-
-            for(Class *cls: abstractSyntaxTree->getClasses())
-            {
-                std::string parent = cls->getParent();
-                while(parent != "Object")
-                {
-                    /* Cycle in inheritance */
-                    if(parentSet.find(parent) != parentSet.end())
-                    {
-                        semanticError("class " + cls->getName() + " cannot extends parent class " + parent);
-                        break;
-                    }
-                    else
-                    {
-                        /* Parent class has not been defined */
-                        if(abstractSyntaxTree->classesMap.find(parent) == abstractSyntaxTree->classesMap.end())
-                        {
-                           semanticError("class " + parent + " is not defined");
-                           break; 
-                        }
-
-                        parentSet.insert(parent);
-                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
-                    }
-                }
-
-                parentSet.clear(); 
-            }
+            abstractSyntaxTree->checkInheritance();
 
             /* Check for overrides */ 
-            for(Class *cls: abstractSyntaxTree->getClasses())
+            abstractSyntaxTree->checkOverrides();
+
+            /* Display errors if any */
+            if(abstractSyntaxTree->errors.size() > 0)
             {
-                /* Field */
-                for(Field *field: cls->getFields())
-                {
-                    std::string parent = cls->getParent();
-                    while(parent != "Object")
-                    {
-                        if(abstractSyntaxTree->classesMap[parent]->fieldsMap.find(field->getName()) != abstractSyntaxTree->classesMap[parent]->fieldsMap.end())
-                            semanticError("field " + field->getName() + " of class " + cls->getName() + " is overriden");
-                        
-                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
-                    }
-                }
-
-                for(Method *method: cls->getMethods())
-                {
-                    std::string parent = cls->getParent();
-                    while(parent != "Object")
-                    {
-                        if(abstractSyntaxTree->classesMap[parent]->methodsMap.find(method->getName()) != abstractSyntaxTree->classesMap[parent]->methodsMap.end())
-                        {
-                            Method *m =  abstractSyntaxTree->classesMap[parent]->methodsMap[method->getName()];
-                            if(m->getRetType() != method->getRetType())
-                                semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
-                            
-                            if(m->getFormals().size() != method->getFormals().size())
-                            {
-                                semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with " + std::to_string(method->getFormals().size()) + " formals but parent class has " + std::to_string(m->getFormals().size()) + " formals");
-                                break;
-                            }
-
-                            unsigned int i = 0;
-                            for(Formal *formal: method->getFormals())
-                            {
-                                if(m->getFormals(i)->getName() != formal->getName())
-                                    semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
-                                
-                                if(m->getFormals(i)->getType() != formal->getType())
-                                    semanticError("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
-                            }
-                        }
-
-                        parent = abstractSyntaxTree->classesMap[parent]->getParent();
-                    }
-                }
+                for(std::string error: abstractSyntaxTree->errors)
+                    semanticError(error);
             }
+
+            
         }
     }
 

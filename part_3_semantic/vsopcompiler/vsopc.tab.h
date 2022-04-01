@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 24 "vsopc.y"
+#line 23 "vsopc.y"
 
     #include "AbstractSyntaxTree.hpp"
 
@@ -116,7 +116,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 32 "vsopc.y"
+#line 31 "vsopc.y"
 
     int intValue;
     char *stringValue;

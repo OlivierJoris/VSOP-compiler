@@ -136,6 +136,7 @@ class Program : public Expr
         std::string eval() const override;
         std::vector<Class*> getClasses() {return classes;}
         std::map<std::string, Class*> classesMap;
+        std::vector<std::string> errors;
 };
 
 class If : public Expr 
