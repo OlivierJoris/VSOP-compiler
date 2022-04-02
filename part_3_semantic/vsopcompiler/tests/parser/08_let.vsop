@@ -1,0 +1,7 @@
+class Main {
+    main() : bool {
+        let n : int32 in {
+            maxime <- 1
+        }
+    }
+}
