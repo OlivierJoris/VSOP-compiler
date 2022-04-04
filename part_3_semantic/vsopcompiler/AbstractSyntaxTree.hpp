@@ -75,6 +75,7 @@ class Formal : public Expr
         std::string eval() const override;
         std::string getName() {return name;}
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        std::string getType() {return type;}
 };
 
 class Formals : public Expr
@@ -88,6 +89,7 @@ class Formals : public Expr
         std::string eval() const override;
         std::vector<Formal*> getFormals() {return formals;}
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        Formal *getFormals(unsigned int i) {return formals[i];}
 };
 
 class Method : public Expr 
@@ -103,6 +105,8 @@ class Method : public Expr
         std::string eval() const override;
         std::string getName() {return name;}
         std::vector<Formal*> getFormals() {return formals->getFormals();}
+        Formal *getFormals(unsigned int i) {return formals->getFormals(i);}
+        std::string getRetType() {return retType;}
         std::map<std::string, Formal*> formalsMap;
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
@@ -148,10 +152,14 @@ class Program : public Expr
 
     public:
         Program();
+        void checkRedefinition();
+        void checkInheritance();
+        void checkOverrides();
         void addClass(Class* cls) {classes.push_back(cls);}
         std::string eval() const override;
         std::vector<Class*> getClasses() {return classes;}
         std::map<std::string, Class*> classesMap;
+        std::vector<std::string> errors;
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 

@@ -1,7 +1,6 @@
 %{
     #include <iostream>
     #include <vector>
-    #include <set>
     #include <cstring>
 
     #include "AbstractSyntaxTree.hpp"
@@ -505,69 +504,23 @@ int main(int argc, char** argv){
         }else{
 
             /* Check for class, field, method, and formal redefinitions */
-            for(Class *cls: abstractSyntaxTree->getClasses())
-            {
-                std::string className = cls->getName();
-                if(abstractSyntaxTree->classesMap.find(className) != abstractSyntaxTree->classesMap.end())
-                    semanticError("redefinition of class " + className);
-                else 
-                    abstractSyntaxTree->classesMap[className] = cls;
+            abstractSyntaxTree->checkRedefinition();
 
-                for(Field *field: cls->getFields())
-                {
-                    std::string fieldName = field->getName();
-                    if(cls->fieldsMap.find(fieldName) != cls->fieldsMap.end())
-                        semanticError("redefinition of field " + fieldName);
-                    else
-                        cls->fieldsMap[fieldName] = field;
-                }
+            /* Check for inheritance */
+            abstractSyntaxTree->checkInheritance();
 
-                for(Method *method: cls->getMethods())
-                {
-                    std::string methodName = method->getName();
-                    if(cls->methodsMap.find(methodName) != cls->methodsMap.end())
-                        semanticError("redefinition of method " + methodName);
-                    else
-                        cls->methodsMap[methodName] = method;
-                    
+            /* Check for overrides */ 
+            abstractSyntaxTree->checkOverrides();
 
-                    for(Formal *formal: method->getFormals())
-                    {
-                        std::string formalName = formal->getName();
-                        if(method->formalsMap.find(formalName) != method->formalsMap.end())
-                            semanticError("redefinition of the formal " + formalName);
-                        else 
-                            method->formalsMap[formalName] = formal;
-                    }
-                }
-            }
-
+            /* Display errors if any */
+            if(abstractSyntaxTree->errors.size() > 0)
             std::cout << "Testing usage of undefined types" << std::endl;
             int undefinedTypeUsage = checkUseUndefinedType(abstractSyntaxTree);
             std::cout << "Result of undefined type usage = " << undefinedTypeUsage << std::endl;
-
-
-            /* Check for cycles in inheritance */
-            /* std::set<std::string> parentSet;
-
-            for(Class *cls: abstractSyntaxTree->getClasses())
             {
-                std::string parent = cls->getParent();
-                while(parent != "Object")
-                {
-                    if(parentSet.find(parent) != parentSet.end())
-                    {
-                        semanticError("class " + cls->getName() + " cannot extends parent class " + parent);
-                        break;
-                    }
-                    else
-                    {
-                        parentSet.insert(parent);
-                        Class *parentClass = abstractSyntaxTree->classesMap[parent];
-                        parent = parentClass->getName();
-                    }
-                }
-            } */
+                for(std::string error: abstractSyntaxTree->errors)
+                    semanticError(error);
+            }
         }
     }
 
