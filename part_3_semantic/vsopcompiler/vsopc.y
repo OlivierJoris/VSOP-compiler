@@ -4,6 +4,18 @@
     #include <cstring>
 
     #include "AbstractSyntaxTree.hpp"
+    #include "Args.hpp"
+    #include "Block.hpp"
+    #include "Class.hpp"
+    #include "Expr.hpp"
+    #include "Field.hpp"
+    #include "Formal.hpp"
+    #include "If.hpp"
+    #include "Let.hpp"
+    #include "Literals.hpp"
+    #include "Method.hpp"
+    #include "Operators.hpp"
+    #include "While.hpp"
 
     #define YYERROR_VERBOSE 1
 
