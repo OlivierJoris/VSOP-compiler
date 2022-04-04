@@ -28,5 +28,4 @@ int checkUseUndefinedType(Program *prog);
  */
 bool checkKnownType(const std::map<std::string, Class*>& types, const std::string& toCheck);
 
-
 #endif

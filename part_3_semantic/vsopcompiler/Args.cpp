@@ -5,8 +5,12 @@
 */
 
 #include <string>
+#include <vector>
+#include <map>
 
 #include "Args.hpp"
+#include "Expr.hpp"
+#include "Class.hpp"
 
 using namespace std;
 
@@ -26,4 +30,18 @@ string Args::eval() const
     }
 
     return "[" + exprList + "]";
+}
+
+const Expr* Args::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    if(exprList.size() == 0)
+        return NULL;
+    
+    // Check for each expression
+    for(Expr *expr: exprList){
+        const Expr* check = expr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    return NULL;
 }

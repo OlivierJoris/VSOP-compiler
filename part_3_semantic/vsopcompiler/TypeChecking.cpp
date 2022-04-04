@@ -19,16 +19,16 @@ int checkUseUndefinedType(Program *prog){
         return -1;
 
     const Expr* check = prog->checkUsageUndefinedType(prog->classesMap);
-    if(check == NULL) {
+    if(check == NULL){
         cout << "No usage of not defined type" << endl;
         return 0;
-    } else {
+    }else{
         cout << "Usage of not defined type" << endl;
         return -1;
     }
 }
 
-bool checkKnownType(const std::map<std::string, Class*>& types, const std::string& toCheck){
+bool checkKnownType(const map<string, Class*>& types, const string& toCheck){
     if(types.find(toCheck) != types.end()){
         return true;
     }else{

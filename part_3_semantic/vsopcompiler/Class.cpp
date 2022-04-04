@@ -44,13 +44,11 @@ string Class::eval() const
     return "Class(" + Class::name + ", " + Class::parent + ", " + "[" + fields + "]" + ", " + "[" + methods + "]" + ")";
 }
 
-const Expr* Class::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+const Expr* Class::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check fields
     for(Field *field: fields){
         const Expr* check = field->checkUsageUndefinedType(classesMap);
-        if(check == NULL) {
-            cout << "No usage of not defined type for field " << field->getName() << endl;
-        } else {
+        if(check) {
             cout << "Usage of not defined type for field " << field->getName() << endl;
             return check;
         }
@@ -59,9 +57,7 @@ const Expr* Class::checkUsageUndefinedType(const std::map<std::string, Class*>& 
     // Check methods
     for(Method *method: methods){
         const Expr* check = method->checkUsageUndefinedType(classesMap);
-        if (check == NULL) {
-            cout << "No usage of not defined type for method " << method->getName() << endl;
-        } else {
+        if (check) {
             cout << "Usage of not defined type for method " << method->getName() << endl;
             return check;
         }

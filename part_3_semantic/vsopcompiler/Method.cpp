@@ -38,22 +38,26 @@ string Method::eval() const
     return "Method(" + Method::name + ", " + formals + ", " + Method::retType + ", " + block + ")";
 }
 
-const Expr* Method::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+const Expr* Method::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check return type
     bool known = checkKnownType(classesMap, retType);
-    if(known){
-        cout << "Return type of " << name << " known" << endl;
-    }else{
-        cout << "Return type of " << name << " unknown" << endl;
+    if(!known){
+         cout << "Return type of " << name << " unknown" << endl;
         return this;
     }
 
     // Check formals if any
-    if(formals != NULL){
-        cout << "Checking formals" << endl;
-        formals->checkUsageUndefinedType(classesMap);
-    }else{
-        cout << "No formals to check" << endl;
+    if(formals){
+        const Expr* check = formals->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    // Check block if any
+    if(block){
+        const Expr* check = block->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
     }
 
     return NULL;
@@ -76,11 +80,41 @@ string Call::eval() const
     return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ")";
 }
 
+const Expr* Call::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    // Check object expr if any
+    if(objExpr){
+        const Expr* check = objExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    // Check the list of expressions if any
+    if(listExpr){
+        const Expr* check = listExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    return NULL;
+}
+
 New::New(const string typeName): typeName(typeName){}
 
 string New::eval() const
 {
     return "New(" + New::typeName + ")";
+}
+
+const Expr* New::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    // Check type name
+    bool known = checkKnownType(classesMap, typeName);
+    if(known){
+        cout << "Type of new " << typeName << " known" << endl;
+        return NULL;
+    }else{
+        cout << "Return type of " << typeName << " unknown" << endl;
+        return this;
+    }
 }
 
 ObjectIdentifier::ObjectIdentifier(const string identifier): identifier(identifier){}
@@ -96,4 +130,3 @@ string Self::eval() const
 {
     return "self";
 }
-

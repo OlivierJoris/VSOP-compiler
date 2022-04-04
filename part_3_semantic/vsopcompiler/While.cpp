@@ -19,3 +19,21 @@ string While::eval() const
 {
     return "While(" + While::condExpr->eval() + ", " + While::bodyExpr->eval() + ")";
 }
+
+const Expr* While::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+    // Check condition expression if any
+    if(condExpr){
+        const Expr* check = condExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    // Check body expression if any
+    if(bodyExpr){
+        const Expr* check = bodyExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    return NULL;
+}

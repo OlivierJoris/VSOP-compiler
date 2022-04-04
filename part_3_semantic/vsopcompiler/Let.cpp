@@ -25,3 +25,21 @@ string Let::eval() const
 
     return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->eval() + ")";
 }
+
+const Expr* Let::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    // Check expr used in initialize if any
+    if(initExpr){
+        const Expr* check = initExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    // Check expr used in scope if any
+    if(scopeExpr){
+        const Expr* check = scopeExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    return NULL;
+}

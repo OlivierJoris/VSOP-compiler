@@ -52,17 +52,15 @@ string Formals::eval() const
     return "[" + formals + "]";
 }
 
-const Expr* Formals::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
-    if(formals.size() == 0){
-        cout << "No formals to check" << endl;
+const Expr* Formals::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    // Check if there is any formal to check
+    if(formals.size() == 0)
         return NULL;
-    }
 
     // Check all formals
     for(Formal *formal: formals){
-        cout << "Checking formal " << formal->getName() << endl;
         const Expr* check = formal->checkUsageUndefinedType(classesMap);
-        if(check != NULL)
+        if(check)
             return check;
     }
 

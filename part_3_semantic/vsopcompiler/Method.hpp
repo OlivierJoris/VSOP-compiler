@@ -51,7 +51,7 @@ class Call : public Expr
     public:
         Call(Expr *objExpr, const std::string methodName, Args *listExpr);
         std::string eval() const override;
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class New : public Expr
@@ -62,7 +62,7 @@ class New : public Expr
     public:
         New(const std::string typeName);
         std::string eval() const override;
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class ObjectIdentifier : public Expr
@@ -73,7 +73,7 @@ class ObjectIdentifier : public Expr
     public:
         ObjectIdentifier(const std::string identifier);
         std::string eval() const override;
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
 };
 
 class Self : public Expr
@@ -81,7 +81,7 @@ class Self : public Expr
     public:
         Self();
         std::string eval() const override;
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
 };
 
 #endif

@@ -22,3 +22,10 @@ string Block::eval() const
     
     return listExpr;
 }
+
+const Expr* Block::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    if(exprList == NULL)
+        return NULL;
+    
+    return exprList->checkUsageUndefinedType(classesMap);
+}

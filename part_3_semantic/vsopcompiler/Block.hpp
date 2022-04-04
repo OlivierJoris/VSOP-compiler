@@ -24,7 +24,7 @@ class Block : public Expr
     public:
         Block(Args *exprList);
         std::string eval() const override;
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 #endif

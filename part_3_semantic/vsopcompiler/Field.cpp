@@ -27,10 +27,18 @@ string Field::eval() const
     return "Field(" + Field::name + ", " + Field::type + initExpr + ")";
 }
 
-const Expr* Field::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
-    bool knwon = checkKnownType(classesMap, type);
-    if(knwon)
-        return NULL;
-    else
+const Expr* Field::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    // Check type of field
+    bool known = checkKnownType(classesMap, type);
+    if(!known)
         return this;
+
+    // Check init expr if any
+    if(initExpr){
+        const Expr* check = initExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    return NULL;
 }

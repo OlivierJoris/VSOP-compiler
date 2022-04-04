@@ -23,8 +23,7 @@ class Args : public Expr
         Args();
         void addExpr(Expr *expr) {exprList.push_back(expr);}
         std::string eval() const override;
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
-
 
 #endif

@@ -64,4 +64,3 @@ string BooleanLiteral::eval() const
 
     return boolString;
 }
-

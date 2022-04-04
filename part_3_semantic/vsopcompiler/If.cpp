@@ -24,3 +24,28 @@ string If::eval() const
 
     return "If(" + If::condExpr->eval() + ", " + If::thenExpr->eval() + elseExpr + ")";
 }
+
+const Expr* If::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    // Check cond expression if any
+    if(condExpr){
+        const Expr* check = condExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    // Check then expression if any
+    if(thenExpr){
+        const Expr* check = thenExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    // Check els expression if any
+    if(elseExpr){
+        const Expr* check = elseExpr->checkUsageUndefinedType(classesMap);
+        if(check)
+            return check;
+    }
+
+    return NULL;
+}

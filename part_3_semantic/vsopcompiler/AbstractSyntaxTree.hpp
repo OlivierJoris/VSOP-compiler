@@ -37,7 +37,7 @@ class Unit : public Expr
     public:
         Unit();
         std::string eval() const override;
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
 };
 
 #endif
