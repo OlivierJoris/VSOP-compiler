@@ -512,11 +512,13 @@ int main(int argc, char** argv){
             /* Check for overrides */ 
             abstractSyntaxTree->checkOverrides();
 
-            /* Display errors if any */
-            if(abstractSyntaxTree->errors.size() > 0)
+            /* Check for usage of undefined types */
             std::cout << "Testing usage of undefined types" << std::endl;
             int undefinedTypeUsage = checkUseUndefinedType(abstractSyntaxTree);
             std::cout << "Result of undefined type usage = " << undefinedTypeUsage << std::endl;
+
+            /* Display errors if any */
+            if(abstractSyntaxTree->errors.size() > 0)
             {
                 for(std::string error: abstractSyntaxTree->errors)
                     semanticError(error);
