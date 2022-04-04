@@ -1,14 +1,30 @@
+/**
+ * Abstract syntax tree for VSOP compiler.
+ *
+ * @authors Goffart Maxime & Joris Olivier
+*/
+
 #ifndef ABSTRACTSYNTAXTREE_HH
 #define ABSTRACTSYNTAXTREE_HH
 
 #include <string>
 #include <vector>
 #include <map>
+
+class Class;
        
 class Expr 
 {
-    public: 
+    public:
         virtual std::string eval() const = 0;
+
+        /**
+         * @brief Check if expr is using non defined type.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
+        virtual const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const = 0;
 };
 
 class Field : public Expr
@@ -22,6 +38,7 @@ class Field : public Expr
         Field(const std::string name, const std::string type, Expr *initExpr);
         std::string getName() {return name;}
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class Args : public Expr
@@ -33,6 +50,7 @@ class Args : public Expr
         Args();
         void addExpr(Expr *expr) {exprList.push_back(expr);}
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Block : public Expr
@@ -43,6 +61,7 @@ class Block : public Expr
     public:
         Block(Args *exprList);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Formal : public Expr 
@@ -55,6 +74,7 @@ class Formal : public Expr
         Formal(const std::string name, const std::string type);
         std::string eval() const override;
         std::string getName() {return name;}
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class Formals : public Expr
@@ -67,6 +87,7 @@ class Formals : public Expr
         void addFormal(Formal *formal){formals.push_back(formal);};
         std::string eval() const override;
         std::vector<Formal*> getFormals() {return formals;}
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class Method : public Expr 
@@ -83,6 +104,7 @@ class Method : public Expr
         std::string getName() {return name;}
         std::vector<Formal*> getFormals() {return formals->getFormals();}
         std::map<std::string, Formal*> formalsMap;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class Class : public Expr 
@@ -102,6 +124,7 @@ class Class : public Expr
         std::string getParent() {return parent;}
         std::map<std::string, Field*> fieldsMap;
         std::map<std::string, Method*> methodsMap;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class ClassBody
@@ -129,6 +152,7 @@ class Program : public Expr
         std::string eval() const override;
         std::vector<Class*> getClasses() {return classes;}
         std::map<std::string, Class*> classesMap;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 class If : public Expr 
@@ -141,6 +165,7 @@ class If : public Expr
     public:
         If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class While : public Expr
@@ -152,6 +177,7 @@ class While : public Expr
     public:
         While(Expr *condExpr, Expr *bodyExpr);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Let : public Expr 
@@ -165,6 +191,7 @@ class Let : public Expr
     public:
         Let(const std::string name, const std::string type, Expr *scopeExpr, Expr *initExpr);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Assign : public Expr 
@@ -176,6 +203,7 @@ class Assign : public Expr
     public:
         Assign(const std::string name, Expr* expr);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class UnOp : public Expr 
@@ -187,6 +215,7 @@ class UnOp : public Expr
     public:
         UnOp(const std::string symbol, Expr *expr);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Not : public UnOp
@@ -217,6 +246,7 @@ class BinOp : public Expr
     public:
         BinOp(const std::string symbol, Expr *leftExpr, Expr *rightExpr);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Plus : public BinOp
@@ -283,6 +313,7 @@ class Call : public Expr
     public:
         Call(Expr *objExpr, const std::string methodName, Args *listExpr);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };  
 
 class New : public Expr
@@ -293,6 +324,7 @@ class New : public Expr
     public:
         New(const std::string typeName);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class IntegerLiteral : public Expr 
@@ -303,6 +335,7 @@ class IntegerLiteral : public Expr
     public:
         IntegerLiteral(const int intValue);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class StringLiteral : public Expr
@@ -313,6 +346,7 @@ class StringLiteral : public Expr
     public:
         StringLiteral(const std::string stringValue);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 
 };
 
@@ -324,6 +358,7 @@ class BooleanLiteral : public Expr
     public:
         BooleanLiteral(const bool booleanValue);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class ObjectIdentifier : public Expr
@@ -334,6 +369,7 @@ class ObjectIdentifier : public Expr
     public:
         ObjectIdentifier(const std::string identifier);
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Self : public Expr
@@ -341,6 +377,7 @@ class Self : public Expr
     public:
         Self();
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 class Unit : public Expr
@@ -348,6 +385,7 @@ class Unit : public Expr
     public:
         Unit();
         std::string eval() const override;
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override {return NULL;};
 };
 
 #endif

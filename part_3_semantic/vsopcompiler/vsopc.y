@@ -23,6 +23,7 @@
 
 %code requires{
     #include "AbstractSyntaxTree.hpp"
+    #include "TypeChecking.hpp"
 }
 
 %define parse.trace
@@ -541,8 +542,13 @@ int main(int argc, char** argv){
                 }
             }
 
+            std::cout << "Testing usage of undefined types" << std::endl;
+            int undefinedTypeUsage = checkUseUndefinedType(abstractSyntaxTree);
+            std::cout << "Result of undefined type usage = " << undefinedTypeUsage << std::endl;
+
+
             /* Check for cycles in inheritance */
-            std::set<std::string> parentSet;
+            /* std::set<std::string> parentSet;
 
             for(Class *cls: abstractSyntaxTree->getClasses())
             {
@@ -561,7 +567,7 @@ int main(int argc, char** argv){
                         parent = parentClass->getName();
                     }
                 }
-            }
+            } */
         }
     }
 

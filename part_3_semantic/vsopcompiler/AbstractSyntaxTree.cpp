@@ -1,16 +1,28 @@
-#include "AbstractSyntaxTree.hpp"
+/**
+ * Implementation of the AST for VSOP compiler.
+ *
+ * @authors Goffart Maxime & Joris Olivier
+*/
+
 #include <map>
 #include <iostream>
+#include <vector>
+#include <string>
+
+#include "AbstractSyntaxTree.hpp"
+#include "TypeChecking.hpp"
+
+using namespace std;
 
 Program::Program()
 {
-    Program::classesMap.insert(std::pair<std::string, Class *>("Object", NULL));
+    Program::classesMap.insert(pair<string, Class *>("Object", NULL));
 }
 
-std::string Program::eval() const 
+string Program::eval() const 
 {
     auto firstClass = Program::classes.rbegin();
-    std::string program = (*firstClass)->eval();
+    string program = (*firstClass)->eval();
 
     for(auto it = Program::classes.rbegin() + 1; it != Program::classes.rend(); ++it)
         program += ", " + (*it)->eval();
@@ -18,11 +30,25 @@ std::string Program::eval() const
     return "[" + program + "]";
 }
 
-Class::Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods): name(name), parent(parent), fields(fields), methods(methods){}
+const Expr* Program::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+    for(Class *cls: classes){
+        const Expr* check = cls->checkUsageUndefinedType(classesMap);
+        if(check == NULL) {
+            cout << "No usage of not defined type inside class " << cls->getName() << endl;
+        } else {
+            cout << "Usage of not defined type inside class " << cls->getName() << endl;
+            return check;
+        }
 
-std::string Class::eval() const
+    }
+    return NULL;
+}
+
+Class::Class(const string name, const string parent, vector<Field*>& fields, vector<Method*>& methods): name(name), parent(parent), fields(fields), methods(methods){}
+
+string Class::eval() const
 {
-    std::string fields = "";    
+    string fields = "";    
 
     if(Class::fields.size() != 0)
     {
@@ -33,7 +59,7 @@ std::string Class::eval() const
             fields += ", " + (*it)->eval();
     }
 
-    std::string methods = "";
+    string methods = "";
 
     if(Class::methods.size() != 0)
     {
@@ -45,15 +71,41 @@ std::string Class::eval() const
     }
     
     return "Class(" + Class::name + ", " + Class::parent + ", " + "[" + fields + "]" + ", " + "[" + methods + "]" + ")";
-}   
+}
+
+const Expr* Class::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+    // Check fields
+    for(Field *field: fields){
+        const Expr* check = field->checkUsageUndefinedType(classesMap);
+        if(check == NULL) {
+            cout << "No usage of not defined type for field " << field->getName() << endl;
+        } else {
+            cout << "Usage of not defined type for field " << field->getName() << endl;
+            return check;
+        }
+    }
+
+    // Check methods
+    for(Method *method: methods){
+        const Expr* check = method->checkUsageUndefinedType(classesMap);
+        if (check == NULL) {
+            cout << "No usage of not defined type for method " << method->getName() << endl;
+        } else {
+            cout << "Usage of not defined type for method " << method->getName() << endl;
+            return check;
+        }
+    }
+
+    return NULL;
+}
 
 ClassBody::ClassBody(){}
 
-Field::Field(const std::string name, const std::string type, Expr *initExpr): name(name), type(type), initExpr(initExpr){}
+Field::Field(const string name, const string type, Expr *initExpr): name(name), type(type), initExpr(initExpr){}
 
-std::string Field::eval() const
+string Field::eval() const
 {
-    std::string initExpr = "";
+    string initExpr = "";
 
     if(Field::initExpr)
         initExpr = ", " + Field::initExpr->eval();
@@ -61,12 +113,20 @@ std::string Field::eval() const
     return "Field(" + Field::name + ", " + Field::type + initExpr + ")";
 }
 
-Method::Method(const std::string name, Formals* formals, const std::string retType, Block* block): name(name), formals(formals), retType(retType), block(block){}
+const Expr* Field::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+    bool knwon = checkKnownType(classesMap, type);
+    if(knwon)
+        return NULL;
+    else
+        return this;
+}
 
-std::string Method::eval() const 
+Method::Method(const string name, Formals* formals, const string retType, Block* block): name(name), formals(formals), retType(retType), block(block){}
+
+string Method::eval() const 
 {
-    std::string formals = "[]";
-    std::string block = "[]";
+    string formals = "[]";
+    string block = "[]";
 
     if(Method::formals)
         formals = Method::formals->eval();
@@ -77,18 +137,50 @@ std::string Method::eval() const
     return "Method(" + Method::name + ", " + formals + ", " + Method::retType + ", " + block + ")";
 }
 
-Formal::Formal(const std::string name, const std::string type): name(name), type(type){}
+const Expr* Method::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+    // Check return type
+    bool known = checkKnownType(classesMap, retType);
+    if(known){
+        cout << "Return type of " << name << " known" << endl;
+    }else{
+        cout << "Return type of " << name << " unknown" << endl;
+        return this;
+    }
 
-std::string Formal::eval() const
+    // Check formals if any
+    if(formals != NULL){
+        cout << "Checking formals" << endl;
+        formals->checkUsageUndefinedType(classesMap);
+    }else{
+        cout << "No formals to check" << endl;
+    }
+
+    return NULL;
+}
+
+Formal::Formal(const string name, const string type): name(name), type(type){}
+
+string Formal::eval() const
 {
     return Formal::name + " : " + Formal::type;
 }
 
+const Expr* Formal::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+    bool known = checkKnownType(classesMap, type);
+    if(known){
+        cout << "Type of formal " << name << " known" << endl;
+        return NULL;
+    }else{
+        cout << "Type of formal " << name << " unknown" << endl;
+        return this;
+    }
+}
+
 Formals::Formals(){}
 
-std::string Formals::eval() const
+string Formals::eval() const
 {
-    std::string formals = "";
+    string formals = "";
 
     if(Formals::formals.size() != 0)
     {
@@ -102,11 +194,28 @@ std::string Formals::eval() const
     return "[" + formals + "]";
 }
 
+const Expr* Formals::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+    if(formals.size() == 0){
+        cout << "No formals to check" << endl;
+        return NULL;
+    }
+
+    // Check all formals
+    for(Formal *formal: formals){
+        cout << "Checking formal " << formal->getName() << endl;
+        const Expr* check = formal->checkUsageUndefinedType(classesMap);
+        if(check != NULL)
+            return check;
+    }
+
+    return NULL;
+}
+
 Block::Block(Args *exprList): exprList(exprList){}
 
-std::string Block::eval() const
+string Block::eval() const
 {
-    std::string listExpr = "[]";
+    string listExpr = "[]";
 
     if(Block::exprList)
         listExpr = Block::exprList->eval();
@@ -116,9 +225,9 @@ std::string Block::eval() const
 
 If::If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr): condExpr(condExpr), thenExpr(thenExpr), elseExpr(elseExpr){}
 
-std::string If::eval() const
+string If::eval() const
 {
-    std::string elseExpr = "";
+    string elseExpr = "";
 
     if(If::elseExpr)
         elseExpr = ", " + If::elseExpr->eval();
@@ -128,16 +237,16 @@ std::string If::eval() const
 
 While::While(Expr *condExpr, Expr *bodyExpr): condExpr(condExpr), bodyExpr(bodyExpr){}
 
-std::string While::eval() const 
+string While::eval() const 
 {
     return "While(" + While::condExpr->eval() + ", " + While::bodyExpr->eval() + ")";
 }
 
-Let::Let(const std::string name, const std::string type, Expr *scopeExpr, Expr *initExpr): name(name), type(type), scopeExpr(scopeExpr), initExpr(initExpr){}
+Let::Let(const string name, const string type, Expr *scopeExpr, Expr *initExpr): name(name), type(type), scopeExpr(scopeExpr), initExpr(initExpr){}
 
-std::string Let::eval() const
+string Let::eval() const
 {
-    std::string initExpr = "";
+    string initExpr = "";
 
     if(Let::initExpr)
         initExpr = ", " + Let::initExpr->eval();
@@ -145,16 +254,16 @@ std::string Let::eval() const
     return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->eval() + ")";
 }
 
-Assign::Assign(const std::string name, Expr *expr): name(name), expr(expr){}
+Assign::Assign(const string name, Expr *expr): name(name), expr(expr){}
 
-std::string Assign::eval() const 
+string Assign::eval() const 
 {
     return "Assign(" + Assign::name + ", " + Assign::expr->eval() + ")";
 }
 
-UnOp::UnOp(const std::string symbol, Expr *expr): expr(expr), symbol(symbol){}
+UnOp::UnOp(const string symbol, Expr *expr): expr(expr), symbol(symbol){}
 
-std::string UnOp::eval() const 
+string UnOp::eval() const 
 {
     return "UnOp(" + UnOp::symbol + ", " + UnOp::expr->eval() + ")";
 }
@@ -165,9 +274,9 @@ UnaryMinus::UnaryMinus(Expr *expr): UnOp("-", expr){}
 
 IsNull::IsNull(Expr *expr): UnOp("isnull", expr){}
 
-BinOp::BinOp(const std::string symbol, Expr *leftExpr, Expr *rightExpr): leftExpr(leftExpr), rightExpr(rightExpr), symbol(symbol){}
+BinOp::BinOp(const string symbol, Expr *leftExpr, Expr *rightExpr): leftExpr(leftExpr), rightExpr(rightExpr), symbol(symbol){}
 
-std::string BinOp::eval() const 
+string BinOp::eval() const 
 {
     return "BinOp(" + BinOp::symbol + ", " + BinOp::leftExpr->eval() + ", " + BinOp::rightExpr->eval() + ")";
 }
@@ -192,9 +301,9 @@ Pow::Pow(Expr *leftExpr, Expr *rightExpr): BinOp("^", leftExpr, rightExpr){}
 
 Args::Args(){}
 
-std::string Args::eval() const
+string Args::eval() const
 {
-    std::string exprList = "";
+    string exprList = "";
 
     if(Args::exprList.size() != 0)
     {
@@ -208,13 +317,13 @@ std::string Args::eval() const
     return "[" + exprList + "]";
 }
 
-Call::Call(Expr *objExpr, const std::string methodName, Args *listExpr): objExpr(objExpr), methodName(methodName), listExpr(listExpr){}
+Call::Call(Expr *objExpr, const string methodName, Args *listExpr): objExpr(objExpr), methodName(methodName), listExpr(listExpr){}
 
-std::string Call::eval() const
+string Call::eval() const
 {
-    std::string objExpr = "self";
+    string objExpr = "self";
    
-    std::string listExpr = "[]";
+    string listExpr = "[]";
 
     if(Call::listExpr)
         listExpr = Call::listExpr->eval();
@@ -225,26 +334,26 @@ std::string Call::eval() const
     return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ")";
 }
 
-New::New(const std::string typeName): typeName(typeName){}
+New::New(const string typeName): typeName(typeName){}
 
-std::string New::eval() const
+string New::eval() const
 {
     return "New(" + New::typeName + ")";
 }
 
 IntegerLiteral::IntegerLiteral(const int intValue): intValue(intValue){}
 
-std::string IntegerLiteral::eval() const
+string IntegerLiteral::eval() const
 {
-    return std::to_string(IntegerLiteral::intValue);
+    return to_string(IntegerLiteral::intValue);
 }
 
-StringLiteral::StringLiteral(const std::string stringValue): stringValue(stringValue){}
+StringLiteral::StringLiteral(const string stringValue): stringValue(stringValue){}
 
-std::string hexConvert(char character)
+string hexConvert(char character)
 {
-    std::string ret = "\\xhh";
-    std::string ref = "0123456789abcdef";
+    string ret = "\\xhh";
+    string ref = "0123456789abcdef";
 
     ret[2] = ref[character / 16];
     ret[3] = ref[character % 16];
@@ -252,9 +361,9 @@ std::string hexConvert(char character)
     return ret;
 }
 
-std::string StringLiteral::eval() const
+string StringLiteral::eval() const
 {
-    std::string ret = "\"";
+    string ret = "\"";
 
     for(char character: StringLiteral::stringValue){
 
@@ -273,9 +382,9 @@ std::string StringLiteral::eval() const
 
 BooleanLiteral::BooleanLiteral(const bool booleanValue): booleanValue(booleanValue){}
 
-std::string BooleanLiteral::eval() const
+string BooleanLiteral::eval() const
 {
-    std::string boolString = "false";
+    string boolString = "false";
 
     if(BooleanLiteral::booleanValue)
         boolString = "true";
@@ -283,23 +392,23 @@ std::string BooleanLiteral::eval() const
     return boolString;
 }
 
-ObjectIdentifier::ObjectIdentifier(const std::string identifier): identifier(identifier){}
+ObjectIdentifier::ObjectIdentifier(const string identifier): identifier(identifier){}
 
-std::string ObjectIdentifier::eval() const 
+string ObjectIdentifier::eval() const 
 {
     return ObjectIdentifier::identifier;
 }
 
 Self::Self(){}
 
-std::string Self::eval() const
+string Self::eval() const
 {
     return "self";
 }
 
 Unit::Unit(){}
 
-std::string Unit::eval() const
+string Unit::eval() const
 {
     return "unit";
 }

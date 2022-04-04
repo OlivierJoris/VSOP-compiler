@@ -5,10 +5,13 @@ DIR=./
 
 all: $(PROGRAM)
 
-$(PROGRAM): $(DIR)AbstractSyntaxTree.o $(DIR)$(PROGRAM).yy.c $(DIR)$(PROGRAM).tab.c
+$(PROGRAM): $(DIR)AbstractSyntaxTree.o $(DIR)TypeChecking.o $(DIR)$(PROGRAM).yy.c $(DIR)$(PROGRAM).tab.c
 	$(CC) $(FLAGS) -o $@ $^
 
 $(DIR)AbstractSyntaxTree.o: $(DIR)AbstractSyntaxTree.cpp
+	$(CC) $(FLAGS) -c $^ -o $@
+
+$(DIR)TypeChecking.o: $(DIR)TypeChecking.cpp
 	$(CC) $(FLAGS) -c $^ -o $@
 
 $(DIR)$(PROGRAM).tab.c: $(DIR)$(PROGRAM).y
