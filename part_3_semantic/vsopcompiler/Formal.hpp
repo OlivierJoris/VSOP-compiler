@@ -14,6 +14,9 @@
 #include "Expr.hpp"
 #include "Class.hpp"
 
+/**
+ * @brief Represent a formal argument of a method. 
+ */
 class Formal : public Expr 
 {
     private:
@@ -22,12 +25,28 @@ class Formal : public Expr
     
     public:
         Formal(const std::string name, const std::string type);
-        std::string eval() const override;
         std::string getName() {return name;}
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         std::string getType() {return type;}
+
+        /**
+         * @brief Dump the AST corresponding to the formal inside the returned string.
+         * 
+         * @return std::string AST.
+         */
+        std::string eval() const override;
+
+        /**
+         * @brief Check if the formal is using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent all the formals of a method.
+ */
 class Formals : public Expr
 {
     private:
@@ -36,10 +55,23 @@ class Formals : public Expr
     public:
         Formals();
         void addFormal(Formal *formal){formals.push_back(formal);};
-        std::string eval() const override;
         std::vector<Formal*> getFormals() {return formals;}
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         Formal *getFormals(unsigned int i) {return formals[i];}
+
+        /**
+         * @brief Dump the AST corresponding to the formals inside the returned string.
+         * 
+         * @return std::string AST.
+         */
+        std::string eval() const override;
+
+        /**
+         * @brief Check if the formals are using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
+        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
 #endif

@@ -36,33 +36,36 @@ void Program::checkRedefinition()
 {
     for(Class *cls: classes)
     {
-        std::string className = cls->getName();
+        // Check class redefinition
+        string className = cls->getName();
         if(classesMap.find(className) != classesMap.end())
             errors.push_back("redefinition of class " + className);
         else 
             classesMap[className] = cls;
 
+        // Check field redefinition in current class
         for(Field *field: cls->getFields())
         {
-            std::string fieldName = field->getName();
+            string fieldName = field->getName();
             if(cls->fieldsMap.find(fieldName) != cls->fieldsMap.end())
                 errors.push_back("redefinition of field " + fieldName);
             else
                 cls->fieldsMap[fieldName] = field;
         }
 
+        // Check method redefinition in current class
         for(Method *method: cls->getMethods())
         {
-            std::string methodName = method->getName();
+            string methodName = method->getName();
             if(cls->methodsMap.find(methodName) != cls->methodsMap.end())
                 errors.push_back("redefinition of method " + methodName);
             else
                 cls->methodsMap[methodName] = method;
             
-
+            // Check formal redefinition in current method
             for(Formal *formal: method->getFormals())
             {
-                std::string formalName = formal->getName();
+                string formalName = formal->getName();
                 if(method->formalsMap.find(formalName) != method->formalsMap.end())
                     errors.push_back("redefinition of the formal " + formalName);
                 else 
@@ -74,14 +77,14 @@ void Program::checkRedefinition()
 
 void Program::checkInheritance()
 {
-    std::set<std::string> parentSet;
+    set<string> parentSet;
 
     for(Class *cls: classes)
     {
-        std::string parent = cls->getParent();
+        string parent = cls->getParent();
         while(parent != "Object")
         {
-            /* Cycle in inheritance */
+            // Cycle in inheritance
             if(parentSet.find(parent) != parentSet.end())
             {
                 errors.push_back("class " + cls->getName() + " cannot extends parent class " + parent);
@@ -89,7 +92,7 @@ void Program::checkInheritance()
             }
             else
             {
-                /* Parent class has not been defined */
+                // Parent class has not been defined
                 if(classesMap.find(parent) == classesMap.end())
                 {
                     errors.push_back("class " + parent + " is not defined");
@@ -108,15 +111,16 @@ void Program::checkInheritance()
 
 void Program::checkOverrides()
 {
+    // Check for each class
     for(Class *cls: classes)
     {
-        /* Field */
+        // Check overridden fields in current class
         for(Field *field: cls->getFields())
         {
-            std::string parent = cls->getParent();
+            string parent = cls->getParent();
             while(parent != "Object")
             {
-                /* Parent class has not been defined */
+                // Parent class has not been defined
                 if(classesMap.find(parent) == classesMap.end())
                     break; 
             
@@ -127,35 +131,39 @@ void Program::checkOverrides()
             }
         }
 
+        // Check for overridden methods with different args and/or return type in current class
         for(Method *method: cls->getMethods())
         {
-            std::string parent = cls->getParent();
+            string parent = cls->getParent();
             while(parent != "Object")
             {
-                /* Parent class has not been defined */
+                // Parent class has not been defined
                 if(classesMap.find(parent) == classesMap.end())
                     break; 
 
                 if(classesMap[parent]->methodsMap.find(method->getName()) != classesMap[parent]->methodsMap.end())
                 {
                     Method *m =  classesMap[parent]->methodsMap[method->getName()];
+                    // Check if matching return type
                     if(m->getRetType() != method->getRetType())
                         errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
                     
+                    // Check if matching number of formal arguments
                     if(m->getFormals().size() != method->getFormals().size())
                     {
-                        errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + std::to_string(method->getFormals().size()) + " formals but parent class has " + std::to_string(m->getFormals().size()) + " formals");
+                        errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + to_string(method->getFormals().size()) + " formals but parent class has " + to_string(m->getFormals().size()) + " formals");
                         break;
                     }
 
+                    // Check if matching formal arguments
                     unsigned int i = 0;
                     for(Formal *formal: method->getFormals())
                     {
                         if(m->getFormals(i)->getName() != formal->getName())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
+                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + to_string(i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
                         
                         if(m->getFormals(i)->getType() != formal->getType())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
+                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + to_string(i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
                     }
                 }
 
@@ -165,7 +173,7 @@ void Program::checkOverrides()
     }
 }
 
-std::string Program::eval() const 
+string Program::eval() const 
 {
     auto firstClass = Program::classes.rbegin();
     string program = (*firstClass)->eval();

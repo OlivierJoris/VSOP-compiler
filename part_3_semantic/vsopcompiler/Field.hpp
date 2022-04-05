@@ -13,6 +13,9 @@
 #include "Expr.hpp"
 #include "Class.hpp"
 
+/**
+ * @brief Represent a field of a class.
+ */
 class Field : public Expr
 {
     private:
@@ -23,7 +26,20 @@ class Field : public Expr
     public:
         Field(const std::string name, const std::string type, Expr *initExpr);
         std::string getName() {return name;}
+
+        /**
+         * @brief Dump the AST corresponding to the field inside the returned string.
+         * 
+         * @return std::string AST.
+         */
         std::string eval() const override;
+
+        /**
+         * @brief Check if the field is using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 

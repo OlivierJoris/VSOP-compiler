@@ -12,13 +12,21 @@
 
 class Class;
 
+/**
+ * @brief Represent an expression.
+ */
 class Expr
 {
     public:
+        /**
+         * @brief Dump the AST corresponding to the expressions inside the returned string.
+         * 
+         * @return std::string AST.
+         */
         virtual std::string eval() const = 0;
 
         /**
-         * @brief Check if expr is using non defined type.
+         * @brief Check if expr is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
          * @return Expr*, if using non defined type. Otherwise, null.

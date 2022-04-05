@@ -524,7 +524,7 @@ int main(int argc, char** argv){
             /* Check for overrides */ 
             abstractSyntaxTree->checkOverrides();
 
-            /* Check if Main class, main method, and main method signature */
+            /* Check Main class, main method, and main method signature */
             std::string mainCheckErr = abstractSyntaxTree->checkMain();
             if(mainCheckErr.compare("")){
                 semanticError(mainCheckErr);

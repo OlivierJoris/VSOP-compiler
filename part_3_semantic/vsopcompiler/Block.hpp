@@ -16,6 +16,9 @@ class Args;
 #include "Expr.hpp"
 #include "Class.hpp"
 
+/**
+ * @brief Represent a block in the source code.
+ */
 class Block : public Expr
 {
     private:
@@ -23,7 +26,20 @@ class Block : public Expr
 
     public:
         Block(Args *exprList);
+
+        /**
+         * @brief Dump the AST corresponding to the block inside the returned string.
+         * 
+         * @return std::string AST.
+         */
         std::string eval() const override;
+
+        /**
+         * @brief Check if the code inside the block is using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 

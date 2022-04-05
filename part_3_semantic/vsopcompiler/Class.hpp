@@ -20,6 +20,9 @@ class Formals;
 #include "Field.hpp"
 #include "Method.hpp"
 
+/**
+ * @brief Represent a class.
+ */
 class Class : public Expr 
 {
     private:
@@ -29,17 +32,35 @@ class Class : public Expr
         std::vector<Method*> methods;
 
     public:
-        Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods);
-        std::string eval() const override;
-        std::string getName() {return name;}
-        std::vector<Field*> getFields() {return fields;}
-        std::vector<Method*> getMethods() {return methods;}
-        std::string getParent() {return parent;}
         std::map<std::string, Field*> fieldsMap;
         std::map<std::string, Method*> methodsMap;
+
+        Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods);
+        std::string getName() {return name;}
+        std::string getParent() {return parent;}
+        std::vector<Field*> getFields() {return fields;}
+        std::vector<Method*> getMethods() {return methods;}
+
+        /**
+         * @brief Dump the AST corresponding to the class inside the returned string.
+         * 
+         * @return std::string AST.
+         */
+        std::string eval() const override;
+
+        /**
+         * @brief Check if the class is using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+
+/**
+ * @brief Represent the body of a class.
+ */
 class ClassBody
 {
     private:

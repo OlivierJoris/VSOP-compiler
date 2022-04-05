@@ -14,6 +14,9 @@
 #include "Expr.hpp"
 #include "Class.hpp"
 
+/**
+ * @brief Represent the assign operator.
+ */
 class Assign : public Expr 
 {
     private:
@@ -22,10 +25,26 @@ class Assign : public Expr
 
     public:
         Assign(const std::string name, Expr* expr);
+
+        /**
+         * @brief Dump the AST corresponding to the assign operator inside the returned string.
+         * 
+         * @return std::string AST.
+         */
         std::string eval() const override;
+
+        /**
+         * @brief Check if the operator is using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent a generic unary operator.
+ */
 class UnOp : public Expr 
 {
     protected:
@@ -34,10 +53,26 @@ class UnOp : public Expr
 
     public:
         UnOp(const std::string symbol, Expr *expr);
+
+        /**
+         * @brief Dump the AST corresponding to the operator inside the returned string.
+         * 
+         * @return std::string AST.
+         */
         std::string eval() const override;
+
+        /**
+         * @brief Check if the operator is using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the unary not.
+ */
 class Not : public UnOp
 {
     public:
@@ -45,6 +80,9 @@ class Not : public UnOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the unary minus.
+ */
 class UnaryMinus : public UnOp
 {
     public:
@@ -52,6 +90,9 @@ class UnaryMinus : public UnOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the isNull operator.
+ */
 class IsNull : public UnOp
 {
     public:
@@ -59,6 +100,9 @@ class IsNull : public UnOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent a generic binary operator.
+ */
 class BinOp : public Expr
 {
     protected:
@@ -68,10 +112,26 @@ class BinOp : public Expr
     
     public:
         BinOp(const std::string symbol, Expr *leftExpr, Expr *rightExpr);
+
+        /**
+         * @brief Dump the AST corresponding to the operator inside the returned string.
+         * 
+         * @return std::string AST.
+         */
         std::string eval() const override;
+
+        /**
+         * @brief Check if the operator is using non defined types.
+         * 
+         * @param classesMap Map of classes defined throughout the source code.
+         * @return Expr*, if using non defined type. Otherwise, null.
+         */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the plus operator.
+ */
 class Plus : public BinOp
 {
     public:
@@ -79,6 +139,9 @@ class Plus : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the minus operator.
+ */
 class Minus : public BinOp
 {
     public:
@@ -86,6 +149,9 @@ class Minus : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the multiplication operator.
+ */
 class Times : public BinOp
 {
     public:
@@ -93,6 +159,9 @@ class Times : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the division operator.
+ */
 class Div : public BinOp
 {
     public :
@@ -100,6 +169,9 @@ class Div : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the and operator.
+ */
 class And : public BinOp
 {
     public:
@@ -107,6 +179,9 @@ class And : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the lower equal operator.
+ */
 class LowerEqual : public BinOp
 {
     public:
@@ -114,6 +189,9 @@ class LowerEqual : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the lower operator.
+ */
 class Lower : public BinOp
 {
     public:
@@ -121,6 +199,9 @@ class Lower : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the comparison operator.
+ */
 class Equal : public BinOp
 {
     public:
@@ -128,6 +209,9 @@ class Equal : public BinOp
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 };
 
+/**
+ * @brief Represent the power operator.
+ */
 class Pow : public BinOp
 {
     public:
