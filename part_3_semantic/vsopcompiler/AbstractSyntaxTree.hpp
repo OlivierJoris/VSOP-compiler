@@ -30,6 +30,14 @@ class Program : public Expr
         std::map<std::string, Class*> classesMap;
         std::vector<std::string> errors;
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        /**
+         * @brief Check if the program contains a Main class with a main method.
+         * If the program contains such a method, check if its signautre matches the specifications.
+         * 
+         * @return std::string Empty string if no error. Otherwise, error message.
+         */
+        std::string checkMain() const;
 };
 
 class Unit : public Expr

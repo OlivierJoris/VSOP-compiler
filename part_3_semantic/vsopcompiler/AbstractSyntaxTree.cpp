@@ -189,6 +189,37 @@ const Expr* Program::checkUsageUndefinedType(const map<string, Class*>& classesM
     return NULL;
 }
 
+string Program::checkMain() const {
+    // Check if Main class
+    auto mainClass = classesMap.find("Main");
+    if(mainClass != classesMap.end()){
+        // Check if main method
+        Class *main = (*mainClass).second;
+        Method *mainMethod = NULL;
+        vector<Method*> methods = main->getMethods();
+        for(Method *method: methods){
+            if(method && !(method->getName().compare("main")))
+                mainMethod = method;
+        }
+
+        if(!mainMethod)
+            return "missing main method";
+
+        // Check return type
+        if(mainMethod->getRetType().compare("int32"))
+            return "main method return type must be int32";
+
+        // Check formal arguments
+        if(mainMethod->getFormals().size() > 0)
+            return "main method must not have arguments";
+
+    }else{
+        return "missing Main class";
+    }
+
+    return "";
+}
+
 Unit::Unit(){}
 
 string Unit::eval() const

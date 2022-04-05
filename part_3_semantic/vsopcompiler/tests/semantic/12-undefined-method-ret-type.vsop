@@ -1,6 +1,10 @@
 class Main {
     head : bool;
-    main() : Maxime {
+    init(hd : int32, tl : int32) : List {
+        head <- hd;
+        tail <- tl
+    }
+    main() : int32 {
         0
     }
 }
