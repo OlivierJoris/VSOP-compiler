@@ -1,3 +1,9 @@
 class Stack extends List {}
 
 class List extends Stack {}
+
+class Main {
+    main() : int32 {
+        0
+    }
+}

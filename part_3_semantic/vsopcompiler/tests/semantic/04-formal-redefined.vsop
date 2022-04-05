@@ -4,3 +4,8 @@ class List extends MyAmazingClass {
         head <- hd
     }
 }
+class Main {
+    main() : int32 {
+        0
+    }
+}

@@ -157,13 +157,16 @@ void Program::checkOverrides()
 
                     // Check if matching formal arguments
                     unsigned int i = 0;
+                    unsigned int nbFormals = (unsigned int)method->getFormals().size();
                     for(Formal *formal: method->getFormals())
                     {
                         if(m->getFormals(i)->getName() != formal->getName())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + to_string(i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
+                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
                         
                         if(m->getFormals(i)->getType() != formal->getType())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + to_string(i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
+                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
+
+                        i+=1;
                     }
                 }
 

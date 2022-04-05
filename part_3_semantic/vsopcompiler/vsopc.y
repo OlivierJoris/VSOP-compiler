@@ -537,10 +537,9 @@ int main(int argc, char** argv){
             if(undefinedTypeUsage != 0){
                 semanticError("Usage of undefined type");
                 return EXIT_FAILURE;
-            }else{
+            }else
                 std::cout << "Not using undefined type" << std::endl;
-            }
-            
+
             /* Display errors if any */
             if(abstractSyntaxTree->errors.size() > 0)
             {
