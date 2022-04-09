@@ -15,7 +15,10 @@
 
 using namespace std;
 
-Class::Class(const string name, const string parent, vector<Field*>& fields, vector<Method*>& methods): name(name), parent(parent), fields(fields), methods(methods){}
+Class::Class(const string name, const string parent, vector<Field*>& fields, vector<Method*>& methods, const int line, const int column): name(name), parent(parent), fields(fields), methods(methods){
+    this->line = line;
+    this->column = column;
+}
 
 string Class::eval() const
 {

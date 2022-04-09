@@ -16,7 +16,10 @@
 
 using namespace std;
 
-Formal::Formal(const string name, const string type): name(name), type(type){}
+Formal::Formal(const string name, const string type, const int line, const int column): name(name), type(type){
+    this->line = line;
+    this->column = column;
+}
 
 string Formal::eval() const
 {

@@ -14,7 +14,11 @@
 
 using namespace std;
 
-Args::Args(){}
+Args::Args(const int line, const int column)
+{
+    this->line = line;
+    this->column = column;
+}
 
 string Args::eval() const
 {

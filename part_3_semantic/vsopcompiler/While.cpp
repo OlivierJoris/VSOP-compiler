@@ -13,7 +13,10 @@
 
 using namespace std;
 
-While::While(Expr *condExpr, Expr *bodyExpr): condExpr(condExpr), bodyExpr(bodyExpr){}
+While::While(Expr *condExpr, Expr *bodyExpr, const int line, const int column): condExpr(condExpr), bodyExpr(bodyExpr){
+    this->line = line;
+    this->column = column;
+}
 
 string While::eval() const 
 {

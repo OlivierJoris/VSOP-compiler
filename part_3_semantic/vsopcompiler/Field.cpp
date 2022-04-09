@@ -15,7 +15,10 @@
 
 using namespace std;
 
-Field::Field(const string name, const string type, Expr *initExpr): name(name), type(type), initExpr(initExpr){}
+Field::Field(const string name, const string type, Expr *initExpr, const int line, const int column): name(name), type(type), initExpr(initExpr){
+    this->line = line;
+    this->column = column;
+}
 
 string Field::eval() const
 {

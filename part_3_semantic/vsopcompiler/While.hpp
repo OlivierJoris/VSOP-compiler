@@ -23,7 +23,7 @@ class While : public Expr
         Expr *bodyExpr;
 
     public:
-        While(Expr *condExpr, Expr *bodyExpr);
+        While(Expr *condExpr, Expr *bodyExpr, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the while inside the returned string.

@@ -35,7 +35,7 @@ class Method : public Expr
 
     public:
         std::map<std::string, Formal*> formalsMap;
-        Method(const std::string name, Formals *formals, const std::string retType, Block *block);
+        Method(const std::string name, Formals *formals, const std::string retType, Block *block, const int line, const int column);
         std::string getName() {return name;}
         std::vector<Formal*> getFormals();
         Formal *getFormals(unsigned int i);
@@ -68,7 +68,7 @@ class Call : public Expr
         Args *listExpr;
 
     public:
-        Call(Expr *objExpr, const std::string methodName, Args *listExpr);
+        Call(Expr *objExpr, const std::string methodName, Args *listExpr, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the dispatch inside the returned string.
@@ -95,7 +95,7 @@ class New : public Expr
         std::string typeName;
     
     public:
-        New(const std::string typeName);
+        New(const std::string typeName, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the instantiation inside the returned string.
@@ -122,7 +122,7 @@ class ObjectIdentifier : public Expr
         std::string identifier;
     
     public:
-        ObjectIdentifier(const std::string identifier);
+        ObjectIdentifier(const std::string identifier, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the identifier inside the returned string.
@@ -146,7 +146,7 @@ class ObjectIdentifier : public Expr
 class Self : public Expr
 {
     public:
-        Self();
+        Self(const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the keyword inside the returned string.

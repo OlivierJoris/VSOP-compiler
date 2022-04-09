@@ -24,7 +24,7 @@ class If : public Expr
         Expr *elseExpr;
     
     public:
-        If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr);
+        If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the if inside the returned string.

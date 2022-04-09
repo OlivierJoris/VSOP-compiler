@@ -34,40 +34,48 @@ Program::Program()
 
 void Program::checkRedefinition()
 {
-    for(Class *cls: classes)
+    for(auto it = classes.rbegin(); it != classes.rend(); ++it)
     {
+        Class *cls = *it;
         // Check class redefinition
         string className = cls->getName();
         if(classesMap.find(className) != classesMap.end())
-            errors.push_back("redefinition of class " + className);
+            errors.push_back(to_string(cls->getLine()) + ":" + to_string(cls->getColumn()) + ": " + "semantic error: " + " redefinition of class " + className);
+        
         else 
             classesMap[className] = cls;
 
         // Check field redefinition in current class
-        for(Field *field: cls->getFields())
+        vector<Field*> fields = cls->getFields();
+        for(auto it = fields.rbegin(); it != fields.rend(); ++it)
         {
+            Field *field = *it;
             string fieldName = field->getName();
             if(cls->fieldsMap.find(fieldName) != cls->fieldsMap.end())
-                errors.push_back("redefinition of field " + fieldName);
+                errors.push_back(to_string(field->getLine()) + ":" + to_string(field->getColumn()) + ": " + "semantic error: " + "redefinition of field " + fieldName);
             else
                 cls->fieldsMap[fieldName] = field;
         }
 
         // Check method redefinition in current class
-        for(Method *method: cls->getMethods())
+        vector<Method*> methods = cls->getMethods();
+        for(auto it = methods.rbegin(); it != methods.rend(); ++it)
         {
+            Method *method = *it;
             string methodName = method->getName();
             if(cls->methodsMap.find(methodName) != cls->methodsMap.end())
-                errors.push_back("redefinition of method " + methodName);
+                errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "redefinition of method " + methodName);
             else
                 cls->methodsMap[methodName] = method;
             
             // Check formal redefinition in current method
-            for(Formal *formal: method->getFormals())
+            vector<Formal*> formals = method->getFormals();
+            for(auto it = formals.rbegin(); it != formals.rend(); ++it)
             {
+                Formal *formal = *it;
                 string formalName = formal->getName();
                 if(method->formalsMap.find(formalName) != method->formalsMap.end())
-                    errors.push_back("redefinition of the formal " + formalName);
+                    errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "redefinition of the formal " + formalName);
                 else 
                     method->formalsMap[formalName] = formal;
             }
@@ -87,7 +95,7 @@ void Program::checkInheritance()
             // Cycle in inheritance
             if(parentSet.find(parent) != parentSet.end())
             {
-                errors.push_back("class " + cls->getName() + " cannot extends parent class " + parent);
+                errors.push_back(to_string(cls->getLine()) + ":" + to_string(cls->getColumn()) + ": " + "semantic error: " + "class " + cls->getName() + " cannot extends parent class " + parent);
                 break;
             }
             else
@@ -95,7 +103,7 @@ void Program::checkInheritance()
                 // Parent class has not been defined
                 if(classesMap.find(parent) == classesMap.end())
                 {
-                    errors.push_back("class " + parent + " is not defined");
+                    errors.push_back(to_string(cls->getLine()) + ":" + to_string(cls->getColumn()) + ": " + "semantic error: " + "class " + parent + " is not defined");
                     break; 
                 }
 
@@ -125,7 +133,7 @@ void Program::checkOverrides()
                     break; 
             
                 if(classesMap[parent]->fieldsMap.find(field->getName()) != classesMap[parent]->fieldsMap.end())
-                    errors.push_back("field " + field->getName() + " of class " + cls->getName() + " is overriden");
+                    errors.push_back(to_string(field->getLine()) + ":" + to_string(field->getColumn()) + ": " + "semantic error: " + "field " + field->getName() + " of class " + cls->getParent() + " is overriden");
                 
                 parent = classesMap[parent]->getParent();
             }
@@ -146,13 +154,13 @@ void Program::checkOverrides()
                     Method *m =  classesMap[parent]->methodsMap[method->getName()];
                     // Check if matching return type
                     if(m->getRetType() != method->getRetType())
-                        errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
+                        errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
                     
                     // Check if matching number of formal arguments
                     if(m->getFormals().size() != method->getFormals().size())
                     {
-                        errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + to_string(method->getFormals().size()) + " formals but parent class has " + to_string(m->getFormals().size()) + " formals");
-                        break;
+                       errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + to_string(method->getFormals().size()) + " formals but parent class has " + to_string(m->getFormals().size()) + " formals");
+                       break;
                     }
 
                     // Check if matching formal arguments
@@ -161,10 +169,10 @@ void Program::checkOverrides()
                     for(Formal *formal: method->getFormals())
                     {
                         if(m->getFormals(i)->getName() != formal->getName())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
+                            errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getName() + " as formal name in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
                         
                         if(m->getFormals(i)->getType() != formal->getType())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
+                            errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getType() + " as formal type in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
 
                         i+=1;
                     }
@@ -231,7 +239,10 @@ string Program::checkMain() const {
     return "";
 }
 
-Unit::Unit(){}
+Unit::Unit(const int line, const int column){
+    this->line = line;
+    this->column = column;
+}
 
 string Unit::eval() const
 {

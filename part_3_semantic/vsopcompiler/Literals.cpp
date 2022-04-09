@@ -14,14 +14,20 @@
 
 using namespace std;
 
-IntegerLiteral::IntegerLiteral(const int intValue): intValue(intValue){}
+IntegerLiteral::IntegerLiteral(const int intValue, const int line, const int column): intValue(intValue){
+    this->line = line;
+    this->column = column;
+}
 
 string IntegerLiteral::eval() const
 {
     return to_string(IntegerLiteral::intValue);
 }
 
-StringLiteral::StringLiteral(const string stringValue): stringValue(stringValue){}
+StringLiteral::StringLiteral(const string stringValue, const int line, const int column): stringValue(stringValue){
+    this->line = line;
+    this->column = column;
+}
 
 string hexConvert(char character)
 {
@@ -53,7 +59,10 @@ string StringLiteral::eval() const
     return ret + "\"";
 }
 
-BooleanLiteral::BooleanLiteral(const bool booleanValue): booleanValue(booleanValue){}
+BooleanLiteral::BooleanLiteral(const bool booleanValue, const int line, const int column): booleanValue(booleanValue){
+    this->line = line;
+    this->column = column;
+}
 
 string BooleanLiteral::eval() const
 {

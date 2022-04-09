@@ -17,6 +17,10 @@ class Class;
  */
 class Expr
 {
+    protected:
+        int line;
+        int column;
+
     public:
         /**
          * @brief Dump the AST corresponding to the expressions inside the returned string.
@@ -32,6 +36,20 @@ class Expr
          * @return Expr*, if using non defined type. Otherwise, null.
          */
         virtual const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const = 0;
+
+        /**
+         * @brief Get the line of the expression.
+         * 
+         * @return int Line.
+         */
+        int getLine() const { return line; }
+
+        /**
+         * @brief Get the column of the expression.
+         * 
+         * @return int Column.
+         */     
+        int getColumn() const { return column; }
 };
 
 #endif

@@ -74,7 +74,7 @@ class Program : public Expr
 class Unit : public Expr
 {
     public:
-        Unit();
+        Unit(const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to Unit inside the returned string.
