@@ -13,7 +13,10 @@
 
 using namespace std;
 
-If::If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr): condExpr(condExpr), thenExpr(thenExpr), elseExpr(elseExpr){}
+If::If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr, const int line, const int column): condExpr(condExpr), thenExpr(thenExpr), elseExpr(elseExpr){
+    this->line = line;
+    this->column = column;
+}
 
 string If::eval() const
 {

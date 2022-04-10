@@ -24,7 +24,7 @@ class Assign : public Expr
         Expr *expr;
 
     public:
-        Assign(const std::string name, Expr* expr);
+        Assign(const std::string name, Expr* expr, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the assign operator inside the returned string.
@@ -54,7 +54,7 @@ class UnOp : public Expr
         std::string symbol;
 
     public:
-        UnOp(const std::string symbol, Expr *expr);
+        UnOp(const std::string symbol, Expr *expr, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the operator inside the returned string.
@@ -80,7 +80,7 @@ class UnOp : public Expr
 class Not : public UnOp
 {
     public:
-        Not(Expr *expr);
+        Not(Expr *expr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -91,7 +91,7 @@ class Not : public UnOp
 class UnaryMinus : public UnOp
 {
     public:
-        UnaryMinus(Expr *expr);
+        UnaryMinus(Expr *expr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -102,7 +102,7 @@ class UnaryMinus : public UnOp
 class IsNull : public UnOp
 {
     public:
-        IsNull(Expr *expr);
+        IsNull(Expr *expr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -118,7 +118,7 @@ class BinOp : public Expr
         std::string symbol;
     
     public:
-        BinOp(const std::string symbol, Expr *leftExpr, Expr *rightExpr);
+        BinOp(const std::string symbol, Expr *leftExpr, Expr *rightExpr, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the operator inside the returned string.
@@ -143,7 +143,7 @@ class BinOp : public Expr
 class Plus : public BinOp
 {
     public:
-        Plus(Expr *leftExpr, Expr *rightExpr);
+        Plus(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -154,7 +154,7 @@ class Plus : public BinOp
 class Minus : public BinOp
 {
     public:
-        Minus(Expr *leftExpr, Expr *rightExpr);
+        Minus(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -165,7 +165,7 @@ class Minus : public BinOp
 class Times : public BinOp
 {
     public:
-        Times(Expr *leftExpr, Expr *rightExpr);
+        Times(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -176,7 +176,7 @@ class Times : public BinOp
 class Div : public BinOp
 {
     public :
-        Div(Expr *leftExpr, Expr *rightExpr);
+        Div(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -187,7 +187,7 @@ class Div : public BinOp
 class And : public BinOp
 {
     public:
-        And(Expr *leftExpr, Expr *rightExpr);
+        And(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -198,7 +198,7 @@ class And : public BinOp
 class LowerEqual : public BinOp
 {
     public:
-        LowerEqual(Expr *leftExpr, Expr *rightExpr);
+        LowerEqual(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -209,7 +209,7 @@ class LowerEqual : public BinOp
 class Lower : public BinOp
 {
     public:
-        Lower(Expr *leftExpr, Expr *rightExpr);
+        Lower(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -220,7 +220,7 @@ class Lower : public BinOp
 class Equal : public BinOp
 {
     public:
-        Equal(Expr *leftExpr, Expr *rightExpr);
+        Equal(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
@@ -231,7 +231,7 @@ class Equal : public BinOp
 class Pow : public BinOp
 {
     public:
-        Pow(Expr *leftExpr, Expr *rightExpr);
+        Pow(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };

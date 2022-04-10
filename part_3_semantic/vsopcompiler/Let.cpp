@@ -14,7 +14,10 @@
 
 using namespace std;
 
-Let::Let(const string name, const string type, Expr *scopeExpr, Expr *initExpr): name(name), type(type), scopeExpr(scopeExpr), initExpr(initExpr){}
+Let::Let(const string name, const string type, Expr *scopeExpr, Expr *initExpr, const int line, const int column): name(name), type(type), scopeExpr(scopeExpr), initExpr(initExpr){
+    this->line = line;
+    this->column = column;
+}
 
 string Let::eval() const
 {

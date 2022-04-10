@@ -35,7 +35,7 @@ class Class : public Expr
         std::map<std::string, Field*> fieldsMap;
         std::map<std::string, Method*> methodsMap;
 
-        Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods);
+        Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods, const int line, const int column);
         std::string getName() {return name;}
         std::string getParent() {return parent;}
         std::vector<Field*> getFields() {return fields;}

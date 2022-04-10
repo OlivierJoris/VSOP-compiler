@@ -19,7 +19,10 @@
 
 using namespace std;
 
-Method::Method(const string name, Formals* formals, const string retType, Block* block): name(name), formals(formals), retType(retType), block(block){}
+Method::Method(const string name, Formals* formals, const string retType, Block* block, const int line, const int column): name(name), formals(formals), retType(retType), block(block){
+    this->line = line;
+    this->column = column;
+}
 
 vector<Formal*> Method::getFormals() {return formals->getFormals();}
 Formal* Method::getFormals(unsigned int i) {return formals->getFormals(i);}
@@ -63,7 +66,10 @@ const Expr* Method::checkUsageUndefinedType(const map<string, Class*>& classesMa
     return NULL;
 }
 
-Call::Call(Expr *objExpr, const string methodName, Args *listExpr): objExpr(objExpr), methodName(methodName), listExpr(listExpr){}
+Call::Call(Expr *objExpr, const string methodName, Args *listExpr, const int line, const int column): objExpr(objExpr), methodName(methodName), listExpr(listExpr){
+    this->line = line;
+    this->column = column;
+}
 
 string Call::eval() const
 {
@@ -98,7 +104,10 @@ const Expr* Call::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     return NULL;
 }
 
-New::New(const string typeName): typeName(typeName){}
+New::New(const string typeName, const int line, const int column): typeName(typeName){
+    this->line = line;
+    this->column = column;
+}
 
 string New::eval() const
 {
@@ -117,14 +126,20 @@ const Expr* New::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     }
 }
 
-ObjectIdentifier::ObjectIdentifier(const string identifier): identifier(identifier){}
+ObjectIdentifier::ObjectIdentifier(const string identifier, const int line, const int column): identifier(identifier){
+    this->line = line;
+    this->column = column;
+}
 
 string ObjectIdentifier::eval() const 
 {
     return ObjectIdentifier::identifier;
 }
 
-Self::Self(){}
+Self::Self(const int line, const int column){
+    this->line = line;
+    this->column = column;
+}
 
 string Self::eval() const
 {

@@ -24,7 +24,7 @@ class Field : public Expr
         Expr *initExpr;
 
     public:
-        Field(const std::string name, const std::string type, Expr *initExpr);
+        Field(const std::string name, const std::string type, Expr *initExpr, const int line, const int column);
         std::string getName() {return name;}
 
         /**

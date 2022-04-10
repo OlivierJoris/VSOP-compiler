@@ -11,7 +11,10 @@
 
 using namespace std;
 
-Block::Block(Args *exprList): exprList(exprList){}
+Block::Block(Args *exprList, const int line, const int column): exprList(exprList){
+    this->line = line;
+    this->column = column;
+}
 
 string Block::eval() const
 {

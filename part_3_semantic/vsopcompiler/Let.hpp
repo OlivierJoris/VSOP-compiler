@@ -26,7 +26,7 @@ class Let : public Expr
         Expr *initExpr;
     
     public:
-        Let(const std::string name, const std::string type, Expr *scopeExpr, Expr *initExpr);
+        Let(const std::string name, const std::string type, Expr *scopeExpr, Expr *initExpr, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the let inside the returned string.

@@ -25,7 +25,7 @@ class Block : public Expr
         Args *exprList;
 
     public:
-        Block(Args *exprList);
+        Block(Args *exprList, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the block inside the returned string.

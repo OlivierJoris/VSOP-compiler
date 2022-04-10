@@ -23,7 +23,7 @@ class Args : public Expr
         std::vector<Expr*> exprList;
 
     public:
-        Args();
+        Args(const int line, const int column);
         void addExpr(Expr *expr) {exprList.push_back(expr);}
 
         /**

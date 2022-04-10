@@ -24,7 +24,7 @@ class Formal : public Expr
         std::string type;
     
     public:
-        Formal(const std::string name, const std::string type);
+        Formal(const std::string name, const std::string type, const int line, const int column);
         std::string getName() {return name;}
         std::string getType() {return type;}
 

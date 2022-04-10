@@ -23,7 +23,7 @@ class IntegerLiteral : public Expr
         int intValue;
 
     public:
-        IntegerLiteral(const int intValue);
+        IntegerLiteral(const int intValue, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the integer inside the returned string.
@@ -52,7 +52,7 @@ class StringLiteral : public Expr
         std::string stringValue;
     
     public:
-        StringLiteral(const std::string stringValue);
+        StringLiteral(const std::string stringValue, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the string inside the returned string.
@@ -82,7 +82,7 @@ class BooleanLiteral : public Expr
         bool booleanValue;
     
     public:
-        BooleanLiteral(const bool booleanValue);
+        BooleanLiteral(const bool booleanValue, const int line, const int column);
 
         /**
          * @brief Dump the AST corresponding to the boolean inside the returned string.

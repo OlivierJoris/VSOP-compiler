@@ -20,6 +20,10 @@ class Class;
  */
 class Expr
 {
+    protected:
+        int line;
+        int column;
+
     public:
         /**
          * @brief Type of the expression.
@@ -49,6 +53,20 @@ class Expr
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         virtual const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) = 0;
+
+        /**
+         * @brief Get the line of the expression.
+         * 
+         * @return int Line.
+         */
+        int getLine() const { return line; }
+
+        /**
+         * @brief Get the column of the expression.
+         * 
+         * @return int Column.
+         */     
+        int getColumn() const { return column; }
 };
 
 #endif

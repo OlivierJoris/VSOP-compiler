@@ -14,7 +14,10 @@
 
 using namespace std;
 
-Assign::Assign(const string name, Expr *expr): name(name), expr(expr){}
+Assign::Assign(const string name, Expr *expr, const int line, const int column): name(name), expr(expr){
+    this->line = line;
+    this->column = column;
+}
 
 string Assign::eval() const 
 {
@@ -32,7 +35,10 @@ const Expr* Assign::checkUsageUndefinedType(const map<string, Class*>& classesMa
     return NULL;
 }
 
-UnOp::UnOp(const string symbol, Expr *expr): expr(expr), symbol(symbol){}
+UnOp::UnOp(const string symbol, Expr *expr, const int line, const int column): expr(expr), symbol(symbol){
+    this->line = line;
+    this->column = column;
+}
 
 string UnOp::eval() const 
 {
@@ -50,25 +56,28 @@ const Expr* UnOp::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     return NULL;
 }
 
-Not::Not(Expr *expr): UnOp("not", expr){}
+Not::Not(Expr *expr, const int line, const int column): UnOp("not", expr, line, column){}
 
 const Expr* Not::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
-UnaryMinus::UnaryMinus(Expr *expr): UnOp("-", expr){}
+UnaryMinus::UnaryMinus(Expr *expr, const int line, const int column): UnOp("-", expr, line, column){}
 
 const Expr* UnaryMinus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
-IsNull::IsNull(Expr *expr): UnOp("isnull", expr){}
+IsNull::IsNull(Expr *expr, const int line, const int column): UnOp("isnull", expr, line, column){}
 
 const Expr* IsNull::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
-BinOp::BinOp(const string symbol, Expr *leftExpr, Expr *rightExpr): leftExpr(leftExpr), rightExpr(rightExpr), symbol(symbol){}
+BinOp::BinOp(const string symbol, Expr *leftExpr, Expr *rightExpr, const int line, const int column): leftExpr(leftExpr), rightExpr(rightExpr), symbol(symbol){
+    this->line = line;
+    this->column = column;
+}
 
 string BinOp::eval() const 
 {
@@ -93,55 +102,55 @@ const Expr* BinOp::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return NULL;
 }
 
-Plus::Plus(Expr *leftExpr, Expr *rightExpr): BinOp("+", leftExpr, rightExpr){}
+Plus::Plus(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("+", leftExpr, rightExpr, line, column){}
 
 const Expr* Plus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-Minus::Minus(Expr *leftExpr, Expr *rightExpr): BinOp("-", leftExpr, rightExpr){}
+Minus::Minus(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("-", leftExpr, rightExpr, line, column){}
 
 const Expr* Minus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-Times::Times(Expr *leftExpr, Expr *rightExpr): BinOp("*", leftExpr, rightExpr){}
+Times::Times(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("*", leftExpr, rightExpr, line, column){}
 
 const Expr* Times::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-Div::Div(Expr *leftExpr, Expr *rightExpr): BinOp("/", leftExpr, rightExpr){}
+Div::Div(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("/", leftExpr, rightExpr, line, column){}
 
 const Expr* Div::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-And::And(Expr *leftExpr, Expr *rightExpr): BinOp("and", leftExpr, rightExpr){}
+And::And(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("and", leftExpr, rightExpr, line, column){}
 
 const Expr* And::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-LowerEqual::LowerEqual(Expr *leftExpr, Expr *rightExpr): BinOp("<=", leftExpr, rightExpr){}
+LowerEqual::LowerEqual(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("<=", leftExpr, rightExpr, line, column){}
 
 const Expr* LowerEqual::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-Lower::Lower(Expr *leftExpr, Expr *rightExpr): BinOp("<", leftExpr, rightExpr){}
+Lower::Lower(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("<", leftExpr, rightExpr, line, column){}
 
 const Expr* Lower::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-Equal::Equal(Expr *leftExpr, Expr *rightExpr): BinOp("=", leftExpr, rightExpr){}
+Equal::Equal(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("=", leftExpr, rightExpr, line, column){}
 
 const Expr* Equal::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-Pow::Pow(Expr *leftExpr, Expr *rightExpr): BinOp("^", leftExpr, rightExpr){}
+Pow::Pow(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("^", leftExpr, rightExpr, line, column){}
 
 const Expr* Pow::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
