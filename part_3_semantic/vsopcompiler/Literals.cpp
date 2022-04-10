@@ -17,6 +17,7 @@ using namespace std;
 IntegerLiteral::IntegerLiteral(const int intValue, const int line, const int column): intValue(intValue){
     this->line = line;
     this->column = column;
+    this->type = "int32";
 }
 
 string IntegerLiteral::eval() const
@@ -27,6 +28,7 @@ string IntegerLiteral::eval() const
 StringLiteral::StringLiteral(const string stringValue, const int line, const int column): stringValue(stringValue){
     this->line = line;
     this->column = column;
+    this->type = "string";
 }
 
 string hexConvert(char character)
@@ -62,6 +64,7 @@ string StringLiteral::eval() const
 BooleanLiteral::BooleanLiteral(const bool booleanValue, const int line, const int column): booleanValue(booleanValue){
     this->line = line;
     this->column = column;
+    this->type = "bool";
 }
 
 string BooleanLiteral::eval() const

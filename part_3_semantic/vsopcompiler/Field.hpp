@@ -42,7 +42,14 @@ class Field : public Expr
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
+        /**
+         * @brief Perform type checking on the field.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param scope Scope of identifiers usable by the field.
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 #endif

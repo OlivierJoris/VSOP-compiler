@@ -198,7 +198,6 @@ string Program::eval() const
 const Expr* Program::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check each class
     for(Class *cls: classes){
-        cout << "Starting check for class " << cls->getName() << endl;
         const Expr* check = cls->checkUsageUndefinedType(classesMap);
         if(check) {
             cout << "Usage of not defined type inside class " << cls->getName() << endl;
@@ -239,9 +238,26 @@ string Program::checkMain() const {
     return "";
 }
 
+const string Program::typeChecking(const Program*, vector<pair<string, Expr*>>) {
+    // Type checking on each class
+    for(auto cls = classes.begin(); cls != classes.end(); cls++){
+        if(*cls){
+            cout << "Performing type checking on " << (*cls)->getName() << endl;
+            const string err = (*cls)->typeChecking(this, vector<pair<string, Expr*>>());
+            if(err.compare("")){
+                cout << "error type checking in class " << (*cls)->getName() << endl;
+                return err;
+            }
+        }
+    }
+
+    return "";
+}
+
 Unit::Unit(const int line, const int column){
     this->line = line;
     this->column = column;
+    this->type = "unit";
 }
 
 string Unit::eval() const

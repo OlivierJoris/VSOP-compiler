@@ -4,6 +4,7 @@
  * @authors Goffart Maxime & Joris Olivier
 */
 
+#include <iostream>
 #include <string>
 #include <map>
 
@@ -44,4 +45,26 @@ const Expr* Field::checkUsageUndefinedType(const map<string, Class*>& classesMap
     }
 
     return NULL;
+}
+
+const string Field::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    if(initExpr){
+        // First, perform type checking on the field initializer if any
+        const string err = initExpr->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "type checking error in field initializer" << endl;
+            return err;
+        }
+
+        // Then, check if type of field initializer matches static type of field
+        if(type.compare(initExpr->type)){
+            string lineNumber = to_string(initExpr->getLine());
+            string columnNumber = to_string(initExpr->getColumn());
+            const string err = lineNumber + ":" + columnNumber + ":" + "initializer of field has not expected type. Expected " + type + " but is " + initExpr->type +".";
+            cout << err << endl;
+            return err;
+        }
+    }
+
+    return "";
 }

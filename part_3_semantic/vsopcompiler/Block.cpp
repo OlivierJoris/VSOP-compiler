@@ -4,6 +4,7 @@
  * @authors Goffart Maxime & Joris Olivier
 */
 
+#include <iostream>
 #include <string>
 
 #include "Block.hpp"
@@ -31,4 +32,20 @@ const Expr* Block::checkUsageUndefinedType(const map<string, Class*>& classesMap
         return NULL;
     
     return exprList->checkUsageUndefinedType(classesMap);
+}
+
+const string Block::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    if(exprList){
+        // First, need to check the expressions inside the block if any
+        const string err = exprList->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "Error in exprlist check" << endl;
+            return err;
+        }
+        
+        // Then, set type of block as type of list of expressions (itself is type of last expr)
+        type = exprList->type;
+    }
+
+    return "";
 }

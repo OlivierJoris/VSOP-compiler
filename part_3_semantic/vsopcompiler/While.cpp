@@ -40,3 +40,33 @@ const Expr* While::checkUsageUndefinedType(const map<string, Class*>& classesMap
 
     return NULL;
 }
+
+const string While::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    // Type checking on condition
+    if(condExpr){
+        const string err = condExpr->typeChecking(prog, scope);
+        if(err.compare(""))
+            return err;
+    }
+
+    // Type checking on body
+    if(bodyExpr){
+        const string err = bodyExpr->typeChecking(prog, scope);
+        if(err.compare(""))
+            return err;
+    }
+
+    // Type of condition must be bool
+    if(condExpr && condExpr->type.compare("bool")){
+        const string err = to_string(condExpr->getLine()) + ":" + to_string(condExpr->getColumn())
+            + ":" + "condition must have type bool (is type " + condExpr->type + ").";
+        return err;
+    }
+
+    // No restriction on type of body -> no check
+
+    // Set type of while as unit (from manual of VSOP)
+    type = "unit";
+
+    return "";
+}

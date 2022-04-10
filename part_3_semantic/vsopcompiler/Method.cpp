@@ -66,6 +66,41 @@ const Expr* Method::checkUsageUndefinedType(const map<string, Class*>& classesMa
     return NULL;
 }
 
+const string Method::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    // First, we need to perform type checking on the formals (should never return error)
+    if(formals){
+        /* The scope does not really matter because should not have type errors in formals since
+        declared types of formals are checked in checkUsageUndefinedType */
+        const string err = formals->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "Error in formal" << endl;
+            return err;
+        }
+    }
+
+    if(block){
+        // Then, we can perform type checking on the body (block) of the method
+        const string err = block->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "type checking error in method body" << endl;
+            return err;
+        }
+        // Finally, we need to check that the type of the body (block) matches the type of the return
+        if(retType.compare(block->type)){
+            const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":"
+                + "body type does not match return type of method. Expected "
+                + retType + " but is " + block->type + ".";
+            cout << "Error in ret type" << endl;
+            return err;
+        }
+    }else{
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "method is missing body.";
+        return err;
+    }
+
+    return "";
+}
+
 Call::Call(Expr *objExpr, const string methodName, Args *listExpr, const int line, const int column): objExpr(objExpr), methodName(methodName), listExpr(listExpr){
     this->line = line;
     this->column = column;
@@ -107,6 +142,7 @@ const Expr* Call::checkUsageUndefinedType(const map<string, Class*>& classesMap)
 New::New(const string typeName, const int line, const int column): typeName(typeName){
     this->line = line;
     this->column = column;
+    this->type = typeName;
 }
 
 string New::eval() const
@@ -118,7 +154,6 @@ const Expr* New::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     // Check type name
     bool known = checkKnownType(classesMap, typeName);
     if(known){
-        cout << "Type of new " << typeName << " known" << endl;
         return NULL;
     }else{
         cout << "Return type of " << typeName << " unknown" << endl;

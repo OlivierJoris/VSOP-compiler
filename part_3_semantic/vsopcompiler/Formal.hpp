@@ -43,7 +43,12 @@ class Formal : public Expr
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
+        /**
+         * @brief Perform type checking on the formal.
+         * 
+         * @return const std::string Always empty string because error is not possible.
+         */
+        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -56,7 +61,7 @@ class Formals : public Expr
     
     public:
         Formals();
-        void addFormal(Formal *formal){formals.push_back(formal);};
+        void addFormal(Formal *formal) {formals.push_back(formal);};
         std::vector<Formal*> getFormals() {return formals;}
         Formal *getFormals(unsigned int i) {return formals[i];}
 
@@ -75,7 +80,14 @@ class Formals : public Expr
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
+        /**
+         * @brief Perform type checking on the formals.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param scope Scope of identifiers usable by the formals.
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 #endif

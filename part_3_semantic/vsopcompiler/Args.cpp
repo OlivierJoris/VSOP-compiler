@@ -4,6 +4,7 @@
  * @authors Goffart Maxime & Joris Olivier
 */
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -48,4 +49,28 @@ const Expr* Args::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     }
 
     return NULL;
+}
+
+const string Args::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    // First, check each expression
+    for(Expr* expr: exprList){
+        if(expr){
+            const string err = expr->typeChecking(prog, scope);
+            if(err.compare("")){
+                cout << "Error while checking expr" << endl;
+                return err;
+            }
+        }
+    }
+
+    /* Then, set type of list as type of last expr in list.
+    ! last expr is at front of vector due to how bison works */
+    if(exprList.size() > 0){
+        Expr* last = exprList.front();
+        if(last){
+            type = last->type;
+        }
+    }
+
+    return "";
 }

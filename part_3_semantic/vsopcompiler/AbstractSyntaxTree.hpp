@@ -27,7 +27,7 @@ class Program : public Expr
         std::vector<std::string> errors;
 
         Program();
-        std::vector<Class*> getClasses() {return classes;}
+        std::vector<Class*> getClasses() const {return classes;}
         void addClass(Class* cls) {classes.push_back(cls);}
 
         /**
@@ -64,13 +64,20 @@ class Program : public Expr
 
         /**
          * @brief Check if the program contains a Main class with a main method.
-         * If the program contains such a method, check if its signautre matches the specifications.
+         * If the program contains such a method, check if its signature matches the specifications.
          * 
          * @return std::string Empty string if no error. Otherwise, error message.
          */
         std::string checkMain() const;
 
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
+        /**
+         * @brief Perform type checking on the program.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param scope Scope of identifiers usable by the program.
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 class Unit : public Expr
@@ -93,7 +100,12 @@ class Unit : public Expr
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
         
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
+        /**
+         * @brief Perform type checking on the unit.
+         * 
+         * @return const std::string Always empty string because no possible error.
+         */
+        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 #endif

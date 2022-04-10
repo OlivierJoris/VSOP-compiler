@@ -4,12 +4,14 @@
  * @authors Goffart Maxime & Joris Olivier
 */
 
+#include <iostream>
 #include <string>
 #include <map>
 
 #include "If.hpp"
 #include "Expr.hpp"
 #include "Class.hpp"
+#include "AbstractSyntaxTree.hpp"
 
 using namespace std;
 
@@ -51,4 +53,134 @@ const Expr* If::checkUsageUndefinedType(const map<string, Class*>& classesMap) c
     }
 
     return NULL;
+}
+
+static bool checkPrimitiveType(const string& toCheck){
+    if(toCheck.compare("int32") == 0)
+        return true;
+    if(toCheck.compare("bool") == 0)
+        return true;
+    if(toCheck.compare("string") == 0)
+        return true;
+    return false;
+}
+
+const string If::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    // Type checking on condition
+    if(condExpr){
+        const string err = condExpr->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "Type checking error in cond of if" << endl;
+            return err;
+        }
+    }
+
+    // Type checking on then branch
+    if(thenExpr){
+        const string err = thenExpr->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "Type checking error in then branch of if" << endl;
+            return err;
+        }
+    }
+
+    // Type checking on else branch
+    if(elseExpr){
+        const string err = elseExpr->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "Type checking error in the else branch of if" << endl;
+            return err;
+        }
+    }
+
+    // Check if type of condition is bool
+    if(condExpr && condExpr->type.compare("bool")){
+        const string err = to_string(condExpr->getLine()) + ":" + to_string(condExpr->getColumn())
+            + ":" + "condition must have type bool (is type " + condExpr->type + ").";
+        return err;
+    }
+
+    // Check if types of thenExpr and elseExpr agree
+    if(thenExpr && elseExpr){ // Both then and else branches
+        if(!checkPrimitiveType(thenExpr->type) && !checkPrimitiveType(elseExpr->type) && thenExpr->type.compare("unit") && elseExpr->type.compare("unit")){
+            // Both are not primitive types -> type of if is first ancestor
+            vector<string> listAncestorThen = vector<string>();
+            vector<string> listAncestorElse = vector<string>();
+            listAncestorThen.push_back(thenExpr->type);
+            listAncestorElse.push_back(elseExpr->type);
+            auto classes = prog->getClasses();
+
+            string tmpThen = thenExpr->type;
+            while(tmpThen.compare("Object")){
+                auto tmpClass = prog->classesMap.find(tmpThen);
+                if(tmpClass != prog->classesMap.end()){
+                    Class *cls = (*tmpClass).second;
+                    if(cls){
+                        tmpThen = cls->getParent();
+                        listAncestorThen.push_back(tmpThen);
+                    }else
+                        break;
+                }else
+                    break;
+            }
+
+            cout << "Ancestors of then: ";
+            for(string ancestor: listAncestorThen){
+                cout << ancestor << " ";
+            }
+            cout << endl;
+
+            string tmpElse = elseExpr->type;
+            while(tmpElse.compare("Object")){
+                auto tmpClass = prog->classesMap.find(tmpElse);
+                if(tmpClass != prog->classesMap.end()){
+                    Class *cls = (*tmpClass).second;
+                    if(cls){
+                        tmpElse = cls->getParent();
+                        listAncestorThen.push_back(tmpElse);
+                    }else
+                        break;
+                }else
+                    break;
+            }
+
+            cout << "Ancestors of else: ";
+            for(string ancestor: listAncestorElse){
+                cout << ancestor << " ";
+            }
+            cout << endl;
+
+            string firstCommonAncestor = "";
+            for(string ancestorThen: listAncestorThen){
+                if(firstCommonAncestor.compare("")) // allow to stop looking for ancestor when first one found
+                    break;
+                for(string ancestorElse: listAncestorElse){
+                    if(firstCommonAncestor.compare("")) // allow to stop looking for ancestor when first one found
+                        break;
+                    if(!ancestorThen.compare(ancestorElse))
+                        firstCommonAncestor = ancestorThen;
+                }
+            }
+
+            type = firstCommonAncestor;
+
+        }else if(!(thenExpr->type.compare(elseExpr->type)) && checkPrimitiveType(thenExpr->type)){
+            // If both have same primitive type -> type of if is the same type
+            type = thenExpr->type;
+        }else if(!(thenExpr->type.compare("unit")) || !(elseExpr->type.compare("unit"))){
+            // If (at least) one branch has type unit -> type of if is unit
+            type = "unit";
+        }else{
+            // Types of branches do not agree
+            const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "types of <expr_t> and <expr_e> do not agree.";
+            return err;
+        }
+    }else if(thenExpr && !elseExpr){ // No else branch
+        type = "unit";
+    }else{
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "types of <expr_t> and <expr_e> do not agree.";
+        return err;
+    }
+
+    return "";
 }

@@ -26,10 +26,9 @@ string Formal::eval() const
     return Formal::name + " : " + Formal::type;
 }
 
-const Expr* Formal::checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const {
+const Expr* Formal::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     bool known = checkKnownType(classesMap, type);
     if(known){
-        cout << "Type of formal " << name << " known" << endl;
         return NULL;
     }else{
         cout << "Type of formal " << name << " unknown" << endl;
@@ -68,4 +67,18 @@ const Expr* Formals::checkUsageUndefinedType(const map<string, Class*>& classesM
     }
 
     return NULL;
+}
+
+const string Formals::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    // Check each formal
+    for(Formal *formal: formals){
+        if(formal){
+            // Scope does not matter since there should never be any errors
+            const string err = formal->typeChecking(prog, scope);
+            if(err.compare(""))
+                return err;
+        }
+    }
+
+    return "";
 }

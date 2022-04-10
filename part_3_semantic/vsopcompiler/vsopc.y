@@ -19,7 +19,7 @@
 
     #define YYERROR_VERBOSE 1
 
-    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE>";
+    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE> or ./vsopc -c <SOURCE-FILE>";
 
     extern FILE *yyin;
     std::string fileName;
@@ -536,7 +536,6 @@ int main(int argc, char** argv){
             }
 
             /* Check for usage of undefined types */
-            std::cout << "Testing usage of undefined types" << std::endl;
             int undefinedTypeUsage = checkUseUndefinedType(abstractSyntaxTree);
             if(undefinedTypeUsage != 0){
                 semanticError("Usage of undefined type");
@@ -549,6 +548,18 @@ int main(int argc, char** argv){
             {
                 for(auto it = abstractSyntaxTree->errors.rbegin(); it != abstractSyntaxTree->errors.rend(); ++it)
                     semanticErrorWithLocation(*it);
+                
+                return EXIT_FAILURE;
+            }
+
+            /* Type checking */
+            std::string typeCheckingERR = abstractSyntaxTree->typeChecking(abstractSyntaxTree, std::vector<std::pair<std::string, Expr*>>());
+            if(typeCheckingERR.compare("")){
+                std::cerr << "Error while performing type checking" << std::endl;
+                semanticErrorWithLocation(typeCheckingERR);
+                return EXIT_FAILURE;
+            }else{
+                std::cout << "No type checking error" << std::endl;
             }
         }
     }
