@@ -7,3 +7,9 @@ class List {
         head <- hd
     }
 }
+class Main {
+    main() : int32 {
+        0
+    }
+}
+

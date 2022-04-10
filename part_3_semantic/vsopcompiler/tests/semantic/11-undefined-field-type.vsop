@@ -1,6 +1,5 @@
-class List {}
-class List {}
 class Main {
+    head : Maxime;
     main() : int32 {
         0
     }

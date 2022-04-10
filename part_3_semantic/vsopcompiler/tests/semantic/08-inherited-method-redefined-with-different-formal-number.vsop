@@ -6,7 +6,13 @@ class List {
 }
 
 class Stack extends List {
-    isNil(max : int32) : int32 {
+    isNil(max : int32) : bool {
         head <- hd
+    }
+}
+
+class Main {
+    main() : int32 {
+        0
     }
 }

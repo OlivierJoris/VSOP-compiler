@@ -1,47 +1,81 @@
-#include "AbstractSyntaxTree.hpp"
+/**
+ * Implementation of the AST for VSOP compiler.
+ *
+ * @authors Goffart Maxime & Joris Olivier
+*/
 
 #include <map>
 #include <iostream>
+#include <vector>
+#include <string>
 #include <set>
+
+#include "AbstractSyntaxTree.hpp"
+#include "Args.hpp"
+#include "Block.hpp"
+#include "Class.hpp"
+#include "Expr.hpp"
+#include "Field.hpp"
+#include "Formal.hpp"
+#include "If.hpp"
+#include "Let.hpp"
+#include "Literals.hpp"
+#include "Method.hpp"
+#include "Operators.hpp"
+#include "While.hpp"
+#include "TypeChecking.hpp"
+
+using namespace std;
 
 Program::Program()
 {
-    Program::classesMap.insert(std::pair<std::string, Class *>("Object", NULL));
+    Program::classesMap.insert(pair<string, Class *>("Object", NULL));
 }
 
 void Program::checkRedefinition()
 {
-    for(Class *cls: classes)
+    for(auto it = classes.rbegin(); it != classes.rend(); ++it)
     {
-        std::string className = cls->getName();
+        Class *cls = *it;
+        // Check class redefinition
+        string className = cls->getName();
         if(classesMap.find(className) != classesMap.end())
-            errors.push_back("redefinition of class " + className);
+            errors.push_back(to_string(cls->getLine()) + ":" + to_string(cls->getColumn()) + ": " + "semantic error: " + " redefinition of class " + className);
+        
         else 
             classesMap[className] = cls;
 
-        for(Field *field: cls->getFields())
+        // Check field redefinition in current class
+        vector<Field*> fields = cls->getFields();
+        for(auto it = fields.rbegin(); it != fields.rend(); ++it)
         {
-            std::string fieldName = field->getName();
+            Field *field = *it;
+            string fieldName = field->getName();
             if(cls->fieldsMap.find(fieldName) != cls->fieldsMap.end())
-                errors.push_back("redefinition of field " + fieldName);
+                errors.push_back(to_string(field->getLine()) + ":" + to_string(field->getColumn()) + ": " + "semantic error: " + "redefinition of field " + fieldName);
             else
                 cls->fieldsMap[fieldName] = field;
         }
 
-        for(Method *method: cls->getMethods())
+        // Check method redefinition in current class
+        vector<Method*> methods = cls->getMethods();
+        for(auto it = methods.rbegin(); it != methods.rend(); ++it)
         {
-            std::string methodName = method->getName();
+            Method *method = *it;
+            string methodName = method->getName();
             if(cls->methodsMap.find(methodName) != cls->methodsMap.end())
-                errors.push_back("redefinition of method " + methodName);
+                errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "redefinition of method " + methodName);
             else
                 cls->methodsMap[methodName] = method;
             
-
-            for(Formal *formal: method->getFormals())
+            // Check formal redefinition in current method
+            vector<Formal*> formals = method->getFormals();
+            for(auto it = formals.rbegin(); it != formals.rend(); ++it)
             {
-                std::string formalName = formal->getName();
+                Formal *formal = *it;
+                string formalName = formal->getName();
                 if(method->formalsMap.find(formalName) != method->formalsMap.end())
-                    errors.push_back("redefinition of the formal " + formalName);
+                    errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "redefinition of the formal " + formalName);
                 else 
                     method->formalsMap[formalName] = formal;
             }
@@ -51,25 +85,25 @@ void Program::checkRedefinition()
 
 void Program::checkInheritance()
 {
-    std::set<std::string> parentSet;
+    set<string> parentSet;
 
     for(Class *cls: classes)
     {
-        std::string parent = cls->getParent();
+        string parent = cls->getParent();
         while(parent != "Object")
         {
-            /* Cycle in inheritance */
+            // Cycle in inheritance
             if(parentSet.find(parent) != parentSet.end())
             {
-                errors.push_back("class " + cls->getName() + " cannot extends parent class " + parent);
+                errors.push_back(to_string(cls->getLine()) + ":" + to_string(cls->getColumn()) + ": " + "semantic error: " + "class " + cls->getName() + " cannot extends parent class " + parent);
                 break;
             }
             else
             {
-                /* Parent class has not been defined */
+                // Parent class has not been defined
                 if(classesMap.find(parent) == classesMap.end())
                 {
-                    errors.push_back("class " + parent + " is not defined");
+                    errors.push_back(to_string(cls->getLine()) + ":" + to_string(cls->getColumn()) + ": " + "semantic error: " + "class " + parent + " is not defined");
                     break; 
                 }
 
@@ -85,54 +119,62 @@ void Program::checkInheritance()
 
 void Program::checkOverrides()
 {
+    // Check for each class
     for(Class *cls: classes)
     {
-        /* Field */
+        // Check overridden fields in current class
         for(Field *field: cls->getFields())
         {
-            std::string parent = cls->getParent();
+            string parent = cls->getParent();
             while(parent != "Object")
             {
-                /* Parent class has not been defined */
+                // Parent class has not been defined
                 if(classesMap.find(parent) == classesMap.end())
                     break; 
             
                 if(classesMap[parent]->fieldsMap.find(field->getName()) != classesMap[parent]->fieldsMap.end())
-                    errors.push_back("field " + field->getName() + " of class " + cls->getName() + " is overriden");
+                    errors.push_back(to_string(field->getLine()) + ":" + to_string(field->getColumn()) + ": " + "semantic error: " + "field " + field->getName() + " of class " + cls->getParent() + " is overriden");
                 
                 parent = classesMap[parent]->getParent();
             }
         }
 
+        // Check for overridden methods with different args and/or return type in current class
         for(Method *method: cls->getMethods())
         {
-            std::string parent = cls->getParent();
+            string parent = cls->getParent();
             while(parent != "Object")
             {
-                /* Parent class has not been defined */
+                // Parent class has not been defined
                 if(classesMap.find(parent) == classesMap.end())
                     break; 
 
                 if(classesMap[parent]->methodsMap.find(method->getName()) != classesMap[parent]->methodsMap.end())
                 {
                     Method *m =  classesMap[parent]->methodsMap[method->getName()];
+                    // Check if matching return type
                     if(m->getRetType() != method->getRetType())
-                        errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
+                        errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
                     
+                    // Check if matching number of formal arguments
                     if(m->getFormals().size() != method->getFormals().size())
                     {
-                        errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + std::to_string(method->getFormals().size()) + " formals but parent class has " + std::to_string(m->getFormals().size()) + " formals");
-                        break;
+                       errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + to_string(method->getFormals().size()) + " formals but parent class has " + to_string(m->getFormals().size()) + " formals");
+                       break;
                     }
 
+                    // Check if matching formal arguments
                     unsigned int i = 0;
+                    unsigned int nbFormals = (unsigned int)method->getFormals().size();
                     for(Formal *formal: method->getFormals())
                     {
                         if(m->getFormals(i)->getName() != formal->getName())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getName() + " as formal name in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
+                            errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getName() + " as formal name in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
                         
                         if(m->getFormals(i)->getType() != formal->getType())
-                            errors.push_back("method " + method->getName() + " of class " + cls->getName() + " overriden with " + formal->getType() + " as formal type in place " + std::to_string(i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
+                            errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getType() + " as formal type in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
+
+                        i+=1;
                     }
                 }
 
@@ -142,10 +184,10 @@ void Program::checkOverrides()
     }
 }
 
-std::string Program::eval() const 
+string Program::eval() const 
 {
     auto firstClass = Program::classes.rbegin();
-    std::string program = (*firstClass)->eval();
+    string program = (*firstClass)->eval();
 
     for(auto it = Program::classes.rbegin() + 1; it != Program::classes.rend(); ++it)
         program += ", " + (*it)->eval();
@@ -153,288 +195,56 @@ std::string Program::eval() const
     return "[" + program + "]";
 }
 
-Class::Class(const std::string name, const std::string parent, std::vector<Field*>& fields, std::vector<Method*>& methods): name(name), parent(parent), fields(fields), methods(methods){}
-
-std::string Class::eval() const
-{
-    std::string fields = "";    
-
-    if(Class::fields.size() != 0)
-    {
-        auto firstField = Class::fields.rbegin();
-        fields = (*firstField)->eval();
-
-        for(auto it = Class::fields.rbegin() + 1; it != Class::fields.rend(); ++it)
-            fields += ", " + (*it)->eval();
-    }
-
-    std::string methods = "";
-
-    if(Class::methods.size() != 0)
-    {
-        auto firstMethod = Class::methods.rbegin();
-        methods = (*firstMethod)->eval();
-
-        for(auto it = Class::methods.rbegin() + 1; it != Class::methods.rend(); ++it)
-            methods += ", " + (*it)->eval();
-    }
-    
-    return "Class(" + Class::name + ", " + Class::parent + ", " + "[" + fields + "]" + ", " + "[" + methods + "]" + ")";
-}   
-
-ClassBody::ClassBody(){}
-
-Field::Field(const std::string name, const std::string type, Expr *initExpr): name(name), type(type), initExpr(initExpr){}
-
-std::string Field::eval() const
-{
-    std::string initExpr = "";
-
-    if(Field::initExpr)
-        initExpr = ", " + Field::initExpr->eval();
-
-    return "Field(" + Field::name + ", " + Field::type + initExpr + ")";
-}
-
-Method::Method(const std::string name, Formals* formals, const std::string retType, Block* block): name(name), formals(formals), retType(retType), block(block){}
-
-std::string Method::eval() const 
-{
-    std::string formals = "[]";
-    std::string block = "[]";
-
-    if(Method::formals)
-        formals = Method::formals->eval();
-    
-    if(Method::block)
-        block = Method::block->eval();
-
-    return "Method(" + Method::name + ", " + formals + ", " + Method::retType + ", " + block + ")";
-}
-
-Formal::Formal(const std::string name, const std::string type): name(name), type(type){}
-
-std::string Formal::eval() const
-{
-    return Formal::name + " : " + Formal::type;
-}
-
-Formals::Formals(){}
-
-std::string Formals::eval() const
-{
-    std::string formals = "";
-
-    if(Formals::formals.size() != 0)
-    {
-        auto firstFormal = Formals::formals.rbegin();
-        formals = (*firstFormal)->eval();
-
-        for(auto it = Formals::formals.rbegin() + 1; it != Formals::formals.rend(); ++it)
-            formals += ", " + (*it)->eval();
-    }
-
-    return "[" + formals + "]";
-}
-
-Block::Block(Args *exprList): exprList(exprList){}
-
-std::string Block::eval() const
-{
-    std::string listExpr = "[]";
-
-    if(Block::exprList)
-        listExpr = Block::exprList->eval();
-    
-    return listExpr;
-}
-
-If::If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr): condExpr(condExpr), thenExpr(thenExpr), elseExpr(elseExpr){}
-
-std::string If::eval() const
-{
-    std::string elseExpr = "";
-
-    if(If::elseExpr)
-        elseExpr = ", " + If::elseExpr->eval();
-
-    return "If(" + If::condExpr->eval() + ", " + If::thenExpr->eval() + elseExpr + ")";
-}
-
-While::While(Expr *condExpr, Expr *bodyExpr): condExpr(condExpr), bodyExpr(bodyExpr){}
-
-std::string While::eval() const 
-{
-    return "While(" + While::condExpr->eval() + ", " + While::bodyExpr->eval() + ")";
-}
-
-Let::Let(const std::string name, const std::string type, Expr *scopeExpr, Expr *initExpr): name(name), type(type), scopeExpr(scopeExpr), initExpr(initExpr){}
-
-std::string Let::eval() const
-{
-    std::string initExpr = "";
-
-    if(Let::initExpr)
-        initExpr = ", " + Let::initExpr->eval();
-
-    return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->eval() + ")";
-}
-
-Assign::Assign(const std::string name, Expr *expr): name(name), expr(expr){}
-
-std::string Assign::eval() const 
-{
-    return "Assign(" + Assign::name + ", " + Assign::expr->eval() + ")";
-}
-
-UnOp::UnOp(const std::string symbol, Expr *expr): expr(expr), symbol(symbol){}
-
-std::string UnOp::eval() const 
-{
-    return "UnOp(" + UnOp::symbol + ", " + UnOp::expr->eval() + ")";
-}
-
-Not::Not(Expr *expr): UnOp("not", expr){}
-
-UnaryMinus::UnaryMinus(Expr *expr): UnOp("-", expr){}
-
-IsNull::IsNull(Expr *expr): UnOp("isnull", expr){}
-
-BinOp::BinOp(const std::string symbol, Expr *leftExpr, Expr *rightExpr): leftExpr(leftExpr), rightExpr(rightExpr), symbol(symbol){}
-
-std::string BinOp::eval() const 
-{
-    return "BinOp(" + BinOp::symbol + ", " + BinOp::leftExpr->eval() + ", " + BinOp::rightExpr->eval() + ")";
-}
-
-Plus::Plus(Expr *leftExpr, Expr *rightExpr): BinOp("+", leftExpr, rightExpr){}
-
-Minus::Minus(Expr *leftExpr, Expr *rightExpr): BinOp("-", leftExpr, rightExpr){}
-
-Times::Times(Expr *leftExpr, Expr *rightExpr): BinOp("*", leftExpr, rightExpr){}
-
-Div::Div(Expr *leftExpr, Expr *rightExpr): BinOp("/", leftExpr, rightExpr){}
-
-And::And(Expr *leftExpr, Expr *rightExpr): BinOp("and", leftExpr, rightExpr){}
-
-LowerEqual::LowerEqual(Expr *leftExpr, Expr *rightExpr): BinOp("<=", leftExpr, rightExpr){}
-
-Lower::Lower(Expr *leftExpr, Expr *rightExpr): BinOp("<", leftExpr, rightExpr){}
-
-Equal::Equal(Expr *leftExpr, Expr *rightExpr): BinOp("=", leftExpr, rightExpr){}
-
-Pow::Pow(Expr *leftExpr, Expr *rightExpr): BinOp("^", leftExpr, rightExpr){}
-
-Args::Args(){}
-
-std::string Args::eval() const
-{
-    std::string exprList = "";
-
-    if(Args::exprList.size() != 0)
-    {
-        auto firstFormal = Args::exprList.rbegin();
-        exprList = (*firstFormal)->eval();
-
-        for(auto it = Args::exprList.rbegin() + 1; it != Args::exprList.rend(); ++it)
-            exprList += ", " + (*it)->eval();
-    }
-
-    return "[" + exprList + "]";
-}
-
-Call::Call(Expr *objExpr, const std::string methodName, Args *listExpr): objExpr(objExpr), methodName(methodName), listExpr(listExpr){}
-
-std::string Call::eval() const
-{
-    std::string objExpr = "self";
-   
-    std::string listExpr = "[]";
-
-    if(Call::listExpr)
-        listExpr = Call::listExpr->eval();
-
-    if(Call::objExpr)
-        objExpr = Call::objExpr->eval();
-
-    return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ")";
-}
-
-New::New(const std::string typeName): typeName(typeName){}
-
-std::string New::eval() const
-{
-    return "New(" + New::typeName + ")";
-}
-
-IntegerLiteral::IntegerLiteral(const int intValue): intValue(intValue){}
-
-std::string IntegerLiteral::eval() const
-{
-    return std::to_string(IntegerLiteral::intValue);
-}
-
-StringLiteral::StringLiteral(const std::string stringValue): stringValue(stringValue){}
-
-std::string hexConvert(char character)
-{
-    std::string ret = "\\xhh";
-    std::string ref = "0123456789abcdef";
-
-    ret[2] = ref[character / 16];
-    ret[3] = ref[character % 16];
-
-    return ret;
-}
-
-std::string StringLiteral::eval() const
-{
-    std::string ret = "\"";
-
-    for(char character: StringLiteral::stringValue){
-
-        if(character != '\"' && character != '\\'){
-            if(character >= 32 && character <= 126)
-                ret += character;
-            else 
-                ret += hexConvert(character);
+const Expr* Program::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    // Check each class
+    for(Class *cls: classes){
+        cout << "Starting check for class " << cls->getName() << endl;
+        const Expr* check = cls->checkUsageUndefinedType(classesMap);
+        if(check) {
+            cout << "Usage of not defined type inside class " << cls->getName() << endl;
+            return check;
         }
-        else
-            ret += hexConvert(character);
+    }
+    return NULL;
+}
+
+string Program::checkMain() const {
+    // Check if Main class
+    auto mainClass = classesMap.find("Main");
+    if(mainClass != classesMap.end()){
+        // Check if main method
+        Class *main = (*mainClass).second;
+        Method *mainMethod = NULL;
+        vector<Method*> methods = main->getMethods();
+        for(Method *method: methods){
+            if(method && !(method->getName().compare("main")))
+                mainMethod = method;
+        }
+
+        if(!mainMethod)
+            return "missing main method";
+
+        // Check return type
+        if(mainMethod->getRetType().compare("int32"))
+            return "main method return type must be int32";
+
+        // Check formal arguments
+        if(mainMethod->getFormals().size() > 0)
+            return "main method must not have arguments";
+
+    }else{
+        return "missing Main class";
     }
 
-    return ret + "\"";
+    return "";
 }
 
-BooleanLiteral::BooleanLiteral(const bool booleanValue): booleanValue(booleanValue){}
-
-std::string BooleanLiteral::eval() const
-{
-    std::string boolString = "false";
-
-    if(BooleanLiteral::booleanValue)
-        boolString = "true";
-
-    return boolString;
+Unit::Unit(const int line, const int column){
+    this->line = line;
+    this->column = column;
 }
 
-ObjectIdentifier::ObjectIdentifier(const std::string identifier): identifier(identifier){}
-
-std::string ObjectIdentifier::eval() const 
-{
-    return ObjectIdentifier::identifier;
-}
-
-Self::Self(){}
-
-std::string Self::eval() const
-{
-    return "self";
-}
-
-Unit::Unit(){}
-
-std::string Unit::eval() const
+string Unit::eval() const
 {
     return "unit";
 }

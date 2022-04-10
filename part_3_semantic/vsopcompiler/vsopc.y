@@ -4,6 +4,18 @@
     #include <cstring>
 
     #include "AbstractSyntaxTree.hpp"
+    #include "Args.hpp"
+    #include "Block.hpp"
+    #include "Class.hpp"
+    #include "Expr.hpp"
+    #include "Field.hpp"
+    #include "Formal.hpp"
+    #include "If.hpp"
+    #include "Let.hpp"
+    #include "Literals.hpp"
+    #include "Method.hpp"
+    #include "Operators.hpp"
+    #include "While.hpp"
 
     #define YYERROR_VERBOSE 1
 
@@ -22,6 +34,7 @@
 
 %code requires{
     #include "AbstractSyntaxTree.hpp"
+    #include "TypeChecking.hpp"
 }
 
 %define parse.trace
@@ -132,10 +145,10 @@ ProgramContinued:	/* */ { $$ = new Program(); }
 
 Class: CLASS TYPE_IDENTIFIER LBRACE ClassBody RBRACE {std::vector<Field*> fields = $4->getFields();
                                                                std::vector<Method*> methods = $4->getMethods();
-                                                               $$ = new Class($2, "Object", fields, methods);}
+                                                               $$ = new Class($2, "Object", fields, methods, @$.first_line, @$.first_column);}
         | CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER LBRACE ClassBody RBRACE {std::vector<Field*> fields = $6->getFields();
                                                                                        std::vector<Method*> methods = $6->getMethods();
-                                                                                       $$ = new Class($2, $4, fields, methods);}
+                                                                                       $$ = new Class($2, $4, fields, methods, @$.first_line, @$.first_column);}
         ;
 
 ClassBody: /* */ {$$ = new ClassBody();}
@@ -145,11 +158,11 @@ ClassBody: /* */ {$$ = new ClassBody();}
                                        $$ = $2;}
         ;
 
-Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL);}
-        | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {$$ = new Field($1, $3, $5);}
+Field: OBJECT_IDENTIFIER COLON Type SEMICOLON {$$ = new Field($1, $3, NULL, @$.first_line, @$.first_column);}
+        | OBJECT_IDENTIFIER COLON Type ASSIGN Expr SEMICOLON {$$ = new Field($1, $3, $5, @$.first_line, @$.first_column);}
         ;
 
-Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, new Block($7));}
+Method: OBJECT_IDENTIFIER LPAR Formals RPAR COLON Type Block{$$ = new Method($1, $3, $6, new Block($7, @$.first_line, @$.first_column), @$.first_line, @$.first_column);}
         ;
 
 Type: TYPE_IDENTIFIER {$$ = $1;}
@@ -169,14 +182,14 @@ FormalsContinued: /* */ {$$ = new Formals();}
                                                   $$ = $3;}
                  ;
 
-Formal: OBJECT_IDENTIFIER COLON Type {$$ = new Formal($1, $3);}
+Formal: OBJECT_IDENTIFIER COLON Type {$$ = new Formal($1, $3, @$.first_line, @$.first_column);}
         ;
 
 Block: LBRACE Expr BlockExpr RBRACE {$3->addExpr($2);
                                      $$ = $3;}
        ;
 
-BlockExpr: /* */ {$$ = new Args();}
+BlockExpr: /* */ {$$ = new Args(@$.first_line, @$.first_column);}
         | SEMICOLON Expr BlockExpr {$3->addExpr($2);
                                     $$ = $3;}
         ;
@@ -184,55 +197,55 @@ BlockExpr: /* */ {$$ = new Args();}
 Expr:     If
         | While
         | Let 
-        | OBJECT_IDENTIFIER ASSIGN Expr {$$ = new Assign($1, $3);}
-        | NOT Expr {$$ = new Not($2);}
-        | Expr AND Expr {$$ = new And($1, $3);}
-        | Expr LOWER_EQUAL Expr {$$ = new LowerEqual($1, $3);}
-        | Expr LOWER Expr {$$ = new Lower($1, $3);}
-        | Expr EQUAL Expr {$$ = new Equal($1, $3);}
-        | Expr MINUS Expr {$$ = new Minus($1, $3);}
-        | Expr PLUS Expr {$$ = new Plus($1, $3);}
-        | Expr DIV Expr {$$ = new Div($1, $3);}
-        | Expr TIMES Expr {$$ = new Times($1, $3);}
-        | Expr POW Expr {$$ = new Pow($1, $3);}
-        | MINUS Expr %prec UNARYMINUS {$$ = new UnaryMinus($2);}
-        | ISNULL Expr {$$ = new IsNull($2);}
-        | OBJECT_IDENTIFIER LPAR Args RPAR {$$ = new Call(NULL, $1, $3);}
-        | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR {$$ = new Call($1, $3, $5);}
-        | NEW TYPE_IDENTIFIER {$$ = new New($2);}
-        | OBJECT_IDENTIFIER {$$ = new ObjectIdentifier($1);}
-        | SELF {$$ = new Self();}
+        | OBJECT_IDENTIFIER ASSIGN Expr {$$ = new Assign($1, $3, @$.first_line, @$.first_column);}
+        | NOT Expr {$$ = new Not($2, @$.first_line, @$.first_column);}
+        | Expr AND Expr {$$ = new And($1, $3, @$.first_line, @$.first_column);}
+        | Expr LOWER_EQUAL Expr {$$ = new LowerEqual($1, $3, @$.first_line, @$.first_column);}
+        | Expr LOWER Expr {$$ = new Lower($1, $3, @$.first_line, @$.first_column);}
+        | Expr EQUAL Expr {$$ = new Equal($1, $3, @$.first_line, @$.first_column);}
+        | Expr MINUS Expr {$$ = new Minus($1, $3, @$.first_line, @$.first_column);}
+        | Expr PLUS Expr {$$ = new Plus($1, $3, @$.first_line, @$.first_column);}
+        | Expr DIV Expr {$$ = new Div($1, $3, @$.first_line, @$.first_column);}
+        | Expr TIMES Expr {$$ = new Times($1, $3, @$.first_line, @$.first_column);}
+        | Expr POW Expr {$$ = new Pow($1, $3, @$.first_line, @$.first_column);}
+        | MINUS Expr %prec UNARYMINUS {$$ = new UnaryMinus($2, @$.first_line, @$.first_column);}
+        | ISNULL Expr {$$ = new IsNull($2, @$.first_line, @$.first_column);}
+        | OBJECT_IDENTIFIER LPAR Args RPAR {$$ = new Call(NULL, $1, $3, @$.first_line, @$.first_column);}
+        | Expr DOT OBJECT_IDENTIFIER LPAR Args RPAR {$$ = new Call($1, $3, $5, @$.first_line, @$.first_column);}
+        | NEW TYPE_IDENTIFIER {$$ = new New($2, @$.first_line, @$.first_column);}
+        | OBJECT_IDENTIFIER {$$ = new ObjectIdentifier($1, @$.first_line, @$.first_column);}
+        | SELF {$$ = new Self(@$.first_line, @$.first_column);}
         | Literal
-        | LPAR RPAR {$$ = new Unit();}
+        | LPAR RPAR {$$ = new Unit(@$.first_line, @$.first_column);}
         | LPAR Expr RPAR {$$ = $2;}
-        | Block {$$ = new Block($1);}
+        | Block {$$ = new Block($1, @$.first_line, @$.first_column);}
         | InvalidToken
         ;
 
-If: IF Expr THEN Expr {$$ = new If($2, $4, NULL);}
-        | IF Expr THEN Expr ELSE Expr {$$ = new If($2, $4, $6);}
+If: IF Expr THEN Expr {$$ = new If($2, $4, NULL, @$.first_line, @$.first_column);}
+        | IF Expr THEN Expr ELSE Expr {$$ = new If($2, $4, $6, @$.first_line, @$.first_column);}
         ;
 
-While: WHILE Expr DO Expr {$$ = new While($2, $4);}
+While: WHILE Expr DO Expr {$$ = new While($2, $4, @$.first_line, @$.first_column);}
         ;
 
-Let: LET OBJECT_IDENTIFIER COLON Type IN Expr {$$ = new Let($2, $4, $6, NULL);}
-        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr {$$ = new Let($2, $4, $8, $6);}
+Let: LET OBJECT_IDENTIFIER COLON Type IN Expr {$$ = new Let($2, $4, $6, NULL, @$.first_line, @$.first_column);}
+        | LET OBJECT_IDENTIFIER COLON Type ASSIGN Expr IN Expr {$$ = new Let($2, $4, $8, $6, @$.first_line, @$.first_column);}
         ;
 
-Args: /* */ {$$ = new Args();}
+Args: /* */ {$$ = new Args(@$.first_line, @$.first_column);}
         | Expr ArgsExprList {$2->addExpr($1); 
                              $$ = $2;}
         ;
-ArgsExprList: /* */ {$$ = new Args();}
+ArgsExprList: /* */ {$$ = new Args(@$.first_line, @$.first_column);}
         | COMMA Expr ArgsExprList {$3->addExpr($2);
                                    $$ = $3;}
         ;
 
-Literal: INTEGER_LITERAL {$$ = new IntegerLiteral($1);}
-        | STRING_LITERAL {$$ = new StringLiteral($1);}
-        | TRUE {$$ = new BooleanLiteral(true);}
-        | FALSE {$$ = new BooleanLiteral(false);} 
+Literal: INTEGER_LITERAL {$$ = new IntegerLiteral($1, @$.first_line, @$.first_column);}
+        | STRING_LITERAL {$$ = new StringLiteral($1, @$.first_line, @$.first_column);}
+        | TRUE {$$ = new BooleanLiteral(true, @$.first_line, @$.first_column);}
+        | FALSE {$$ = new BooleanLiteral(false, @$.first_line, @$.first_column);} 
         ;
 
 InvalidToken: INVALID_CHAR {lexicalError(std::string("invalid character ") + std::string($1));
@@ -270,6 +283,10 @@ void semanticError(const std::string& message){
     std::cerr << fileName << ":" << yylloc.first_line << ":";
     std::cerr << yylloc.first_column << ": " << "semantic error: ";
     std::cerr << message << std::endl;
+}
+
+void semanticErrorWithLocation(const std::string& error){
+    std::cerr << fileName << ":" << error << std::endl;
 }
 
 /* Converts a character to its hexadecimal value */
@@ -468,10 +485,10 @@ int main(int argc, char** argv){
                 case INTEGER_LITERAL:
                     std::cout << "integer-literal," << yylval.intValue;		
                     break;
-	        case TYPE_IDENTIFIER:
+	            case TYPE_IDENTIFIER:
                     std::cout << "type-identifier," << yylval.stringValue;
                     break;
-		case OBJECT_IDENTIFIER:
+		        case OBJECT_IDENTIFIER:
                     std::cout << "object-identifier," << yylval.stringValue;
                     break;
                 case STRING_LITERAL:
@@ -511,11 +528,27 @@ int main(int argc, char** argv){
             /* Check for overrides */ 
             abstractSyntaxTree->checkOverrides();
 
+            /* Check Main class, main method, and main method signature */
+            std::string mainCheckErr = abstractSyntaxTree->checkMain();
+            if(mainCheckErr.compare("")){
+                semanticError(mainCheckErr);
+                return EXIT_FAILURE;
+            }
+
+            /* Check for usage of undefined types */
+            std::cout << "Testing usage of undefined types" << std::endl;
+            int undefinedTypeUsage = checkUseUndefinedType(abstractSyntaxTree);
+            if(undefinedTypeUsage != 0){
+                semanticError("Usage of undefined type");
+                return EXIT_FAILURE;
+            }else
+                std::cout << "Not using undefined type" << std::endl;
+
             /* Display errors if any */
             if(abstractSyntaxTree->errors.size() > 0)
             {
-                for(std::string error: abstractSyntaxTree->errors)
-                    semanticError(error);
+                for(auto it = abstractSyntaxTree->errors.rbegin(); it != abstractSyntaxTree->errors.rend(); ++it)
+                    semanticErrorWithLocation(*it);
             }
         }
     }

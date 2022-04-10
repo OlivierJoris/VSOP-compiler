@@ -2,19 +2,20 @@
 - Scoping rules
 - Typing rules
 - Evaluation rules
-- Cannot use a type that is not defined
+- [OK] Cannot use a type that is not defined
 
 # Classes:
-- Cannot be redefined
-- Fields and methods
-- Cannot have multiple fields or methods with the same name. But can have 1 field and 1 method with the same name
-- Types of fields, formal arguments, and return types must be given explicitly
+- [OK] Cannot be redefined
+- [OK] Fields and methods
+- [OK] Cannot have multiple fields or methods with the same name. But can have 1 field and 1 method with the same name
+- [OK] Types of fields, formal arguments, and return types must be given explicitly
 
 # New:
-- Create object as java
-- Space for each field
-- Pointer to a table of its methods
-- Initialise fields and methods table pointer
+- [OK] Create object as java
+- [OK] Space for each field
+- [OK] Pointer to a table of its methods
+- [OK] Initialise fields and methods table pointer
+- Type of expr new C is C
 
 # Inheritance:
 - Inherits all fields and methods of parent class
@@ -41,7 +42,7 @@
 
 # Methods:
 - All methods are public
-- Zero or more parameters. Cannot have multiple parameters with the same name
+- [OK] Zero or more parameters. Cannot have multiple parameters with the same name
 - Parameters take precedence over fields
 - self refer to object itself (like Java)
 - Return type must match what was declared
@@ -51,8 +52,8 @@
 - All classes are members of a tree rooted at Object
 
 # Main class:
-- Program must have a Main class
-- Main class must contain a main method with no args and return int32
+- [OK] Program must have a Main class
+- [OK] Main class must contain a main method with no args and return int32
 - Object of class Main is instantiated and the method main is called
 - Return value of main method is used as the program exit code
 
