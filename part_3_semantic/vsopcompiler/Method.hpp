@@ -55,6 +55,8 @@ class Method : public Expr
          * @return Expr*, if using non defined type. Otherwise, null.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 /**
@@ -84,6 +86,8 @@ class Call : public Expr
          * @return Expr*, if using non defined type. Otherwise, null.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 /**
@@ -111,6 +115,8 @@ class New : public Expr
          * @return Expr*, if using non defined type. Otherwise, null.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 /**
@@ -138,6 +144,8 @@ class ObjectIdentifier : public Expr
          * @return Always NULL because the object identifier does not use any type.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 /**
@@ -162,6 +170,8 @@ class Self : public Expr
          * @return Always NULL because the keyword does not use any type.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 #endif

@@ -42,6 +42,8 @@ class Let : public Expr
          * @return Expr*, if using non defined type. Otherwise, null.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 #endif

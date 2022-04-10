@@ -39,6 +39,8 @@ class IntegerLiteral : public Expr
          * @return Always NULL because Unit does not use any type.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 /**
@@ -67,6 +69,8 @@ class StringLiteral : public Expr
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
 
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
+
 };
 
 /**
@@ -94,6 +98,8 @@ class BooleanLiteral : public Expr
          * @return Always NULL because Unit does not use any type.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override {return "";};
 };
 
 #endif
