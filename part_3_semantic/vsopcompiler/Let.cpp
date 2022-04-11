@@ -4,6 +4,7 @@
  * @authors Goffart Maxime & Joris Olivier
 */
 
+#include <iostream>
 #include <string>
 #include <map>
 #include <string>
@@ -45,4 +46,36 @@ const Expr* Let::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     }
 
     return NULL;
+}
+
+const string Let::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    if(initExpr){
+        // Type checking on initExpr
+        const string err = initExpr->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "Error type checking let initExpr" << endl;
+            return err;
+        }
+
+        // Check if type of initExpr is the same as the type declared
+        if(Let::type.compare(initExpr->type)){
+            const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" +
+                "type of initializer does not match expected type. Expected " + Let::type +
+                " but is " + initExpr->type + ".";
+        }
+    }
+
+    if(scopeExpr){
+        // Type checking of body of let
+        const string err = scopeExpr->typeChecking(prog, scope);
+        if(err.compare("")){
+            cout << "Error type checking let scopeExpr" << endl;
+            return err;
+        }
+
+        // Type of let is type of body,
+       Expr::type = scopeExpr->type;
+    }
+
+    return "";
 }

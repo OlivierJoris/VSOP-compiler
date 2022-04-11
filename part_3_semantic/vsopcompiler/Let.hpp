@@ -43,7 +43,14 @@ class Let : public Expr
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        /**
+         * @brief Perform type checking on the let.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param scope Scope of identifiers usable by the if.
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 #endif
