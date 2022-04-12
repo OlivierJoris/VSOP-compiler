@@ -37,6 +37,7 @@ class Method : public Expr
         std::map<std::string, Formal*> formalsMap;
         Method(const std::string name, Formals *formals, const std::string retType, Block *block, const int line, const int column);
         std::string getName() {return name;}
+        Formals* getFormalsPointer() {return formals;}
         std::vector<Formal*> getFormals();
         Formal *getFormals(unsigned int i);
         std::string getRetType() {return retType;}

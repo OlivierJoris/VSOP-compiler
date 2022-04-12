@@ -51,11 +51,13 @@ const Expr* Let::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
 const string Let::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     if(initExpr){
         // Type checking on initExpr
+        cout << "Start type checking on init expr of let" << endl;
         const string err = initExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error type checking let initExpr" << endl;
             return err;
-        }
+        }else
+            cout << "Ok type checking on init expr of let" << endl;
 
         // Check if type of initExpr is the same as the type declared
         if(Let::type.compare(initExpr->type)){
@@ -66,12 +68,14 @@ const string Let::typeChecking(const Program* prog, string currentClass, vector<
     }
 
     if(scopeExpr){
+        cout << "Start type checking on scope expr of let" << endl;
         // Type checking of body of let
         const string err = scopeExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error type checking let scopeExpr" << endl;
             return err;
-        }
+        }else
+            cout << "Ok type checking on scope expr of let" << endl;
 
         // Type of let is type of body,
        Expr::type = scopeExpr->type;

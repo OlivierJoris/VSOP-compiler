@@ -55,11 +55,13 @@ const string Args::typeChecking(const Program* prog, string currentClass, vector
     // First, check each expression
     for(Expr* expr: exprList){
         if(expr){
+            cout << "Start type checking on expr " << expr->eval() << endl;
             const string err = expr->typeChecking(prog, currentClass, scope);
             if(err.compare("")){
                 cout << "Error while checking expr" << endl;
                 return err;
-            }
+            }else
+                cout << "Ok type checking expr " << expr->eval() << endl;
         }
     }
 

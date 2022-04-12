@@ -75,16 +75,19 @@ const string Method::typeChecking(const Program* prog, string currentClass, vect
         if(err.compare("")){
             cout << "Error in formal" << endl;
             return err;
-        }
+        }else
+            cout << "Ok type checking formals" << endl;
     }
 
     if(block){
+        cout << "Starting type checking on block" << endl;
         // Then, we can perform type checking on the body (block) of the method
         const string err = block->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "type checking error in method body" << endl;
             return err;
-        }
+        }else
+            cout << "Ok type checking on block" << endl;
         // Finally, we need to check that the type of the body (block) matches the type of the return
         if(retType.compare(block->type)){
             const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":"
@@ -139,6 +142,18 @@ const Expr* Call::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     return NULL;
 }
 
+static bool checkPrimitiveType(const string& toCheck){
+    if(toCheck.compare("int32") == 0)
+        return true;
+    if(toCheck.compare("bool") == 0)
+        return true;
+    if(toCheck.compare("string") == 0)
+        return true;
+    if(toCheck.compare("unit") == 0)
+        return true;
+    return false;
+}
+
 const string Call::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Type checking on the expr representing the left-hand side
     if(objExpr){
@@ -186,7 +201,8 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
             auto parentMap = prog->classesMap.find(parent);
             if(parentMap != prog->classesMap.end()){
                 cls = (*parentMap).second;
-            }
+            }else
+                cls = NULL;
         }
     }
 
@@ -210,7 +226,33 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
     for(size_t it = 0; it < formals.size(); ++it){
         string formalType = formals[it]->getType();
         string argType = args[it]->type;
-        if(formalType.compare(argType)){
+
+        // Get ancestors of arg because can use child (oop)
+        vector<string> ancestors;
+        ancestors.push_back(argType);
+        if(!checkPrimitiveType(argType)){ // Ancestor only if not primitive type
+            string ancestor = argType;
+            while(ancestor.compare("")){
+                auto clsMap = prog->classesMap.find(ancestor);
+                if(clsMap != prog->classesMap.end()){
+                    Class *cls = (*clsMap).second;
+                    if(cls){
+                        ancestor = cls->getParent();
+                        ancestors.push_back(ancestor);
+                    }else
+                        break;
+                }else
+                    break;
+            }
+        }
+
+        // Check if formalType is equal to argType or one of its ancestor
+        bool typeOk = false;
+        for(string ancestor: ancestors){
+            if(!ancestor.compare(formalType))
+                typeOk = true;
+        }
+        if(!typeOk){
             string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":formal " +
                 to_string(it) + " must be of type " + formalType + ". Given argument is of type " + argType + ".";
             return err;

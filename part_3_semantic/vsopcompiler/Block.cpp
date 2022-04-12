@@ -36,12 +36,14 @@ const Expr* Block::checkUsageUndefinedType(const map<string, Class*>& classesMap
 
 const string Block::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     if(exprList){
+        cout << "Start type checking on expr list" << endl;
         // First, need to check the expressions inside the block if any
         const string err = exprList->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error in exprlist check" << endl;
             return err;
-        }
+        }else
+            cout << "OK type checking on expr list" << endl;
         
         // Then, set type of block as type of list of expressions (itself is type of last expr)
         type = exprList->type;

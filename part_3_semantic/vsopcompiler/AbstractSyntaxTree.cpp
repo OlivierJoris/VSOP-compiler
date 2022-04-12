@@ -29,7 +29,30 @@ using namespace std;
 
 Program::Program()
 {
-    Program::classesMap.insert(pair<string, Class *>("Object", NULL));
+    // Add Object class
+    vector<Field*> fields;
+    vector<Method*> methods;
+
+    Formals *printFormals = new Formals();
+    Formals *printBoolFormals = new Formals();
+    Formals *printIntFormals = new Formals();
+    printFormals->addFormal(new Formal("s", "string", 0, 0));
+    printBoolFormals->addFormal(new Formal("b", "bool", 0, 0));
+    printIntFormals->addFormal(new Formal("i", "int32", 0, 0));
+    Method *print = new Method("print", printFormals, "Object", NULL, 0, 0);
+    Method *printBool = new Method("printBool", printBoolFormals, "Object", NULL, 0, 0);
+    Method *printInt32 = new Method("printInt32", printIntFormals, "Object", NULL, 0, 0);
+    Method *inputLine = new Method("inputLine", NULL, "string", NULL, 0, 0);
+    Method *inputBool = new Method("inputBool", NULL, "bool", NULL, 0, 0);
+    Method *inputInt = new Method("inputInt32", NULL, "int32", NULL, 0, 0);
+    Class *object = new Class("Object", "", fields, methods, 0, 0);
+    object->methodsMap.insert(pair<string, Method*>("print", print));
+    object->methodsMap.insert(pair<string, Method*>("printBool", printBool));
+    object->methodsMap.insert(pair<string, Method*>("printInt32", printInt32));
+    object->methodsMap.insert(pair<string, Method*>("inputLine", inputLine));
+    object->methodsMap.insert(pair<string, Method*>("inputBool", inputBool));
+    object->methodsMap.insert(pair<string, Method*>("inputInt32", inputInt));
+    Program::classesMap.insert(pair<string, Class*>("Object", object));
 }
 
 void Program::checkRedefinition()
@@ -69,6 +92,9 @@ void Program::checkRedefinition()
                 cls->methodsMap[methodName] = method;
             
             // Check formal redefinition in current method
+            if(!method->getFormalsPointer())
+                continue;
+
             vector<Formal*> formals = method->getFormals();
             for(auto it = formals.rbegin(); it != formals.rend(); ++it)
             {
@@ -157,24 +183,26 @@ void Program::checkOverrides()
                         errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with type " + method->getRetType() + " but parent type was " + m->getRetType());
                     
                     // Check if matching number of formal arguments
-                    if(m->getFormals().size() != method->getFormals().size())
-                    {
-                       errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + to_string(method->getFormals().size()) + " formals but parent class has " + to_string(m->getFormals().size()) + " formals");
-                       break;
-                    }
+                    if(m->getFormalsPointer()){
+                        if(m->getFormals().size() != method->getFormals().size())
+                        {
+                        errors.push_back(to_string(method->getLine()) + ":" + to_string(method->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + to_string(method->getFormals().size()) + " formals but parent class has " + to_string(m->getFormals().size()) + " formals");
+                        break;
+                        }
 
-                    // Check if matching formal arguments
-                    unsigned int i = 0;
-                    unsigned int nbFormals = (unsigned int)method->getFormals().size();
-                    for(Formal *formal: method->getFormals())
-                    {
-                        if(m->getFormals(i)->getName() != formal->getName())
-                            errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getName() + " as formal name in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
-                        
-                        if(m->getFormals(i)->getType() != formal->getType())
-                            errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getType() + " as formal type in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
+                        // Check if matching formal arguments
+                        unsigned int i = 0;
+                        unsigned int nbFormals = (unsigned int)method->getFormals().size();
+                        for(Formal *formal: method->getFormals())
+                        {
+                            if(m->getFormals(i)->getName() != formal->getName())
+                                errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getName() + " as formal name in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getName() + " as formal name in this position");
+                            
+                            if(m->getFormals(i)->getType() != formal->getType())
+                                errors.push_back(to_string(formal->getLine()) + ":" + to_string(formal->getColumn()) + ": " + "semantic error: " + "method " + method->getName() + " of class " + cls->getParent() + " overriden with " + formal->getType() + " as formal type in place " + to_string(nbFormals-i) + " but parent class has " + m->getFormals(i)->getType() + " as formal type in this position");
 
-                        i+=1;
+                            i+=1;
+                        }
                     }
                 }
 

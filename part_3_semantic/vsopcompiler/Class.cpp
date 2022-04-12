@@ -79,7 +79,8 @@ const string Class::typeChecking(const Program* prog, string currentClass, vecto
             if(err.compare("")){
                 cout << "type checking error in field" << endl;
                 return err;
-            }
+            }else
+                cout << "End type checking on field " << field->getName() << endl;
         }
     }
 
@@ -91,7 +92,8 @@ const string Class::typeChecking(const Program* prog, string currentClass, vecto
             if(err.compare("")){
                 cout << "type checking error in method" << endl;
                 return err;
-            }
+            }else
+                cout << "End type checking on method " << method->getName() << endl;
         }
     }
 
