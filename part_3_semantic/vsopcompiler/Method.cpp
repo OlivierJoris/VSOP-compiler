@@ -154,11 +154,71 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
             return err;
     }
 
-    // TODO check that type of objExpr has a method methodName with the same number of args
+    // Check that type of objExpr has a method named methodName
+    string typeOfLHS = "";
+    if(objExpr)
+        typeOfLHS = objExpr->type;
+    else // if no objExpr, dispatch with self (thus, currentClass)
+        typeOfLHS = currentClass;
+    
+    if(!typeOfLHS.compare("")){
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":<id> has no type.";
+        return err;
+    }
 
-    // TODO check that the types of the args match types of args of method
+    // Find class
+    auto clsMap = prog->classesMap.find(typeOfLHS);
+    if(clsMap == prog->classesMap.end()){
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":type " + typeOfLHS + " not found.";
+        return err;
+    }
 
-    // TODO set type of call as type of return of method
+    // Check if class (or parent of class) has a method named methodName
+    Class *cls = (*clsMap).second;
+    Method *method = NULL;
+    while(cls != NULL){
+        auto methodMap = cls->methodsMap.find(methodName);
+        if(methodMap != cls->methodsMap.end()){
+            method = (*methodMap).second;
+            break;
+        }else{
+            string parent = cls->getParent();
+            auto parentMap = prog->classesMap.find(parent);
+            if(parentMap != prog->classesMap.end()){
+                cls = (*parentMap).second;
+            }
+        }
+    }
+
+    if(!method){
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":<id> has no method " + methodName;
+        return err;
+    }
+
+    // Check if same number of args
+    size_t nbFormals = method->getFormals().size();
+    size_t nbArgs = listExpr->getNumberExpr();
+    if(nbFormals != nbArgs){
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + methodName + "has " +
+            to_string(nbFormals) + " formal arguments but " + to_string(nbArgs) + " were given.";
+        return err;
+    }
+
+    // Check that the types of the args match the types of the formals
+    vector<Formal*> formals = method->getFormals();
+    vector<Expr*> args = listExpr->getExpr();
+    for(size_t it = 0; it < formals.size(); ++it){
+        string formalType = formals[it]->getType();
+        string argType = args[it]->type;
+        if(formalType.compare(argType)){
+            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":formal " +
+                to_string(it) + " must be of type " + formalType + ". Given argument is of type " + argType + ".";
+            return err;
+        }
+    }
+
+    // Set type of call as type of return of method
+    type = method->getRetType();
 
     return "";
 }

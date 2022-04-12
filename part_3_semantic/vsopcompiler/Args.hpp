@@ -25,6 +25,8 @@ class Args : public Expr
     public:
         Args(const int line, const int column);
         void addExpr(Expr *expr) {exprList.push_back(expr);}
+        std::vector<Expr*> getExpr() {return exprList;}
+        size_t getNumberExpr() const {return exprList.size();}
 
         /**
          * @brief Dump the AST corresponding to the expressions inside the returned string.
