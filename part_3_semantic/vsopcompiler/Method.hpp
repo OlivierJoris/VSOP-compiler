@@ -94,7 +94,14 @@ class Call : public Expr
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        /**
+         * @brief Perform type checking on the dispatch.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param scope Scope of identifiers usable by the dispatch.
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -160,9 +167,10 @@ class ObjectIdentifier : public Expr
         /**
          * @brief Perform type checking on the object identifier.
          * 
+         * @param scope Scope of identifiers usable by the identifier.
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -193,7 +201,7 @@ class Self : public Expr
          * 
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 #endif

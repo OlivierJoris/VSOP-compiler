@@ -349,6 +349,14 @@ class And : public BinOp
     public:
         And(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        /**
+         * @brief Perform type checking on the and operator.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param scope Scope of identifiers usable by the operator.
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
         const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 

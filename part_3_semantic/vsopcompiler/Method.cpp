@@ -139,6 +139,30 @@ const Expr* Call::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     return NULL;
 }
 
+const string Call::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+    // Type checking on the expr representing the left-hand side
+    if(objExpr){
+        const string err = objExpr->typeChecking(prog, scope);
+        if(err.compare(""))
+            return err;
+    }
+
+    // Type checking on each argument
+    if(listExpr){
+        const string err = listExpr->typeChecking(prog, scope);
+        if(err.compare(""))
+            return err;
+    }
+
+    // TODO check that type of objExpr has a method methodName with the same number of args
+
+    // TODO check that the types of the args match types of args of method
+
+    // TODO set type of call as type of return of method
+
+    return "";
+}
+
 New::New(const string typeName, const int line, const int column): typeName(typeName){
     this->line = line;
     this->column = column;
@@ -171,6 +195,14 @@ string ObjectIdentifier::eval() const
     return ObjectIdentifier::identifier;
 }
 
+const string ObjectIdentifier::typeChecking(const Program*, vector<pair<string, Expr*>> scope){
+    // TODO check if in scope
+
+    // TODO set type of object identifier as type of same object in scope
+
+    return "";
+}
+
 Self::Self(const int line, const int column){
     this->line = line;
     this->column = column;
@@ -179,4 +211,8 @@ Self::Self(const int line, const int column){
 string Self::eval() const
 {
     return "self";
+}
+
+const string Self::typeChecking(const Program*, vector<pair<string, Expr*>>){
+    // TODO set type as type of class
 }

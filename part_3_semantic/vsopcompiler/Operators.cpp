@@ -15,6 +15,13 @@
 
 using namespace std;
 
+/**
+ * @brief Check that the given type is a primitive type (int32, bool, string).
+ * 
+ * @param toCheck Type to check.
+ * @return true If it is a primitive type.
+ * @return false If it is not a primitive type.
+ */
 static bool checkPrimitiveType(const string& toCheck){
     if(toCheck.compare("int32") == 0)
         return true;
@@ -58,6 +65,8 @@ const string Assign::typeChecking(const Program* prog, vector<pair<string, Expr*
             cout << "Type checking error in expr of assign" << endl;
             return err;
         }
+
+        // TODO check that name is in scope
         
         // TODO check that type of expr matches type of id
 
@@ -171,7 +180,7 @@ const std::string IsNull::typeChecking(const Program* prog, std::vector<std::pai
 
     // isnull is only applicable to type defined by classes
     if(checkPrimitiveType(expr->type)){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":isnull not applicable on primitive type.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":isnull not applicable on primitive types.";
         return err;
     }
 
