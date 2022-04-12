@@ -65,10 +65,10 @@ static bool checkPrimitiveType(const string& toCheck){
     return false;
 }
 
-const string If::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string If::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Type checking on condition
     if(condExpr){
-        const string err = condExpr->typeChecking(prog, scope);
+        const string err = condExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Type checking error in cond of if" << endl;
             return err;
@@ -77,7 +77,7 @@ const string If::typeChecking(const Program* prog, vector<pair<string, Expr*>> s
 
     // Type checking on then branch
     if(thenExpr){
-        const string err = thenExpr->typeChecking(prog, scope);
+        const string err = thenExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Type checking error in then branch of if" << endl;
             return err;
@@ -86,7 +86,7 @@ const string If::typeChecking(const Program* prog, vector<pair<string, Expr*>> s
 
     // Type checking on else branch
     if(elseExpr){
-        const string err = elseExpr->typeChecking(prog, scope);
+        const string err = elseExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Type checking error in the else branch of if" << endl;
             return err;

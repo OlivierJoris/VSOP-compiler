@@ -66,12 +66,12 @@ const Expr* Method::checkUsageUndefinedType(const map<string, Class*>& classesMa
     return NULL;
 }
 
-const string Method::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Method::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // First, we need to perform type checking on the formals (should never return error)
     if(formals){
         /* The scope does not really matter because should not have type errors in formals since
         declared types of formals are checked in checkUsageUndefinedType */
-        const string err = formals->typeChecking(prog, scope);
+        const string err = formals->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error in formal" << endl;
             return err;
@@ -80,7 +80,7 @@ const string Method::typeChecking(const Program* prog, vector<pair<string, Expr*
 
     if(block){
         // Then, we can perform type checking on the body (block) of the method
-        const string err = block->typeChecking(prog, scope);
+        const string err = block->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "type checking error in method body" << endl;
             return err;
@@ -139,17 +139,17 @@ const Expr* Call::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     return NULL;
 }
 
-const string Call::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Call::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Type checking on the expr representing the left-hand side
     if(objExpr){
-        const string err = objExpr->typeChecking(prog, scope);
+        const string err = objExpr->typeChecking(prog, currentClass, scope);
         if(err.compare(""))
             return err;
     }
 
     // Type checking on each argument
     if(listExpr){
-        const string err = listExpr->typeChecking(prog, scope);
+        const string err = listExpr->typeChecking(prog, currentClass, scope);
         if(err.compare(""))
             return err;
     }
@@ -195,7 +195,7 @@ string ObjectIdentifier::eval() const
     return ObjectIdentifier::identifier;
 }
 
-const string ObjectIdentifier::typeChecking(const Program*, vector<pair<string, Expr*>> scope){
+const string ObjectIdentifier::typeChecking(const Program*, string, vector<pair<string, Expr*>> scope){
     // TODO check if in scope
 
     // TODO set type of object identifier as type of same object in scope
@@ -213,6 +213,8 @@ string Self::eval() const
     return "self";
 }
 
-const string Self::typeChecking(const Program*, vector<pair<string, Expr*>>){
+const string Self::typeChecking(const Program*, string, vector<pair<string, Expr*>>){
     // TODO set type as type of class
+
+    return "";
 }

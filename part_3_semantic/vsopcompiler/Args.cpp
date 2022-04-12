@@ -51,11 +51,11 @@ const Expr* Args::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     return NULL;
 }
 
-const string Args::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Args::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // First, check each expression
     for(Expr* expr: exprList){
         if(expr){
-            const string err = expr->typeChecking(prog, scope);
+            const string err = expr->typeChecking(prog, currentClass, scope);
             if(err.compare("")){
                 cout << "Error while checking expr" << endl;
                 return err;

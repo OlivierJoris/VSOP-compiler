@@ -45,10 +45,11 @@ class Assign : public Expr
          * @brief Perform type checking on the assignment.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the assignment.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -83,7 +84,7 @@ class UnOp : public Expr
          * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -99,10 +100,11 @@ class Not : public UnOp
          * @brief Perform type checking on the operator.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the operator.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -118,10 +120,11 @@ class UnaryMinus : public UnOp
          * @brief Perform type checking on the operator.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the operator.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string curentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -137,10 +140,11 @@ class IsNull : public UnOp
          * @brief Perform type checking on the operator.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the operator.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -176,7 +180,7 @@ class BinOp : public Expr
          *
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -206,10 +210,11 @@ class ArithmeticBinOp : public BinOp
          * @brief Perform type checking on the operator.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the operator.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -220,7 +225,7 @@ class Plus : public ArithmeticBinOp
     public:
         Plus(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -231,7 +236,7 @@ class Minus : public ArithmeticBinOp
     public:
         Minus(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -242,7 +247,7 @@ class Times : public ArithmeticBinOp
     public:
         Times(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -253,7 +258,7 @@ class Div : public ArithmeticBinOp
     public :
         Div(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -264,7 +269,7 @@ class Pow : public ArithmeticBinOp
     public:
         Pow(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -297,7 +302,7 @@ class BinaryComparison : public BinOp
          * @param scope Scope of identifiers usable by the operator.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -308,7 +313,7 @@ class LowerEqual : public BinaryComparison
     public:
         LowerEqual(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -319,7 +324,7 @@ class Lower : public BinaryComparison
     public:
         Lower(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -338,7 +343,7 @@ class Equal : public BinOp
          * @param scope Scope of identifiers usable by the operator.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -354,10 +359,11 @@ class And : public BinOp
          * @brief Perform type checking on the and operator.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the operator.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 #endif

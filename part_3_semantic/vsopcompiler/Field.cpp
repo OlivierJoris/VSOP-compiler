@@ -47,10 +47,10 @@ const Expr* Field::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return NULL;
 }
 
-const string Field::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Field::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     if(initExpr){
         // First, perform type checking on the field initializer if any
-        const string err = initExpr->typeChecking(prog, scope);
+        const string err = initExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "type checking error in field initializer" << endl;
             return err;

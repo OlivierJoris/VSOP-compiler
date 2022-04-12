@@ -41,17 +41,17 @@ const Expr* While::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return NULL;
 }
 
-const string While::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string While::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Type checking on condition
     if(condExpr){
-        const string err = condExpr->typeChecking(prog, scope);
+        const string err = condExpr->typeChecking(prog, currentClass, scope);
         if(err.compare(""))
             return err;
     }
 
     // Type checking on body
     if(bodyExpr){
-        const string err = bodyExpr->typeChecking(prog, scope);
+        const string err = bodyExpr->typeChecking(prog, currentClass, scope);
         if(err.compare(""))
             return err;
     }

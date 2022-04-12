@@ -42,12 +42,10 @@ class IntegerLiteral : public Expr
 
         /**
          * @brief Perform type checking on the literal.
-         * 
-         * @param prog Program that we are analyzing.
-         * @param scope Scope of identifiers usable by the expression.
+         *
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -79,11 +77,9 @@ class StringLiteral : public Expr
         /**
          * @brief Perform type checking on the literal.
          * 
-         * @param prog Program that we are analyzing.
-         * @param scope Scope of identifiers usable by the expression.
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 
 };
 
@@ -116,11 +112,9 @@ class BooleanLiteral : public Expr
         /**
          * @brief Perform type checking on the literal.
          * 
-         * @param prog Program that we are analyzing.
-         * @param scope Scope of identifiers usable by the expression.
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 #endif

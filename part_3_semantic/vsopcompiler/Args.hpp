@@ -45,10 +45,11 @@ class Args : public Expr
          * @brief Perform type checking on the list of expressions.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the expressions.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 #endif

@@ -57,10 +57,10 @@ const Expr* Assign::checkUsageUndefinedType(const map<string, Class*>& classesMa
     return NULL;
 }
 
-const string Assign::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Assign::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     if(expr){
         // Type checking on expr (right-hand side of assign)
-        const string err = expr->typeChecking(prog, scope);
+        const string err = expr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Type checking error in expr of assign" << endl;
             return err;
@@ -108,10 +108,10 @@ const Expr* Not::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
-const string Not::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Not::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Perform type checking on right-hand side
     if(expr){
-        const string err = expr->typeChecking(prog, scope);
+        const string err = expr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Err rhs not" << endl;
             return err;
@@ -138,10 +138,10 @@ const Expr* UnaryMinus::checkUsageUndefinedType(const map<string, Class*>& class
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
-const string UnaryMinus::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string UnaryMinus::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Perform type checking on right-hand side
     if(expr){
-        const string err = expr->typeChecking(prog, scope);
+        const string err = expr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Err rhs unary minus" << endl;
             return err;
@@ -168,10 +168,10 @@ const Expr* IsNull::checkUsageUndefinedType(const map<string, Class*>& classesMa
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
-const std::string IsNull::typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope){
+const std::string IsNull::typeChecking(const Program* prog, string currentClass, std::vector<std::pair<std::string, Expr*>> scope){
     // Perform type checking on right-hand side
     if(expr){
-        const string err = expr->typeChecking(prog, scope);
+        const string err = expr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Err rhs unary minus" << endl;
             return err;
@@ -236,10 +236,10 @@ const Expr* ArithmeticBinOp::checkUsageUndefinedType(const map<string, Class*>& 
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string ArithmeticBinOp::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string ArithmeticBinOp::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     if(leftExpr){
         // Perform type checking in left-hand side operand
-        const string err = leftExpr->typeChecking(prog, scope);
+        const string err = leftExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error in LHS" << endl;
             return err;
@@ -256,7 +256,7 @@ const string ArithmeticBinOp::typeChecking(const Program* prog, vector<pair<stri
 
     if(rightExpr){
         // Perform type checking on the right-hand side operand
-        const string err = rightExpr->typeChecking(prog, scope);
+        const string err = rightExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error in rhs" << endl;
             return err;
@@ -283,8 +283,8 @@ const Expr* Plus::checkUsageUndefinedType(const map<string, Class*>& classesMap)
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string Plus::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
-    return ArithmeticBinOp::typeChecking(prog, scope);
+const string Plus::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+    return ArithmeticBinOp::typeChecking(prog, currentClass, scope);
 }
 
 Minus::Minus(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("-", leftExpr, rightExpr, line, column){}
@@ -293,8 +293,8 @@ const Expr* Minus::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string Minus::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
-    return ArithmeticBinOp::typeChecking(prog, scope);
+const string Minus::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+    return ArithmeticBinOp::typeChecking(prog, currentClass, scope);
 }
 
 Times::Times(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("*", leftExpr, rightExpr, line, column){}
@@ -303,8 +303,8 @@ const Expr* Times::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string Times::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
-    return ArithmeticBinOp::typeChecking(prog, scope);
+const string Times::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+    return ArithmeticBinOp::typeChecking(prog, currentClass, scope);
 }
 
 Div::Div(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("/", leftExpr, rightExpr, line, column){}
@@ -313,8 +313,8 @@ const Expr* Div::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string Div::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
-    return ArithmeticBinOp::typeChecking(prog, scope);
+const string Div::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+    return ArithmeticBinOp::typeChecking(prog, currentClass, scope);
 }
 
 Pow::Pow(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("^", leftExpr, rightExpr, line, column){}
@@ -323,8 +323,8 @@ const Expr* Pow::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string Pow::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
-    return ArithmeticBinOp::typeChecking(prog, scope);
+const string Pow::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+    return ArithmeticBinOp::typeChecking(prog, currentClass, scope);
 }
 
 /*********************
@@ -341,10 +341,10 @@ const Expr* BinaryComparison::checkUsageUndefinedType(const map<string, Class*>&
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string BinaryComparison::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string BinaryComparison::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     if(leftExpr){
         // Perform type checking in left-hand side operand
-        const string err = leftExpr->typeChecking(prog, scope);
+        const string err = leftExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error in LHS" << endl;
             return err;
@@ -361,7 +361,7 @@ const string BinaryComparison::typeChecking(const Program* prog, vector<pair<str
 
     if(rightExpr){
         // Perform type checking on the right-hand side operand
-        const string err = rightExpr->typeChecking(prog, scope);
+        const string err = rightExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error in rhs" << endl;
             return err;
@@ -388,8 +388,8 @@ const Expr* LowerEqual::checkUsageUndefinedType(const map<string, Class*>& class
     return BinaryComparison::checkUsageUndefinedType(classesMap);
 }
 
-const string LowerEqual::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
-    return BinaryComparison::typeChecking(prog, scope);
+const string LowerEqual::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+    return BinaryComparison::typeChecking(prog, currentClass, scope);
 }
 
 Lower::Lower(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinaryComparison("<", leftExpr, rightExpr, line, column){}
@@ -398,8 +398,8 @@ const Expr* Lower::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return BinaryComparison::checkUsageUndefinedType(classesMap);
 }
 
-const string Lower::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
-    return BinaryComparison::typeChecking(prog, scope);
+const string Lower::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+    return BinaryComparison::typeChecking(prog, currentClass, scope);
 }
 
 Equal::Equal(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("=", leftExpr, rightExpr, line, column){}
@@ -408,10 +408,10 @@ const Expr* Equal::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string Equal::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Equal::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Perform type checking on left-hand side operand
     if(leftExpr){
-        const string err = leftExpr->typeChecking(prog, scope);
+        const string err = leftExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error lhs" << endl;
             return err;
@@ -420,7 +420,7 @@ const string Equal::typeChecking(const Program* prog, vector<pair<string, Expr*>
 
     // Perform type checking on the right-hand side operand
     if(rightExpr){
-        const string err = rightExpr->typeChecking(prog, scope);
+        const string err = rightExpr->typeChecking(prog, currentClass, scope);
         if(err.compare("")){
             cout << "Error rhs" << endl;
             return err;
@@ -465,17 +465,17 @@ const Expr* And::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
-const string And::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string And::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Perform type checking on the left-hand side
     if(leftExpr){
-        const string err = leftExpr->typeChecking(prog, scope);
+        const string err = leftExpr->typeChecking(prog, currentClass, scope);
         cout << "Error lhs" << endl;
         return err;
     }
 
     // Perform type checking on right-hand side
     if(rightExpr){
-        const string err = rightExpr->typeChecking(prog, scope);
+        const string err = rightExpr->typeChecking(prog, currentClass, scope);
         cout << "Error rhs" << endl;
         return err;
     }

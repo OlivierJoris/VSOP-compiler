@@ -238,12 +238,12 @@ string Program::checkMain() const {
     return "";
 }
 
-const string Program::typeChecking(const Program*, vector<pair<string, Expr*>>) {
+const string Program::typeChecking(const Program*, string currentClass, vector<pair<string, Expr*>>) {
     // Type checking on each class
     for(auto cls = classes.begin(); cls != classes.end(); cls++){
         if(*cls){
             cout << "Performing type checking on " << (*cls)->getName() << endl;
-            const string err = (*cls)->typeChecking(this, vector<pair<string, Expr*>>());
+            const string err = (*cls)->typeChecking(this, (*cls)->getName(), vector<pair<string, Expr*>>());
             if(err.compare("")){
                 cout << "error type checking in class " << (*cls)->getName() << endl;
                 return err;

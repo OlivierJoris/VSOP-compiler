@@ -69,12 +69,12 @@ const Expr* Formals::checkUsageUndefinedType(const map<string, Class*>& classesM
     return NULL;
 }
 
-const string Formals::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Formals::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Check each formal
     for(Formal *formal: formals){
         if(formal){
             // Scope does not matter since there should never be any errors
-            const string err = formal->typeChecking(prog, scope);
+            const string err = formal->typeChecking(prog, currentClass, scope);
             if(err.compare(""))
                 return err;
         }

@@ -60,10 +60,11 @@ class Method : public Expr
          * @brief Perform type checking on the method.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the method.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -98,10 +99,11 @@ class Call : public Expr
          * @brief Perform type checking on the dispatch.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the dispatch.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -135,7 +137,7 @@ class New : public Expr
          * 
          * @return const std::string Always empty string because error is not possible.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -170,7 +172,7 @@ class ObjectIdentifier : public Expr
          * @param scope Scope of identifiers usable by the identifier.
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -201,7 +203,7 @@ class Self : public Expr
          * 
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override;
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 #endif

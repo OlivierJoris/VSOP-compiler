@@ -69,13 +69,13 @@ const Expr* Class::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return NULL;
 }
 
-const string Class::typeChecking(const Program* prog, vector<pair<string, Expr*>> scope){
+const string Class::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Type checking on each field
     for(Field *field: fields){
         if(field){
             cout << "Performing type checking on field " << field->getName() << endl;
             // Scope must not be modified because, per the docs, init of field should not have access to any other fields or methods of object
-            const string err = field->typeChecking(prog, scope);
+            const string err = field->typeChecking(prog, currentClass, scope);
             if(err.compare("")){
                 cout << "type checking error in field" << endl;
                 return err;
@@ -87,7 +87,7 @@ const string Class::typeChecking(const Program* prog, vector<pair<string, Expr*>
     for(Method *method: methods){
         if(method){
             cout << "Performing type checking on method " << method->getName() << endl;
-            const string err = method->typeChecking(prog, scope);
+            const string err = method->typeChecking(prog, currentClass, scope);
             if(err.compare("")){
                 cout << "type checking error in method" << endl;
                 return err;

@@ -48,7 +48,7 @@ class Formal : public Expr
          * 
          * @return const std::string Always empty string because error is not possible.
          */
-        const std::string typeChecking(const Program*, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -84,10 +84,11 @@ class Formals : public Expr
          * @brief Perform type checking on the formals.
          * 
          * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the formals.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program* prog, std::vector<std::pair<std::string, Expr*>> scope) override;
+        const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 #endif
