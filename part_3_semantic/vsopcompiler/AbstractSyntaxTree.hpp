@@ -78,7 +78,7 @@ class Program : public Expr
          * @param scope Scope of identifiers usable by the program.
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program*, std::string currentClass, std::vector<std::pair<std::string, Expr*>>) override;
+        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 class Unit : public Expr

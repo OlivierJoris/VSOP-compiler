@@ -196,9 +196,22 @@ string ObjectIdentifier::eval() const
 }
 
 const string ObjectIdentifier::typeChecking(const Program*, string, vector<pair<string, Expr*>> scope){
-    // TODO check if in scope
+    // Check if object identifier is in scope
+    Expr *obj = NULL;
+    for(auto it = scope.crbegin(); it != scope.crend(); it++){
+        if((*it).first.compare(identifier) == 0){
+            obj = (*it).second;
+            break;
+        }
+    }
 
-    // TODO set type of object identifier as type of same object in scope
+    if(!obj){
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + identifier + " is not in scope.";
+        return err;
+    }
+
+    // Set type of object identifier as type of same object in scope
+    type = obj->type;
 
     return "";
 }
@@ -213,8 +226,9 @@ string Self::eval() const
     return "self";
 }
 
-const string Self::typeChecking(const Program*, string, vector<pair<string, Expr*>>){
-    // TODO set type as type of class
+const string Self::typeChecking(const Program*, string currentClass, vector<pair<string, Expr*>>){
+    // Set type as current class.
+    type = currentClass;
 
     return "";
 }

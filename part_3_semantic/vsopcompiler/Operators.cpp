@@ -66,9 +66,27 @@ const string Assign::typeChecking(const Program* prog, string currentClass, vect
             return err;
         }
 
-        // TODO check that name is in scope
+        // Check that name is in scope
+        Expr *obj = NULL;
+        for(auto it = scope.crbegin(); it != scope.crend(); it++){
+            if((*it).first.compare(name) == 0){
+                obj = (*it).second;
+                break;
+            }
+        }
+
+        if(!obj){
+            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + name + " is not in scope.";
+            return err;
+        }
         
-        // TODO check that type of expr matches type of id
+        // Check that type of expr matches type of id (name)
+        if(obj->type.compare(expr->type)){
+            string err = to_string(getLine()) + ":" + to_string(getColumn()) +
+                ":<expr> does not have the same type as " + name +
+                ". " + name + " has type " + obj->type + " while <expr> has type " + expr->type + ".";
+            return err;
+        }
 
         // Type of assign is type of expr
         type = expr->type;

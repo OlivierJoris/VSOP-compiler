@@ -238,7 +238,7 @@ string Program::checkMain() const {
     return "";
 }
 
-const string Program::typeChecking(const Program*, string currentClass, vector<pair<string, Expr*>>) {
+const string Program::typeChecking(const Program*, string, vector<pair<string, Expr*>>) {
     // Type checking on each class
     for(auto cls = classes.begin(); cls != classes.end(); cls++){
         if(*cls){

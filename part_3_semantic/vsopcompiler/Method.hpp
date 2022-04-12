@@ -194,6 +194,7 @@ class Self : public Expr
          * @brief Check if the keyword is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
+         * 
          * @return Always NULL because the keyword does not use any type.
          */
         const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
@@ -201,9 +202,11 @@ class Self : public Expr
         /**
          * @brief Perform type checking on the self.
          * 
+         * @param currentClass Class in which we are running type checking.
+         * 
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override;
+        const std::string typeChecking(const Program*, std::string currentClass, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 #endif
