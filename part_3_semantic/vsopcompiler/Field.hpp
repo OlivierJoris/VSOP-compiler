@@ -26,6 +26,7 @@ class Field : public Expr
     public:
         Field(const std::string name, const std::string type, Expr *initExpr, const int line, const int column);
         std::string getName() {return name;}
+        Expr* getExpr() {return initExpr;}
 
         /**
          * @brief Dump the AST corresponding to the field inside the returned string.

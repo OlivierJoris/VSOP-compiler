@@ -12,6 +12,7 @@
 #include "Let.hpp"
 #include "Expr.hpp"
 #include "Class.hpp"
+#include "Literals.hpp"
 
 using namespace std;
 
@@ -65,6 +66,23 @@ const string Let::typeChecking(const Program* prog, string currentClass, vector<
                 "type of initializer does not match expected type. Expected " + Let::type +
                 " but is " + initExpr->type + ".";
         }
+    }
+
+    // Need to add new identifier inside scope
+    if(initExpr){
+        scope.push_back(pair<string, Expr*>(name, initExpr));
+    }else if (!type.compare("int32")){
+        IntegerLiteral *intLit = new IntegerLiteral(0, getLine(), getColumn());
+        scope.push_back(pair<string, Expr*>(name, intLit));
+    }else if (!type.compare("string")){
+        StringLiteral *stringLit = new StringLiteral("", getLine(), getColumn());
+        scope.push_back(pair<string, Expr*>(name, stringLit));
+    }else if (!type.compare("bool")){
+        BooleanLiteral *boolLit = new BooleanLiteral(false, getLine(), getColumn());
+        scope.push_back(pair<string, Expr*>(name, boolLit));
+    }else{
+        Expr* expr = new New(type, getLine(), getColumn());
+        scope.push_back(pair<string, Expr*>(name, expr));
     }
 
     if(scopeExpr){

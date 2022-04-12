@@ -11,7 +11,7 @@
 #include "Field.hpp"
 #include "Expr.hpp"
 #include "Class.hpp"
-
+#include "Literals.hpp"
 #include "TypeChecking.hpp"
 
 using namespace std;
@@ -19,6 +19,19 @@ using namespace std;
 Field::Field(const string name, const string type, Expr *initExpr, const int line, const int column): name(name), type(type), initExpr(initExpr){
     this->line = line;
     this->column = column;
+
+    if(!initExpr){
+        // Need to add new identifier inside scope
+        if(!type.compare("int32")){
+            Field::initExpr = new IntegerLiteral(0, getLine(), getColumn());
+        }else if(!type.compare("string")){
+            Field::initExpr = new StringLiteral("", getLine(), getColumn());
+        }else if(!type.compare("bool")){
+            Field::initExpr = new BooleanLiteral(false, getLine(), getColumn());
+        }else{
+            Field::initExpr = new New(type, getLine(), getColumn());
+        }
+    }
 }
 
 string Field::eval() const

@@ -15,6 +15,7 @@
 #include "Class.hpp"
 #include "Formal.hpp"
 #include "Args.hpp"
+#include "Literals.hpp"
 #include "TypeChecking.hpp"
 
 using namespace std;
@@ -77,6 +78,19 @@ const string Method::typeChecking(const Program* prog, string currentClass, vect
             return err;
         }else
             cout << "Ok type checking formals" << endl;
+        
+        // Add formals in scope
+        for(Formal *formal: getFormals()){
+            if(!formal->getType().compare("int32")){
+                scope.push_back(pair<string, Expr*>(formal->getName(), new IntegerLiteral(0, getLine(), getColumn())));
+            }else if(!formal->getType().compare("string")){
+                scope.push_back(pair<string, Expr*>(formal->getName(), new StringLiteral("", getLine(), getColumn())));
+            }else if(!formal->getType().compare("bool")){
+                scope.push_back(pair<string, Expr*>(formal->getName(), new BooleanLiteral(false, getLine(), getColumn())));
+            }else{
+               scope.push_back(pair<string, Expr*>(formal->getName(), new New(formal->getType(), getLine(), getColumn())));
+            }
+        }
     }
 
     if(block){

@@ -12,6 +12,8 @@
 #include "Expr.hpp"
 #include "Class.hpp"
 #include "Field.hpp"
+#include "Method.hpp"
+#include "AbstractSyntaxTree.hpp"
 
 using namespace std;
 
@@ -83,6 +85,35 @@ const string Class::typeChecking(const Program* prog, string currentClass, vecto
                 cout << "End type checking on field " << field->getName() << endl;
         }
     }
+
+    // Add each field (including from ancestors) inside the scope
+    cout << "** Updating scope" << endl;
+    vector<pair<string, Expr*>> extendedScope;
+    string curClass = currentClass;
+    while(curClass.compare("")){
+        cout << "Working on class " << curClass << endl;
+        auto clsMap = prog->classesMap.find(curClass);
+        if(clsMap != prog->classesMap.end()){
+            Class *cls = (*clsMap).second;
+            if(cls){
+                vector<Field*> fields = cls->getFields();
+                for(Field *field: fields){
+                    if(field){
+                        cout << "Adding field " << field->getName() << endl;
+                        extendedScope.push_back(pair<string, Expr*>(field->getName(), field->getExpr()));
+                    }
+                }
+                curClass = cls->getParent();
+            }else
+                break;
+        }else
+            break;
+    }
+
+    // Add in reverse order to respect precedence between fields with the same name
+    for(auto it = extendedScope.crbegin(); it < extendedScope.crend(); it++)
+        scope.push_back((*it));
+
 
     // Type checking on each methods
     for(Method *method: methods){
