@@ -13,6 +13,7 @@
 #include "Expr.hpp"
 #include "Class.hpp"
 #include "Literals.hpp"
+#include "TypeChecking.hpp"
 
 using namespace std;
 
@@ -35,6 +36,10 @@ string Let::dumpAST(bool annotated) const
 }
 
 const string Let::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+    bool known = checkKnownType(classesMap, type);
+    if(!known)
+        return to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: type " + type + " is an undefined type.";
+
     // Check expr used in initialize if any
     if(initExpr){
         const string check = initExpr->checkUsageUndefinedType(classesMap);
@@ -60,11 +65,41 @@ const string Let::typeChecking(const Program* prog, string currentClass, vector<
             return err;
 
         // Check if type of initExpr is the same as the type declared
-        if(Let::type.compare(initExpr->type)){
+        // initExpr can also be a child of the type declared
+        vector<string> ancestors;
+        ancestors.push_back(initExpr->type);
+        if(!checkPrimitiveType(initExpr->type)){ // Ancestor only if not primitive type
+            string ancestor = initExpr->type;
+            while(ancestor.compare("")){
+                auto clsMap = prog->classesMap.find(ancestor);
+                if(clsMap != prog->classesMap.end()){
+                    Class *cls = (*clsMap).second;
+                    if(cls){
+                        ancestor = cls->getParent();
+                        ancestors.push_back(ancestor);
+                    }else
+                        break;
+                }else
+                    break;
+            }
+        }
+        bool validType = false;
+        for(string ancestor: ancestors){
+            if(!Let::type.compare(ancestor)){
+                validType = true;
+                break;
+            }
+        }
+        if(!validType){
+            cout << "Let type = " << Let::type << endl;
+            cout << "Init expr type = " << initExpr->type << endl;
             const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" +
                 " semantic error: type of initializer does not match expected type. Expected " + Let::type +
                 " but is " + initExpr->type + ".";
+            return err;
         }
+
+        initExpr->type = Let::type;
     }
 
     // Need to add new identifier inside scope
