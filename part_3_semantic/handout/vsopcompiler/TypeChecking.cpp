@@ -40,3 +40,15 @@ bool checkKnownType(const map<string, Class*>& types, const string& toCheck){
         return false;
     }
 }
+
+bool checkPrimitiveType(const string& toCheck){
+    if(toCheck.compare("int32") == 0)
+        return true;
+    if(toCheck.compare("bool") == 0)
+        return true;
+    if(toCheck.compare("string") == 0)
+        return true;
+    if(toCheck.compare("unit") == 0)
+        return true;
+    return false;
+}

@@ -12,6 +12,7 @@
 #include "Expr.hpp"
 #include "Class.hpp"
 #include "AbstractSyntaxTree.hpp"
+#include "TypeChecking.hpp"
 
 using namespace std;
 
@@ -58,16 +59,6 @@ const string If::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     return "";
 }
 
-static bool checkPrimitiveType(const string& toCheck){
-    if(toCheck.compare("int32") == 0)
-        return true;
-    if(toCheck.compare("bool") == 0)
-        return true;
-    if(toCheck.compare("string") == 0)
-        return true;
-    return false;
-}
-
 const string If::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Type checking on condition
     if(condExpr){
@@ -92,7 +83,7 @@ const string If::typeChecking(const Program* prog, string currentClass, vector<p
 
     // Check if type of condition is bool
     if(condExpr && condExpr->type.compare("bool")){
-        const string err = to_string(condExpr->getLine()) + ":" + to_string(condExpr->getColumn())
+        const string err = to_string(condExpr->getLine()) + ": semantic error: " + to_string(condExpr->getColumn())
             + ":" + "condition must have type bool (is type " + condExpr->type + ").";
         return err;
     }
@@ -157,13 +148,13 @@ const string If::typeChecking(const Program* prog, string currentClass, vector<p
             type = "unit";
         }else{
             // Types of branches do not agree
-            const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "types of <expr_t> and <expr_e> do not agree.";
+            const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: types of <expr_t> and <expr_e> do not agree.";
             return err;
         }
     }else if(thenExpr && !elseExpr){ // No else branch
         type = "unit";
     }else{
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "types of <expr_t> and <expr_e> do not agree.";
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: types of <expr_t> and <expr_e> do not agree.";
         return err;
     }
 

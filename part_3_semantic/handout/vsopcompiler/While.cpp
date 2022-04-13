@@ -18,9 +18,12 @@ While::While(Expr *condExpr, Expr *bodyExpr, const int line, const int column): 
     this->column = column;
 }
 
-string While::dumpAST(bool annotated) const 
+string While::dumpAST(bool annotated) const
 {
-    return "While(" + While::condExpr->dumpAST(annotated) + ", " + While::bodyExpr->dumpAST(annotated) + ")";
+    if(annotated)
+        return "While(" + While::condExpr->dumpAST(annotated) + ", " + While::bodyExpr->dumpAST(annotated) + ") : " + type;
+    else
+        return "While(" + While::condExpr->dumpAST(annotated) + ", " + While::bodyExpr->dumpAST(annotated) + ")";
 }
 
 const string While::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
@@ -58,7 +61,7 @@ const string While::typeChecking(const Program* prog, string currentClass, vecto
 
     // Type of condition must be bool
     if(condExpr && condExpr->type.compare("bool")){
-        const string err = to_string(condExpr->getLine()) + ":" + to_string(condExpr->getColumn())
+        const string err = to_string(condExpr->getLine()) + ": semantic error: " + to_string(condExpr->getColumn())
             + ":" + "condition must have type bool (is type " + condExpr->type + ").";
         return err;
     }

@@ -95,14 +95,39 @@ const string Method::typeChecking(const Program* prog, string currentClass, vect
             return err;
 
         // Finally, we need to check that the type of the body (block) matches the type of the return
-        if(retType.compare(block->type)){
+        // Get ancestors because body can be of type of child of expected type
+        vector<string> ancestors;
+        ancestors.push_back(block->type);
+        if(!checkPrimitiveType(block->type)){ // Ancestor only if not primitive type
+            string ancestor = block->type;
+            while(ancestor.compare("")){
+                auto clsMap = prog->classesMap.find(ancestor);
+                if(clsMap != prog->classesMap.end()){
+                    Class *cls = (*clsMap).second;
+                    if(cls){
+                        ancestor = cls->getParent();
+                        ancestors.push_back(ancestor);
+                    }else
+                        break;
+                }else
+                    break;
+            }
+        }
+        bool validType = false;
+        for(string type: ancestors){
+            if(!type.compare(retType)){
+                validType = true;
+                break;
+            }
+        }
+        if(!validType){
             const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":"
-                + "body type does not match return type of method. Expected "
+                + " semantic error: body type does not match return type of method. Expected "
                 + retType + " but is " + block->type + ".";
             return err;
         }
     }else{
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "method is missing body.";
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: method is missing body.";
         return err;
     }
 
@@ -152,18 +177,6 @@ const string Call::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return "";
 }
 
-static bool checkPrimitiveType(const string& toCheck){
-    if(toCheck.compare("int32") == 0)
-        return true;
-    if(toCheck.compare("bool") == 0)
-        return true;
-    if(toCheck.compare("string") == 0)
-        return true;
-    if(toCheck.compare("unit") == 0)
-        return true;
-    return false;
-}
-
 const string Call::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
     // Type checking on the expr representing the left-hand side
     if(objExpr){
@@ -187,14 +200,14 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
         typeOfLHS = currentClass;
     
     if(!typeOfLHS.compare("")){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":<id> has no type.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: <id> has no type.";
         return err;
     }
 
     // Find class
     auto clsMap = prog->classesMap.find(typeOfLHS);
     if(clsMap == prog->classesMap.end()){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":type " + typeOfLHS + " not found.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: type " + typeOfLHS + " not found.";
         return err;
     }
 
@@ -217,7 +230,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
     }
 
     if(!method){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":<id> has no method " + methodName;
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error <id> has no method " + methodName;
         return err;
     }
 
@@ -225,7 +238,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
     size_t nbFormals = method->getFormals().size();
     size_t nbArgs = listExpr->getNumberExpr();
     if(nbFormals != nbArgs){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + methodName + "has " +
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: " + methodName + "has " +
             to_string(nbFormals) + " formal arguments but " + to_string(nbArgs) + " were given.";
         return err;
     }
@@ -263,7 +276,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
                 typeOk = true;
         }
         if(!typeOk){
-            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":formal " +
+            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: formal " +
                 to_string(it) + " must be of type " + formalType + ". Given argument is of type " + argType + ".";
             return err;
         }
@@ -322,7 +335,7 @@ const string ObjectIdentifier::typeChecking(const Program*, string, vector<pair<
     }
 
     if(!obj){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + identifier + " is not in scope.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: " + identifier + " is not in scope.";
         return err;
     }
 
