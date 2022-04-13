@@ -53,9 +53,9 @@ class Method : public Expr
          * @brief Check if the method is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the method.
@@ -92,9 +92,9 @@ class Call : public Expr
          * @brief Check if the dispatch is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the dispatch.
@@ -129,9 +129,9 @@ class New : public Expr
          * @brief Check if the instantiation is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the instantiation.
@@ -163,9 +163,10 @@ class ObjectIdentifier : public Expr
          * @brief Check if the identifier is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because the object identifier does not use any type.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
 
         /**
          * @brief Perform type checking on the object identifier.
@@ -196,9 +197,9 @@ class Self : public Expr
          * 
          * @param classesMap Map of classes defined throughout the source code.
          * 
-         * @return Always NULL because the keyword does not use any type.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
 
         /**
          * @brief Perform type checking on the self.

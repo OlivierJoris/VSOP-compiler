@@ -46,15 +46,15 @@ string Assign::eval() const
     return "Assign(" + Assign::name + ", " + Assign::expr->eval() + ")";
 }
 
-const Expr* Assign::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Assign::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check expression if any
     if(expr){
-        const Expr* check = expr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = expr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 const string Assign::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
@@ -109,20 +109,20 @@ string UnOp::eval() const
     return "UnOp(" + UnOp::symbol + ", " + UnOp::expr->eval() + ")";
 }
 
-const Expr* UnOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string UnOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     // Check expr if any
     if(expr){
-        const Expr* check = expr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = expr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 Not::Not(Expr *expr, const int line, const int column): UnOp("not", expr, line, column){}
 
-const Expr* Not::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Not::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -152,7 +152,7 @@ const string Not::typeChecking(const Program* prog, string currentClass, vector<
 
 UnaryMinus::UnaryMinus(Expr *expr, const int line, const int column): UnOp("-", expr, line, column){}
 
-const Expr* UnaryMinus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string UnaryMinus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -182,7 +182,7 @@ const string UnaryMinus::typeChecking(const Program* prog, string currentClass, 
 
 IsNull::IsNull(Expr *expr, const int line, const int column): UnOp("isnull", expr, line, column){}
 
-const Expr* IsNull::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string IsNull::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -222,22 +222,22 @@ string BinOp::eval() const
     return "BinOp(" + BinOp::symbol + ", " + BinOp::leftExpr->eval() + ", " + BinOp::rightExpr->eval() + ")";
 }
 
-const Expr* BinOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string BinOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     // Check left-hand side expression if any
     if(leftExpr){
-        const Expr* check = leftExpr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = leftExpr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
     // Check right-hand side expression if any
     if(rightExpr){
-        const Expr* check = rightExpr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = rightExpr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 /*********************
@@ -250,7 +250,7 @@ string ArithmeticBinOp::eval() const{
     return BinOp::eval();
 }
 
-const Expr* ArithmeticBinOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string ArithmeticBinOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -297,7 +297,7 @@ const string ArithmeticBinOp::typeChecking(const Program* prog, string currentCl
 
 Plus::Plus(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("+", leftExpr, rightExpr, line, column){}
 
-const Expr* Plus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Plus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -307,7 +307,7 @@ const string Plus::typeChecking(const Program* prog, string currentClass, vector
 
 Minus::Minus(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("-", leftExpr, rightExpr, line, column){}
 
-const Expr* Minus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Minus::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -317,7 +317,7 @@ const string Minus::typeChecking(const Program* prog, string currentClass, vecto
 
 Times::Times(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("*", leftExpr, rightExpr, line, column){}
 
-const Expr* Times::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Times::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -327,7 +327,7 @@ const string Times::typeChecking(const Program* prog, string currentClass, vecto
 
 Div::Div(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("/", leftExpr, rightExpr, line, column){}
 
-const Expr* Div::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Div::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -337,7 +337,7 @@ const string Div::typeChecking(const Program* prog, string currentClass, vector<
 
 Pow::Pow(Expr *leftExpr, Expr *rightExpr, const int line, const int column): ArithmeticBinOp("^", leftExpr, rightExpr, line, column){}
 
-const Expr* Pow::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Pow::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return ArithmeticBinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -355,7 +355,7 @@ string BinaryComparison::eval() const{
     return BinOp::eval();
 }
 
-const Expr* BinaryComparison::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string BinaryComparison::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -402,7 +402,7 @@ const string BinaryComparison::typeChecking(const Program* prog, string currentC
 
 LowerEqual::LowerEqual(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinaryComparison("<=", leftExpr, rightExpr, line, column){}
 
-const Expr* LowerEqual::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string LowerEqual::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinaryComparison::checkUsageUndefinedType(classesMap);
 }
 
@@ -412,7 +412,7 @@ const string LowerEqual::typeChecking(const Program* prog, string currentClass, 
 
 Lower::Lower(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinaryComparison("<", leftExpr, rightExpr, line, column){}
 
-const Expr* Lower::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Lower::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinaryComparison::checkUsageUndefinedType(classesMap);
 }
 
@@ -422,7 +422,7 @@ const string Lower::typeChecking(const Program* prog, string currentClass, vecto
 
 Equal::Equal(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("=", leftExpr, rightExpr, line, column){}
 
-const Expr* Equal::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string Equal::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 
@@ -479,7 +479,7 @@ const string Equal::typeChecking(const Program* prog, string currentClass, vecto
 
 And::And(Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp("and", leftExpr, rightExpr, line, column){}
 
-const Expr* And::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string And::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     return BinOp::checkUsageUndefinedType(classesMap);
 }
 

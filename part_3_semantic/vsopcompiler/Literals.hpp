@@ -36,9 +36,10 @@ class IntegerLiteral : public Expr
          * @brief Check if the literal is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
 
         /**
          * @brief Perform type checking on the literal.
@@ -70,9 +71,10 @@ class StringLiteral : public Expr
          * @brief Check if the string is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
 
         /**
          * @brief Perform type checking on the literal.
@@ -105,9 +107,10 @@ class BooleanLiteral : public Expr
          * @brief Check if the boolean is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
 
         /**
          * @brief Perform type checking on the literal.

@@ -37,9 +37,10 @@ class Assign : public Expr
          * @brief Check if the operator is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the assignment.
@@ -75,9 +76,10 @@ class UnOp : public Expr
          * @brief Check if the operator is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the operator.
@@ -94,7 +96,7 @@ class Not : public UnOp
 {
     public:
         Not(Expr *expr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the operator.
@@ -114,7 +116,7 @@ class UnaryMinus : public UnOp
 {
     public:
         UnaryMinus(Expr *expr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the operator.
@@ -134,7 +136,7 @@ class IsNull : public UnOp
 {
     public:
         IsNull(Expr *expr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the operator.
@@ -171,9 +173,10 @@ class BinOp : public Expr
          * @brief Check if the operator is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the operator.
@@ -202,9 +205,10 @@ class ArithmeticBinOp : public BinOp
          * @brief Check if the operator is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the operator.
@@ -224,7 +228,7 @@ class Plus : public ArithmeticBinOp
 {
     public:
         Plus(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
@@ -235,7 +239,7 @@ class Minus : public ArithmeticBinOp
 {
     public:
         Minus(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
@@ -246,7 +250,7 @@ class Times : public ArithmeticBinOp
 {
     public:
         Times(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
@@ -257,7 +261,7 @@ class Div : public ArithmeticBinOp
 {
     public :
         Div(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
@@ -268,7 +272,7 @@ class Pow : public ArithmeticBinOp
 {
     public:
         Pow(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
@@ -291,9 +295,10 @@ class BinaryComparison : public BinOp
          * @brief Check if the operator is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the operator.
@@ -312,7 +317,7 @@ class LowerEqual : public BinaryComparison
 {
     public:
         LowerEqual(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
@@ -323,7 +328,7 @@ class Lower : public BinaryComparison
 {
     public:
         Lower(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
         const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
@@ -334,7 +339,7 @@ class Equal : public BinOp
 {
     public:
         Equal(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the comparison operator.
@@ -353,7 +358,7 @@ class And : public BinOp
 {
     public:
         And(Expr *leftExpr, Expr *rightExpr, const int line, const int column);
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the and operator.

@@ -52,9 +52,10 @@ class Class : public Expr
          * @brief Check if the class is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Perform type checking on the class.

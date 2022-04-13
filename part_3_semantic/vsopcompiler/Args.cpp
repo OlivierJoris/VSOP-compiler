@@ -37,18 +37,18 @@ string Args::eval() const
     return "[" + exprList + "]";
 }
 
-const Expr* Args::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Args::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     if(exprList.size() == 0)
-        return NULL;
+        return "";
     
     // Check for each expression
     for(Expr *expr: exprList){
-        const Expr* check = expr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = expr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 const string Args::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){

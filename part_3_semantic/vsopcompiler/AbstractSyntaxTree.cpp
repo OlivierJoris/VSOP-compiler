@@ -223,11 +223,11 @@ string Program::eval() const
     return "[" + program + "]";
 }
 
-const Expr* Program::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Program::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check each class
     for(Class *cls: classes){
-        const Expr* check = cls->checkUsageUndefinedType(classesMap);
-        if(check) {
+        const string check = cls->checkUsageUndefinedType(classesMap);
+        if(check.compare("")) {
             cout << "Usage of not defined type inside class " << cls->getName() << endl;
             return check;
         }

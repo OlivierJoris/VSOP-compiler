@@ -14,15 +14,15 @@
 
 using namespace std;
 
-int checkUseUndefinedType(Program *prog){
+const string checkUseUndefinedType(Program *prog){
     if(prog == NULL)
-        return -1;
+        return "prog is null";
 
-    const Expr* check = prog->checkUsageUndefinedType(prog->classesMap);
-    if(check == NULL)
-        return 0;
+    const string check = prog->checkUsageUndefinedType(prog->classesMap);
+    if(check.compare(""))
+        return check;
     else
-        return -1;
+        return "";
 }
 
 bool checkKnownType(const map<string, Class*>& types, const string& toCheck){

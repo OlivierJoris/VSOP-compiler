@@ -536,9 +536,9 @@ int main(int argc, char** argv){
             }
 
             /* Check for usage of undefined types */
-            int undefinedTypeUsage = checkUseUndefinedType(abstractSyntaxTree);
-            if(undefinedTypeUsage != 0){
-                semanticError("Usage of undefined type");
+            const std::string err = checkUseUndefinedType(abstractSyntaxTree);
+            if(err.compare("")){
+                semanticErrorWithLocation(err);
                 return EXIT_FAILURE;
             }
 

@@ -23,22 +23,22 @@ string While::eval() const
     return "While(" + While::condExpr->eval() + ", " + While::bodyExpr->eval() + ")";
 }
 
-const Expr* While::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
+const string While::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
     // Check condition expression if any
     if(condExpr){
-        const Expr* check = condExpr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = condExpr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
     // Check body expression if any
     if(bodyExpr){
-        const Expr* check = bodyExpr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = bodyExpr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 const string While::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){

@@ -42,29 +42,29 @@ string Method::eval() const
     return "Method(" + Method::name + ", " + formals + ", " + Method::retType + ", " + block + ")";
 }
 
-const Expr* Method::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Method::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check return type
     bool known = checkKnownType(classesMap, retType);
     if(!known){
-         cout << "Return type of " << name << " unknown" << endl;
-        return this;
+        cout << "Return type of " << name << " unknown" << endl;
+        return to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: return type of method is not defined.";
     }
 
     // Check formals if any
     if(formals){
-        const Expr* check = formals->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = formals->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
     // Check block if any
     if(block){
-        const Expr* check = block->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = block->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 const string Method::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
@@ -138,22 +138,22 @@ string Call::eval() const
     return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ")";
 }
 
-const Expr* Call::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Call::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check object expr if any
     if(objExpr){
-        const Expr* check = objExpr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = objExpr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
     // Check the list of expressions if any
     if(listExpr){
-        const Expr* check = listExpr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = listExpr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 static bool checkPrimitiveType(const string& toCheck){
@@ -290,14 +290,14 @@ string New::eval() const
     return "New(" + New::typeName + ")";
 }
 
-const Expr* New::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string New::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check type name
     bool known = checkKnownType(classesMap, typeName);
     if(known){
-        return NULL;
+        return "";
     }else{
-        cout << "Return type of " << typeName << " unknown" << endl;
-        return this;
+        cout << "New type of " << typeName << " unknown" << endl;
+        return to_string(getLine()) + to_string(getColumn()) + ": semantic error: type " + typeName + " is not defined.";
     }
 }
 

@@ -44,20 +44,20 @@ string Field::eval() const
     return "Field(" + Field::name + ", " + Field::type + initExpr + ")";
 }
 
-const Expr* Field::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const std::string Field::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check type of field
     bool known = checkKnownType(classesMap, type);
     if(!known)
-        return this;
+        return to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: field is using an undefined type.";
 
     // Check init expr if any
     if(initExpr){
-        const Expr* check = initExpr->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = initExpr->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 const string Field::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){

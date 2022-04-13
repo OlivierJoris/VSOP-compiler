@@ -58,9 +58,10 @@ class Program : public Expr
          * @brief Check if program is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Check if the program contains a Main class with a main method.
@@ -97,9 +98,10 @@ class Unit : public Expr
          * @brief Check if unit is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * 
+         * @return const std::string Always empty string because no possible error.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
         
         /**
          * @brief Perform type checking on the unit.

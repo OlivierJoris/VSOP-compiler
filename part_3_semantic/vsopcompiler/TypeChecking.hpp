@@ -10,13 +10,13 @@
 #include "AbstractSyntaxTree.hpp"
 
 /**
- * Check if code is using undefined types.
- *
+ * @brief Check if code is using undefined types.
+ * 
  * @param prog AST of code.
  * 
- * @return 0 if no error. -1, otherwise.
+ * @return const std::string Empty string if no error. Otherwise, error message.
  */
-int checkUseUndefinedType(Program *prog);
+const std::string checkUseUndefinedType(Program *prog);
 
 /**
  * @brief Check if a given type is known.

@@ -41,9 +41,9 @@ class Expr
          * @brief Check if expr is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        virtual const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const = 0;
+        virtual const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const = 0;
 
         /**
          * @brief Perform type checking on the expression.
@@ -51,6 +51,7 @@ class Expr
          * @param prog Program that we are analyzing.
          * @param currentClass Class in which we are running type checking.
          * @param scope Scope of identifiers usable by the expression.
+         * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         virtual const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) = 0;

@@ -26,13 +26,13 @@ string Formal::eval() const
     return Formal::name + " : " + Formal::type;
 }
 
-const Expr* Formal::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Formal::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     bool known = checkKnownType(classesMap, type);
     if(known){
-        return NULL;
+        return "";
     }else{
         cout << "Type of formal " << name << " unknown" << endl;
-        return this;
+        return to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: formal " + name + " is using an undefined type.";
     }
 }
 
@@ -54,19 +54,19 @@ string Formals::eval() const
     return "[" + formals + "]";
 }
 
-const Expr* Formals::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Formals::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check if there is any formal to check
     if(formals.size() == 0)
-        return NULL;
+        return "";
 
     // Check all formals
     for(Formal *formal: formals){
-        const Expr* check = formal->checkUsageUndefinedType(classesMap);
-        if(check)
+        const string check = formal->checkUsageUndefinedType(classesMap);
+        if(check.compare(""))
             return check;
     }
 
-    return NULL;
+    return "";
 }
 
 const string Formals::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
