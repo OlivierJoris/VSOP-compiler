@@ -18,9 +18,12 @@ While::While(Expr *condExpr, Expr *bodyExpr, const int line, const int column): 
     this->column = column;
 }
 
-string While::dumpAST(bool annotated) const 
+string While::dumpAST(bool annotated) const
 {
-    return "While(" + While::condExpr->dumpAST(annotated) + ", " + While::bodyExpr->dumpAST(annotated) + ")";
+    if(annotated)
+        return "While(" + While::condExpr->dumpAST(annotated) + ", " + While::bodyExpr->dumpAST(annotated) + ") : " + type;
+    else
+        return "While(" + While::condExpr->dumpAST(annotated) + ", " + While::bodyExpr->dumpAST(annotated) + ")";
 }
 
 const string While::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{

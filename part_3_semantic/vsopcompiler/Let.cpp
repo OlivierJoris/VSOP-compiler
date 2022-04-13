@@ -29,7 +29,7 @@ string Let::dumpAST(bool annotated) const
         initExpr = ", " + Let::initExpr->dumpAST(annotated);
 
     if(annotated)
-        return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->dumpAST(annotated) + ") : " + type;
+        return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->dumpAST(annotated) + ") : " + Expr::type;
     else
         return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->dumpAST(annotated) + ")";
 }

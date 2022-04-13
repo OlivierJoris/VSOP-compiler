@@ -554,7 +554,6 @@ int main(int argc, char** argv){
             /* Type checking */
             std::string typeCheckingERR = abstractSyntaxTree->typeChecking(abstractSyntaxTree, "", std::vector<std::pair<std::string, Expr*>>());
             if(typeCheckingERR.compare("")){
-                std::cerr << "Error while performing type checking" << std::endl;
                 semanticErrorWithLocation(typeCheckingERR);
                 return EXIT_FAILURE;
             }

@@ -20,6 +20,18 @@
 
 using namespace std;
 
+static bool checkPrimitiveType(const string& toCheck){
+    if(toCheck.compare("int32") == 0)
+        return true;
+    if(toCheck.compare("bool") == 0)
+        return true;
+    if(toCheck.compare("string") == 0)
+        return true;
+    if(toCheck.compare("unit") == 0)
+        return true;
+    return false;
+}
+
 Method::Method(const string name, Formals* formals, const string retType, Block* block, const int line, const int column): name(name), formals(formals), retType(retType), block(block){
     this->line = line;
     this->column = column;
@@ -95,14 +107,39 @@ const string Method::typeChecking(const Program* prog, string currentClass, vect
             return err;
 
         // Finally, we need to check that the type of the body (block) matches the type of the return
-        if(retType.compare(block->type)){
+        // Get ancestors because body can be of type of child of expected type
+        vector<string> ancestors;
+        ancestors.push_back(block->type);
+        if(!checkPrimitiveType(block->type)){ // Ancestor only if not primitive type
+            string ancestor = block->type;
+            while(ancestor.compare("")){
+                auto clsMap = prog->classesMap.find(ancestor);
+                if(clsMap != prog->classesMap.end()){
+                    Class *cls = (*clsMap).second;
+                    if(cls){
+                        ancestor = cls->getParent();
+                        ancestors.push_back(ancestor);
+                    }else
+                        break;
+                }else
+                    break;
+            }
+        }
+        bool validType = false;
+        for(string type: ancestors){
+            if(!type.compare(retType)){
+                validType = true;
+                break;
+            }
+        }
+        if(!validType){
             const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":"
-                + "body type does not match return type of method. Expected "
+                + " semantic error: body type does not match return type of method. Expected "
                 + retType + " but is " + block->type + ".";
             return err;
         }
     }else{
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "method is missing body.";
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: method is missing body.";
         return err;
     }
 
@@ -150,18 +187,6 @@ const string Call::checkUsageUndefinedType(const map<string, Class*>& classesMap
     }
 
     return "";
-}
-
-static bool checkPrimitiveType(const string& toCheck){
-    if(toCheck.compare("int32") == 0)
-        return true;
-    if(toCheck.compare("bool") == 0)
-        return true;
-    if(toCheck.compare("string") == 0)
-        return true;
-    if(toCheck.compare("unit") == 0)
-        return true;
-    return false;
 }
 
 const string Call::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){

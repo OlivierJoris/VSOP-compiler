@@ -467,13 +467,15 @@ const string And::typeChecking(const Program* prog, string currentClass, vector<
     // Perform type checking on the left-hand side
     if(leftExpr){
         const string err = leftExpr->typeChecking(prog, currentClass, scope);
-        return err;
+        if(err.compare(""))
+            return err;
     }
 
     // Perform type checking on right-hand side
     if(rightExpr){
         const string err = rightExpr->typeChecking(prog, currentClass, scope);
-        return err;
+        if(err.compare(""))
+            return err;
     }
 
     // Both LHS and RHS must be bool

@@ -16,6 +16,16 @@
 
 using namespace std;
 
+static bool checkPrimitiveType(const string& toCheck){
+    if(toCheck.compare("int32") == 0)
+        return true;
+    if(toCheck.compare("bool") == 0)
+        return true;
+    if(toCheck.compare("string") == 0)
+        return true;
+    return false;
+}
+
 Field::Field(const string name, const string type, Expr *initExpr, const int line, const int column): name(name), type(type), initExpr(initExpr){
     this->line = line;
     this->column = column;
@@ -70,13 +80,40 @@ const string Field::typeChecking(const Program* prog, string currentClass, vecto
             return err;
 
         // Then, check if type of field initializer matches static type of field
-        if(type.compare(initExpr->type)){
+        // Field initializer can be a child of static type
+        vector<string> ancestors;
+        ancestors.push_back(initExpr->type);
+        if(!checkPrimitiveType(initExpr->type)){ // Ancestor only if not primitive type
+            string ancestor = initExpr->type;
+            while(ancestor.compare("")){
+                auto clsMap = prog->classesMap.find(ancestor);
+                if(clsMap != prog->classesMap.end()){
+                    Class *cls = (*clsMap).second;
+                    if(cls){
+                        ancestor = cls->getParent();
+                        ancestors.push_back(ancestor);
+                    }else
+                        break;
+                }else
+                    break;
+            }
+        }
+        bool validType = false;
+        for(string ancestor: ancestors){
+            if(!type.compare(ancestor)){
+                validType = true;
+                break;
+            }
+        }
+        if(!validType){
             string lineNumber = to_string(initExpr->getLine());
             string columnNumber = to_string(initExpr->getColumn());
             const string err = lineNumber + ":" + columnNumber + ":" + "initializer of field has not expected type. Expected " + type + " but is " + initExpr->type +".";
             return err;
         }
     }
+
+    Expr::type = Field::type;
 
     return "";
 }
