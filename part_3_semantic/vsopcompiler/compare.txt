@@ -1,0 +1,9 @@
+
+          Call(self : Main, printInt32, [Call(xs : List, length, []) : int32])
+          : Object, Call(self : Main, print, ["\x0a" : string]) : Object, 0
+          : int32]
+         : int32)
+       : int32]
+      : int32)])]
+
+Call(self : Main, printInt32, [Call(xs : Cons, length, []) : int32]) : Object, Call(self : Main, print, ["\x0a" : string]) : Object, 0 : int32] : int32) : int32] : int32)])]
