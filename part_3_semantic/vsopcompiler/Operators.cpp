@@ -12,25 +12,9 @@
 #include "Operators.hpp"
 #include "Expr.hpp"
 #include "Class.hpp"
+#include "TypeChecking.hpp"
 
 using namespace std;
-
-/**
- * @brief Check that the given type is a primitive type (int32, bool, string).
- * 
- * @param toCheck Type to check.
- * @return true If it is a primitive type.
- * @return false If it is not a primitive type.
- */
-static bool checkPrimitiveType(const string& toCheck){
-    if(toCheck.compare("int32") == 0)
-        return true;
-    if(toCheck.compare("bool") == 0)
-        return true;
-    if(toCheck.compare("string") == 0)
-        return true;
-    return false;
-}
 
 /*********************
         ASSIGN

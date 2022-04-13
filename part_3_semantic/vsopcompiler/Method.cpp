@@ -20,18 +20,6 @@
 
 using namespace std;
 
-static bool checkPrimitiveType(const string& toCheck){
-    if(toCheck.compare("int32") == 0)
-        return true;
-    if(toCheck.compare("bool") == 0)
-        return true;
-    if(toCheck.compare("string") == 0)
-        return true;
-    if(toCheck.compare("unit") == 0)
-        return true;
-    return false;
-}
-
 Method::Method(const string name, Formals* formals, const string retType, Block* block, const int line, const int column): name(name), formals(formals), retType(retType), block(block){
     this->line = line;
     this->column = column;

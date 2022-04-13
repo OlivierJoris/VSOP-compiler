@@ -12,6 +12,7 @@
 #include "Expr.hpp"
 #include "Class.hpp"
 #include "AbstractSyntaxTree.hpp"
+#include "TypeChecking.hpp"
 
 using namespace std;
 
@@ -56,16 +57,6 @@ const string If::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     }
 
     return "";
-}
-
-static bool checkPrimitiveType(const string& toCheck){
-    if(toCheck.compare("int32") == 0)
-        return true;
-    if(toCheck.compare("bool") == 0)
-        return true;
-    if(toCheck.compare("string") == 0)
-        return true;
-    return false;
 }
 
 const string If::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
