@@ -31,7 +31,7 @@ class Assign : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the operator is using non defined types.
@@ -70,7 +70,7 @@ class UnOp : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the operator is using non defined types.
@@ -167,7 +167,7 @@ class BinOp : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the operator is using non defined types.
@@ -199,7 +199,7 @@ class ArithmeticBinOp : public BinOp
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the operator is using non defined types.
@@ -289,7 +289,7 @@ class BinaryComparison : public BinOp
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the operator is using non defined types.

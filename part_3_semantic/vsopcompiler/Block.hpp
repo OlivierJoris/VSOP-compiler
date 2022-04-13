@@ -32,7 +32,7 @@ class Block : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the code inside the block is using non defined types.

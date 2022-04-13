@@ -21,7 +21,7 @@ Formal::Formal(const string name, const string type, const int line, const int c
     this->column = column;
 }
 
-string Formal::eval() const
+string Formal::dumpAST() const
 {
     return Formal::name + " : " + Formal::type;
 }
@@ -38,17 +38,17 @@ const string Formal::checkUsageUndefinedType(const map<string, Class*>& classesM
 
 Formals::Formals(){}
 
-string Formals::eval() const
+string Formals::dumpAST() const
 {
     string formals = "";
 
     if(Formals::formals.size() != 0)
     {
         auto firstFormal = Formals::formals.rbegin();
-        formals = (*firstFormal)->eval();
+        formals = (*firstFormal)->dumpAST();
 
         for(auto it = Formals::formals.rbegin() + 1; it != Formals::formals.rend(); ++it)
-            formals += ", " + (*it)->eval();
+            formals += ", " + (*it)->dumpAST();
     }
 
     return "[" + formals + "]";

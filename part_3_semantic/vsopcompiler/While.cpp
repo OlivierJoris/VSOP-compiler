@@ -18,9 +18,9 @@ While::While(Expr *condExpr, Expr *bodyExpr, const int line, const int column): 
     this->column = column;
 }
 
-string While::eval() const 
+string While::dumpAST() const 
 {
-    return "While(" + While::condExpr->eval() + ", " + While::bodyExpr->eval() + ")";
+    return "While(" + While::condExpr->dumpAST() + ", " + While::bodyExpr->dumpAST() + ")";
 }
 
 const string While::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{

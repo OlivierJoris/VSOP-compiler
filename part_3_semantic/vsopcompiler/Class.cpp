@@ -22,17 +22,17 @@ Class::Class(const string name, const string parent, vector<Field*>& fields, vec
     this->column = column;
 }
 
-string Class::eval() const
+string Class::dumpAST() const
 {
     string fields = "";    
 
     if(Class::fields.size() != 0)
     {
         auto firstField = Class::fields.rbegin();
-        fields = (*firstField)->eval();
+        fields = (*firstField)->dumpAST();
 
         for(auto it = Class::fields.rbegin() + 1; it != Class::fields.rend(); ++it)
-            fields += ", " + (*it)->eval();
+            fields += ", " + (*it)->dumpAST();
     }
 
     string methods = "";
@@ -40,10 +40,10 @@ string Class::eval() const
     if(Class::methods.size() != 0)
     {
         auto firstMethod = Class::methods.rbegin();
-        methods = (*firstMethod)->eval();
+        methods = (*firstMethod)->dumpAST();
 
         for(auto it = Class::methods.rbegin() + 1; it != Class::methods.rend(); ++it)
-            methods += ", " + (*it)->eval();
+            methods += ", " + (*it)->dumpAST();
     }
     
     return "Class(" + Class::name + ", " + Class::parent + ", " + "[" + fields + "]" + ", " + "[" + methods + "]" + ")";

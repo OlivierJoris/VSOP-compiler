@@ -46,7 +46,7 @@ class Class : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the class is using non defined types.

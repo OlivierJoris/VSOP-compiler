@@ -28,16 +28,16 @@ Method::Method(const string name, Formals* formals, const string retType, Block*
 vector<Formal*> Method::getFormals() {return formals->getFormals();}
 Formal* Method::getFormals(unsigned int i) {return formals->getFormals(i);}
 
-string Method::eval() const 
+string Method::dumpAST() const 
 {
     string formals = "[]";
     string block = "[]";
 
     if(Method::formals)
-        formals = Method::formals->eval();
+        formals = Method::formals->dumpAST();
     
     if(Method::block)
-        block = Method::block->eval();
+        block = Method::block->dumpAST();
 
     return "Method(" + Method::name + ", " + formals + ", " + Method::retType + ", " + block + ")";
 }
@@ -123,17 +123,17 @@ Call::Call(Expr *objExpr, const string methodName, Args *listExpr, const int lin
     this->column = column;
 }
 
-string Call::eval() const
+string Call::dumpAST() const
 {
     string objExpr = "self";
    
     string listExpr = "[]";
 
     if(Call::listExpr)
-        listExpr = Call::listExpr->eval();
+        listExpr = Call::listExpr->dumpAST();
 
     if(Call::objExpr)
-        objExpr = Call::objExpr->eval();
+        objExpr = Call::objExpr->dumpAST();
 
     return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ")";
 }
@@ -285,7 +285,7 @@ New::New(const string typeName, const int line, const int column): typeName(type
     this->type = typeName;
 }
 
-string New::eval() const
+string New::dumpAST() const
 {
     return "New(" + New::typeName + ")";
 }
@@ -306,7 +306,7 @@ ObjectIdentifier::ObjectIdentifier(const string identifier, const int line, cons
     this->column = column;
 }
 
-string ObjectIdentifier::eval() const 
+string ObjectIdentifier::dumpAST() const 
 {
     return ObjectIdentifier::identifier;
 }
@@ -337,7 +337,7 @@ Self::Self(const int line, const int column){
     this->column = column;
 }
 
-string Self::eval() const
+string Self::dumpAST() const
 {
     return "self";
 }

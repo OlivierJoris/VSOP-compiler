@@ -41,9 +41,9 @@ Assign::Assign(const string name, Expr *expr, const int line, const int column):
     this->column = column;
 }
 
-string Assign::eval() const 
+string Assign::dumpAST() const 
 {
-    return "Assign(" + Assign::name + ", " + Assign::expr->eval() + ")";
+    return "Assign(" + Assign::name + ", " + Assign::expr->dumpAST() + ")";
 }
 
 const string Assign::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
@@ -104,9 +104,9 @@ UnOp::UnOp(const string symbol, Expr *expr, const int line, const int column): e
     this->column = column;
 }
 
-string UnOp::eval() const 
+string UnOp::dumpAST() const 
 {
-    return "UnOp(" + UnOp::symbol + ", " + UnOp::expr->eval() + ")";
+    return "UnOp(" + UnOp::symbol + ", " + UnOp::expr->dumpAST() + ")";
 }
 
 const string UnOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
@@ -217,9 +217,9 @@ BinOp::BinOp(const string symbol, Expr *leftExpr, Expr *rightExpr, const int lin
     this->column = column;
 }
 
-string BinOp::eval() const 
+string BinOp::dumpAST() const 
 {
-    return "BinOp(" + BinOp::symbol + ", " + BinOp::leftExpr->eval() + ", " + BinOp::rightExpr->eval() + ")";
+    return "BinOp(" + BinOp::symbol + ", " + BinOp::leftExpr->dumpAST() + ", " + BinOp::rightExpr->dumpAST() + ")";
 }
 
 const string BinOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
@@ -246,8 +246,8 @@ const string BinOp::checkUsageUndefinedType(const map<string, Class*>& classesMa
 
 ArithmeticBinOp::ArithmeticBinOp(const string symbol, Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp(symbol, leftExpr, rightExpr, line, column){}
 
-string ArithmeticBinOp::eval() const{
-    return BinOp::eval();
+string ArithmeticBinOp::dumpAST() const{
+    return BinOp::dumpAST();
 }
 
 const string ArithmeticBinOp::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{
@@ -351,8 +351,8 @@ const string Pow::typeChecking(const Program* prog, string currentClass, vector<
 
 BinaryComparison::BinaryComparison(const string symbol, Expr *leftExpr, Expr *rightExpr, const int line, const int column): BinOp(symbol, leftExpr, rightExpr, line, column){}
 
-string BinaryComparison::eval() const{
-    return BinOp::eval();
+string BinaryComparison::dumpAST() const{
+    return BinOp::dumpAST();
 }
 
 const string BinaryComparison::checkUsageUndefinedType(const map<string, Class*>& classesMap) const{

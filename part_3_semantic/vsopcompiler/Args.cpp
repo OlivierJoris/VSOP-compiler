@@ -21,17 +21,17 @@ Args::Args(const int line, const int column)
     this->column = column;
 }
 
-string Args::eval() const
+string Args::dumpAST() const
 {
     string exprList = "";
 
     if(Args::exprList.size() != 0)
     {
         auto firstFormal = Args::exprList.rbegin();
-        exprList = (*firstFormal)->eval();
+        exprList = (*firstFormal)->dumpAST();
 
         for(auto it = Args::exprList.rbegin() + 1; it != Args::exprList.rend(); ++it)
-            exprList += ", " + (*it)->eval();
+            exprList += ", " + (*it)->dumpAST();
     }
 
     return "[" + exprList + "]";
@@ -55,13 +55,13 @@ const string Args::typeChecking(const Program* prog, string currentClass, vector
     // First, check each expression
     for(Expr* expr: exprList){
         if(expr){
-            cout << "Start type checking on expr " << expr->eval() << endl;
+            cout << "Start type checking on expr " << expr->dumpAST() << endl;
             const string err = expr->typeChecking(prog, currentClass, scope);
             if(err.compare("")){
                 cout << "Error while checking expr" << endl;
                 return err;
             }else
-                cout << "Ok type checking expr " << expr->eval() << endl;
+                cout << "Ok type checking expr " << expr->dumpAST() << endl;
         }
     }
 

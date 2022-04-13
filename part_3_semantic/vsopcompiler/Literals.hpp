@@ -30,7 +30,7 @@ class IntegerLiteral : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the literal is using non defined types.
@@ -65,7 +65,7 @@ class StringLiteral : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the string is using non defined types.
@@ -101,7 +101,7 @@ class BooleanLiteral : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the boolean is using non defined types.

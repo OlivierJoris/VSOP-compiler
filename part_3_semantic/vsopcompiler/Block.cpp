@@ -17,12 +17,12 @@ Block::Block(Args *exprList, const int line, const int column): exprList(exprLis
     this->column = column;
 }
 
-string Block::eval() const
+string Block::dumpAST() const
 {
     string listExpr = "[]";
 
     if(Block::exprList)
-        listExpr = Block::exprList->eval();
+        listExpr = Block::exprList->dumpAST();
     
     return listExpr;
 }

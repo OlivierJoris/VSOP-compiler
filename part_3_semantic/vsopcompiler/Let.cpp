@@ -21,14 +21,14 @@ Let::Let(const string name, const string type, Expr *scopeExpr, Expr *initExpr, 
     this->column = column;
 }
 
-string Let::eval() const
+string Let::dumpAST() const
 {
     string initExpr = "";
 
     if(Let::initExpr)
-        initExpr = ", " + Let::initExpr->eval();
+        initExpr = ", " + Let::initExpr->dumpAST();
 
-    return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->eval() + ")";
+    return "Let(" + Let::name + ", " + Let::type + initExpr + ", " + Let::scopeExpr->dumpAST() + ")";
 }
 
 const string Let::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {

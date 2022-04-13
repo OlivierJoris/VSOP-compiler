@@ -20,7 +20,7 @@ IntegerLiteral::IntegerLiteral(const int intValue, const int line, const int col
     this->type = "int32";
 }
 
-string IntegerLiteral::eval() const
+string IntegerLiteral::dumpAST() const
 {
     return to_string(IntegerLiteral::intValue);
 }
@@ -42,7 +42,7 @@ string hexConvert(char character)
     return ret;
 }
 
-string StringLiteral::eval() const
+string StringLiteral::dumpAST() const
 {
     string ret = "\"";
 
@@ -67,7 +67,7 @@ BooleanLiteral::BooleanLiteral(const bool booleanValue, const int line, const in
     this->type = "bool";
 }
 
-string BooleanLiteral::eval() const
+string BooleanLiteral::dumpAST() const
 {
     string boolString = "false";
 

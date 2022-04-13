@@ -35,7 +35,7 @@ class Program : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check for redefinitions.
@@ -88,11 +88,11 @@ class Unit : public Expr
         Unit(const int line, const int column);
 
         /**
-         * @brief Dump the AST corresponding to Unit inside the returned string.
+         * @brief dumpASTASTAST the AST corresponding to Unit inside the returned string.
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if unit is using non defined types.

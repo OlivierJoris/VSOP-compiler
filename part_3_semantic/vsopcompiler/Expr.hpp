@@ -35,7 +35,7 @@ class Expr
          * 
          * @return std::string AST.
          */
-        virtual std::string eval() const = 0;
+        virtual std::string dumpAST() const = 0;
 
         /**
          * @brief Check if expr is using non defined types.

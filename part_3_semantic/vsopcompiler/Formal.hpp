@@ -33,7 +33,7 @@ class Formal : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the formal is using non defined types.
@@ -71,7 +71,7 @@ class Formals : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the formals are using non defined types.

@@ -47,7 +47,7 @@ class Method : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the method is using non defined types.
@@ -86,7 +86,7 @@ class Call : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the dispatch is using non defined types.
@@ -123,7 +123,7 @@ class New : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the instantiation is using non defined types.
@@ -157,7 +157,7 @@ class ObjectIdentifier : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the identifier is using non defined types.
@@ -166,7 +166,7 @@ class ObjectIdentifier : public Expr
          * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
 
         /**
          * @brief Perform type checking on the object identifier.
@@ -190,7 +190,7 @@ class Self : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST() const override;
 
         /**
          * @brief Check if the keyword is using non defined types.
@@ -199,7 +199,7 @@ class Self : public Expr
          * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
 
         /**
          * @brief Perform type checking on the self.

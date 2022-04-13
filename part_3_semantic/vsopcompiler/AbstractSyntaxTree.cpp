@@ -212,13 +212,13 @@ void Program::checkOverrides()
     }
 }
 
-string Program::eval() const 
+string Program::dumpAST() const 
 {
     auto firstClass = Program::classes.rbegin();
-    string program = (*firstClass)->eval();
+    string program = (*firstClass)->dumpAST();
 
     for(auto it = Program::classes.rbegin() + 1; it != Program::classes.rend(); ++it)
-        program += ", " + (*it)->eval();
+        program += ", " + (*it)->dumpAST();
     
     return "[" + program + "]";
 }
@@ -232,7 +232,7 @@ const string Program::checkUsageUndefinedType(const map<string, Class*>& classes
             return check;
         }
     }
-    return NULL;
+    return "";
 }
 
 string Program::checkMain() const {
@@ -288,7 +288,7 @@ Unit::Unit(const int line, const int column){
     this->type = "unit";
 }
 
-string Unit::eval() const
+string Unit::dumpAST() const
 {
     return "unit";
 }

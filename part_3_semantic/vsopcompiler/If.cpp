@@ -20,14 +20,14 @@ If::If(Expr *condExpr, Expr *thenExpr, Expr *elseExpr, const int line, const int
     this->column = column;
 }
 
-string If::eval() const
+string If::dumpAST() const
 {
     string elseExpr = "";
 
     if(If::elseExpr)
-        elseExpr = ", " + If::elseExpr->eval();
+        elseExpr = ", " + If::elseExpr->dumpAST();
 
-    return "If(" + If::condExpr->eval() + ", " + If::thenExpr->eval() + elseExpr + ")";
+    return "If(" + If::condExpr->dumpAST() + ", " + If::thenExpr->dumpAST() + elseExpr + ")";
 }
 
 const string If::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {

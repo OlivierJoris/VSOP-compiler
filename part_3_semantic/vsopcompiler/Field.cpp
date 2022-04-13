@@ -34,12 +34,12 @@ Field::Field(const string name, const string type, Expr *initExpr, const int lin
     }
 }
 
-string Field::eval() const
+string Field::dumpAST() const
 {
     string initExpr = "";
 
     if(Field::initExpr)
-        initExpr = ", " + Field::initExpr->eval();
+        initExpr = ", " + Field::initExpr->dumpAST();
 
     return "Field(" + Field::name + ", " + Field::type + initExpr + ")";
 }
@@ -48,7 +48,7 @@ const std::string Field::checkUsageUndefinedType(const map<string, Class*>& clas
     // Check type of field
     bool known = checkKnownType(classesMap, type);
     if(!known)
-        return to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: field is using an undefined type.";
+        return to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: field " + name + " is using an undefined type.";
 
     // Check init expr if any
     if(initExpr){

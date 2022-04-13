@@ -508,7 +508,7 @@ int main(int argc, char** argv){
         if(yyparse()) {
             return EXIT_FAILURE;
         }else{
-            std::cout << abstractSyntaxTree->eval() << std::endl;
+            std::cout << abstractSyntaxTree->dumpAST() << std::endl;
         }
     }
 
@@ -536,7 +536,7 @@ int main(int argc, char** argv){
             }
 
             /* Check for usage of undefined types */
-            const std::string err = checkUseUndefinedType(abstractSyntaxTree);
+            std::string err = checkUseUndefinedType(abstractSyntaxTree);
             if(err.compare("")){
                 semanticErrorWithLocation(err);
                 return EXIT_FAILURE;
