@@ -531,7 +531,7 @@ int main(int argc, char** argv){
             /* Check Main class, main method, and main method signature */
             std::string mainCheckErr = abstractSyntaxTree->checkMain();
             if(mainCheckErr.compare("")){
-                semanticError(mainCheckErr);
+                semanticErrorWithLocation(mainCheckErr);
                 return EXIT_FAILURE;
             }
 

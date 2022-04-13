@@ -249,18 +249,18 @@ string Program::checkMain() const {
         }
 
         if(!mainMethod)
-            return "missing main method";
+            return to_string(main->getLine()) + ":" + to_string(main->getColumn()) + ": semantic error: missing main method.";
 
         // Check return type
         if(mainMethod->getRetType().compare("int32"))
-            return "main method return type must be int32";
+            return to_string(mainMethod->getLine()) + ":" + to_string(mainMethod->getColumn()) + ": semantic error: main method return type must be int32.";
 
         // Check formal arguments
         if(mainMethod->getFormals().size() > 0)
-            return "main method must not have arguments";
+            return to_string(mainMethod->getLine()) + ":" + to_string(mainMethod->getColumn()) + ": semantic error: main method must not have arguments.";
 
     }else{
-        return "missing Main class";
+        return  "1:1: semantic error: missing Main class.";
     }
 
     return "";
