@@ -62,7 +62,7 @@ const string Let::typeChecking(const Program* prog, string currentClass, vector<
         // Check if type of initExpr is the same as the type declared
         if(Let::type.compare(initExpr->type)){
             const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" +
-                "type of initializer does not match expected type. Expected " + Let::type +
+                " semantic error: type of initializer does not match expected type. Expected " + Let::type +
                 " but is " + initExpr->type + ".";
         }
     }

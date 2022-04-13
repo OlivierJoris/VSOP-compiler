@@ -200,14 +200,14 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
         typeOfLHS = currentClass;
     
     if(!typeOfLHS.compare("")){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":<id> has no type.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: <id> has no type.";
         return err;
     }
 
     // Find class
     auto clsMap = prog->classesMap.find(typeOfLHS);
     if(clsMap == prog->classesMap.end()){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":type " + typeOfLHS + " not found.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: type " + typeOfLHS + " not found.";
         return err;
     }
 
@@ -230,7 +230,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
     }
 
     if(!method){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":<id> has no method " + methodName;
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error <id> has no method " + methodName;
         return err;
     }
 
@@ -238,7 +238,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
     size_t nbFormals = method->getFormals().size();
     size_t nbArgs = listExpr->getNumberExpr();
     if(nbFormals != nbArgs){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + methodName + "has " +
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: " + methodName + "has " +
             to_string(nbFormals) + " formal arguments but " + to_string(nbArgs) + " were given.";
         return err;
     }
@@ -276,7 +276,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
                 typeOk = true;
         }
         if(!typeOk){
-            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":formal " +
+            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: formal " +
                 to_string(it) + " must be of type " + formalType + ". Given argument is of type " + argType + ".";
             return err;
         }
@@ -335,7 +335,7 @@ const string ObjectIdentifier::typeChecking(const Program*, string, vector<pair<
     }
 
     if(!obj){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + identifier + " is not in scope.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: " + identifier + " is not in scope.";
         return err;
     }
 

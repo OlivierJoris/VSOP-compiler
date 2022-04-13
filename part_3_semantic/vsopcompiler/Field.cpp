@@ -98,7 +98,7 @@ const string Field::typeChecking(const Program* prog, string currentClass, vecto
         if(!validType){
             string lineNumber = to_string(initExpr->getLine());
             string columnNumber = to_string(initExpr->getColumn());
-            const string err = lineNumber + ":" + columnNumber + ":" + "initializer of field has not expected type. Expected " + type + " but is " + initExpr->type +".";
+            const string err = lineNumber + ":" + columnNumber + ": semantic error: initializer of field has not expected type. Expected " + type + " but is " + initExpr->type +".";
             return err;
         }
     }

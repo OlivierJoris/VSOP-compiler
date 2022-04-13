@@ -61,14 +61,14 @@ const string Assign::typeChecking(const Program* prog, string currentClass, vect
         }
 
         if(!obj){
-            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + name + " is not in scope.";
+            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: " + name + " is not in scope.";
             return err;
         }
         
         // Check that type of expr matches type of id (name)
         if(obj->type.compare(expr->type)){
             string err = to_string(getLine()) + ":" + to_string(getColumn()) +
-                ":<expr> does not have the same type as " + name +
+                ": semantic error: <expr> does not have the same type as " + name +
                 ". " + name + " has type " + obj->type + " while <expr> has type " + expr->type + ".";
             return err;
         }
@@ -124,7 +124,7 @@ const string Not::typeChecking(const Program* prog, string currentClass, vector<
 
     // Right-hand side must be bool
     if(expr->type.compare("bool")){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "operand must be of type bool" +
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: operand must be of type bool" +
             " (is " + expr->type + ").";
         return err;
     }
@@ -151,7 +151,7 @@ const string UnaryMinus::typeChecking(const Program* prog, string currentClass, 
 
     // Right-hand side must be int32
     if(expr->type.compare("int32")){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "operand must be of type int32" +
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: operand must be of type int32" +
             " (is " + expr->type + ").";
         return err;
     }
@@ -178,7 +178,7 @@ const std::string IsNull::typeChecking(const Program* prog, string currentClass,
 
     // isnull is only applicable to type defined by classes
     if(checkPrimitiveType(expr->type)){
-        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":isnull not applicable on primitive types.";
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: isnull not applicable on primitive types.";
         return err;
     }
 
@@ -246,7 +246,7 @@ const string ArithmeticBinOp::typeChecking(const Program* prog, string currentCl
 
         // Check that type is int32
         if(leftExpr->type.compare("int32")){
-            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" +
+            string err = to_string(getLine()) + ": semantic error: " + to_string(getColumn()) + ":" +
                 "left-hand side of operator must be int32 (is " + leftExpr->type + ").";
             return err;
         }
@@ -260,7 +260,7 @@ const string ArithmeticBinOp::typeChecking(const Program* prog, string currentCl
 
         // Check that type is int32
         if(rightExpr->type.compare("int32")){
-            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" +
+            string err = to_string(getLine()) + ": semantic error: " + to_string(getColumn()) + ":" +
                 "right-hand side of operator must be int32 (is " + rightExpr->type + ").";
             return err;
         }
@@ -345,7 +345,7 @@ const string BinaryComparison::typeChecking(const Program* prog, string currentC
 
         // Check that type is int32
         if(leftExpr->type.compare("int32")){
-            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" +
+            string err = to_string(getLine()) + ": semantic error: " + to_string(getColumn()) + ":" +
                 "left-hand side of operator must be int32 (is " + leftExpr->type + ").";
             return err;
         }
@@ -359,7 +359,7 @@ const string BinaryComparison::typeChecking(const Program* prog, string currentC
 
         // Check that type is int32
         if(rightExpr->type.compare("int32")){
-            string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" +
+            string err = to_string(getLine()) + ": semantic error: " + to_string(getColumn()) + ":" +
                 "right-hand side of operator must be int32 (is " + rightExpr->type + ").";
             return err;
         }
@@ -416,20 +416,20 @@ const string Equal::typeChecking(const Program* prog, string currentClass, vecto
     if(leftExpr && rightExpr && checkPrimitiveType(leftExpr->type) && checkPrimitiveType(rightExpr->type)){
         // Must be same primitive type or error
         if(leftExpr->type.compare(rightExpr->type)){
-            const string err = to_string(getLine()) + ":" + to_string(getColumn()) +
+            const string err = to_string(getLine()) + ": semantic error: " + to_string(getColumn()) +
                 "both operands do not have the same type. Left-hand side is " + leftExpr->type + " while right-hand side is " +
                 rightExpr->type + ".";
             return err;
         }
     }else if(leftExpr && rightExpr && checkPrimitiveType(leftExpr->type) && !checkPrimitiveType(rightExpr->type)){
         // LHS primitive & RHS not primitive
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) +
+        const string err = to_string(getLine()) + ": semantic error: " + to_string(getColumn()) +
             "both operands do not have the same type. Left-hand side is " + leftExpr->type + " while right-hand side is " +
             rightExpr->type + ".";
         return err;
     } else if(leftExpr && rightExpr && !checkPrimitiveType(leftExpr->type) && checkPrimitiveType(rightExpr->type)){
         // LHS not primitive & RHS primitive
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) +
+        const string err = to_string(getLine()) + ": semantic error: " + to_string(getColumn()) +
             "both operands do not have the same type. Left-hand side is " + leftExpr->type + " while right-hand side is " +
             rightExpr->type + ".";
         return err;
@@ -464,12 +464,12 @@ const string And::typeChecking(const Program* prog, string currentClass, vector<
 
     // Both LHS and RHS must be bool
     if(leftExpr->type.compare("bool")){
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "left-hand side must be bool (is " +
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: left-hand side must be bool (is " +
             leftExpr->type + ").";
         return err;
     }
     if(rightExpr->type.compare("bool")){
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "right-hand side must be bool (is " +
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: right-hand side must be bool (is " +
             rightExpr->type + ").";
         return err;
     }

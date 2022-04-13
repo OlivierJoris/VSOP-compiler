@@ -61,7 +61,7 @@ const string While::typeChecking(const Program* prog, string currentClass, vecto
 
     // Type of condition must be bool
     if(condExpr && condExpr->type.compare("bool")){
-        const string err = to_string(condExpr->getLine()) + ":" + to_string(condExpr->getColumn())
+        const string err = to_string(condExpr->getLine()) + ": semantic error: " + to_string(condExpr->getColumn())
             + ":" + "condition must have type bool (is type " + condExpr->type + ").";
         return err;
     }

@@ -83,7 +83,7 @@ const string If::typeChecking(const Program* prog, string currentClass, vector<p
 
     // Check if type of condition is bool
     if(condExpr && condExpr->type.compare("bool")){
-        const string err = to_string(condExpr->getLine()) + ":" + to_string(condExpr->getColumn())
+        const string err = to_string(condExpr->getLine()) + ": semantic error: " + to_string(condExpr->getColumn())
             + ":" + "condition must have type bool (is type " + condExpr->type + ").";
         return err;
     }
@@ -148,13 +148,13 @@ const string If::typeChecking(const Program* prog, string currentClass, vector<p
             type = "unit";
         }else{
             // Types of branches do not agree
-            const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "types of <expr_t> and <expr_e> do not agree.";
+            const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: types of <expr_t> and <expr_e> do not agree.";
             return err;
         }
     }else if(thenExpr && !elseExpr){ // No else branch
         type = "unit";
     }else{
-        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ":" + "types of <expr_t> and <expr_e> do not agree.";
+        const string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: types of <expr_t> and <expr_e> do not agree.";
         return err;
     }
 
