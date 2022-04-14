@@ -52,11 +52,17 @@ class Expr
          * 
          * @param prog Program that we are analyzing.
          * @param currentClass Class in which we are running type checking.
+         * @param inFieldInit Whether typeChecking is called inside a field initializer.
          * @param scope Scope of identifiers usable by the expression.
          * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        virtual const std::string typeChecking(const Program* prog, std::string currentClass, std::vector<std::pair<std::string, Expr*>> scope) = 0;
+        virtual const std::string typeChecking(
+            const Program* prog,
+            std::string currentClass,
+            bool inFieldInit,
+            std::vector<std::pair<std::string, Expr*>> scope
+        ) = 0;
 
         /**
          * @brief Get the line of the expression.

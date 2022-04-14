@@ -552,7 +552,7 @@ int main(int argc, char** argv){
             }
 
             /* Type checking */
-            std::string typeCheckingERR = abstractSyntaxTree->typeChecking(abstractSyntaxTree, "", std::vector<std::pair<std::string, Expr*>>());
+            std::string typeCheckingERR = abstractSyntaxTree->typeChecking(abstractSyntaxTree, "", false, std::vector<std::pair<std::string, Expr*>>());
             if(typeCheckingERR.compare("")){
                 semanticErrorWithLocation(typeCheckingERR);
                 return EXIT_FAILURE;

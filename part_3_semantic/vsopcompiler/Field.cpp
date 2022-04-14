@@ -62,10 +62,10 @@ const std::string Field::checkUsageUndefinedType(const map<string, Class*>& clas
     return "";
 }
 
-const string Field::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+const string Field::typeChecking(const Program* prog, string currentClass, bool inFieldInit,vector<pair<string, Expr*>> scope){
     if(initExpr){
         // First, perform type checking on the field initializer if any
-        const string err = initExpr->typeChecking(prog, currentClass, scope);
+        const string err = initExpr->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
 

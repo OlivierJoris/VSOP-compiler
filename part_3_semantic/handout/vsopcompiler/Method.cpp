@@ -65,12 +65,12 @@ const string Method::checkUsageUndefinedType(const map<string, Class*>& classesM
     return "";
 }
 
-const string Method::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+const string Method::typeChecking(const Program* prog, string currentClass, bool inFieldInit, vector<pair<string, Expr*>> scope){
     // First, we need to perform type checking on the formals (should never return error)
     if(formals){
         /* The scope does not really matter because should not have type errors in formals since
         declared types of formals are checked in checkUsageUndefinedType */
-        const string err = formals->typeChecking(prog, currentClass, scope);
+        const string err = formals->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
         
@@ -90,7 +90,7 @@ const string Method::typeChecking(const Program* prog, string currentClass, vect
 
     if(block){
         // Then, we can perform type checking on the body (block) of the method
-        const string err = block->typeChecking(prog, currentClass, scope);
+        const string err = block->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
 
@@ -177,17 +177,17 @@ const string Call::checkUsageUndefinedType(const map<string, Class*>& classesMap
     return "";
 }
 
-const string Call::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+const string Call::typeChecking(const Program* prog, string currentClass, bool inFieldInit, vector<pair<string, Expr*>> scope){
     // Type checking on the expr representing the left-hand side
     if(objExpr){
-        const string err = objExpr->typeChecking(prog, currentClass, scope);
+        const string err = objExpr->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
     }
 
     // Type checking on each argument
     if(listExpr){
-        const string err = listExpr->typeChecking(prog, currentClass, scope);
+        const string err = listExpr->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
     }
@@ -201,6 +201,12 @@ const string Call::typeChecking(const Program* prog, string currentClass, vector
     
     if(!typeOfLHS.compare("")){
         string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: <id> has no type.";
+        return err;
+    }
+
+    if(!typeOfLHS.compare(currentClass) && inFieldInit){
+        string err = to_string(getLine()) + ":" + to_string(getColumn()) +
+            ": semantic error: cannot use method of object inside field initializer.";
         return err;
     }
 
@@ -324,7 +330,7 @@ string ObjectIdentifier::dumpAST(bool annotated) const
         return ObjectIdentifier::identifier;
 }
 
-const string ObjectIdentifier::typeChecking(const Program*, string, vector<pair<string, Expr*>> scope){
+const string ObjectIdentifier::typeChecking(const Program*, string, bool, vector<pair<string, Expr*>> scope){
     // Check if object identifier is in scope
     Expr *obj = NULL;
     for(auto it = scope.crbegin(); it != scope.crend(); it++){
@@ -358,7 +364,7 @@ string Self::dumpAST(bool annotated) const
         return "self";
 }
 
-const string Self::typeChecking(const Program*, string currentClass, vector<pair<string, Expr*>>){
+const string Self::typeChecking(const Program*, string currentClass, bool, vector<pair<string, Expr*>>){
     // Set type as current class.
     type = currentClass;
 

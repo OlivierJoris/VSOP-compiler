@@ -48,7 +48,7 @@ class IntegerLiteral : public Expr
          *
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -85,7 +85,7 @@ class StringLiteral : public Expr
          * 
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 
 };
 
@@ -123,7 +123,7 @@ class BooleanLiteral : public Expr
          * 
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 #endif

@@ -75,13 +75,10 @@ class Program : public Expr
 
         /**
          * @brief Perform type checking on the program.
-         * 
-         * @param prog Program that we are analyzing.
-         * @param currentClass Class in which we are running type checking.
-         * @param scope Scope of identifiers usable by the program.
+         *
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override;
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 class Unit : public Expr
@@ -110,7 +107,7 @@ class Unit : public Expr
          * 
          * @return const std::string Always empty string because no possible error.
          */
-        const std::string typeChecking(const Program*, std::string, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 #endif

@@ -59,24 +59,24 @@ const string If::checkUsageUndefinedType(const map<string, Class*>& classesMap) 
     return "";
 }
 
-const string If::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+const string If::typeChecking(const Program* prog, string currentClass, bool inFieldInit, vector<pair<string, Expr*>> scope){
     // Type checking on condition
     if(condExpr){
-        const string err = condExpr->typeChecking(prog, currentClass, scope);
+        const string err = condExpr->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
     }
 
     // Type checking on then branch
     if(thenExpr){
-        const string err = thenExpr->typeChecking(prog, currentClass, scope);
+        const string err = thenExpr->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
     }
 
     // Type checking on else branch
     if(elseExpr){
-        const string err = elseExpr->typeChecking(prog, currentClass, scope);
+        const string err = elseExpr->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
     }

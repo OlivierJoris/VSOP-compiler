@@ -37,10 +37,10 @@ const string Block::checkUsageUndefinedType(const map<string, Class*>& classesMa
     return exprList->checkUsageUndefinedType(classesMap);
 }
 
-const string Block::typeChecking(const Program* prog, string currentClass, vector<pair<string, Expr*>> scope){
+const string Block::typeChecking(const Program* prog, string currentClass, bool inFieldInit, vector<pair<string, Expr*>> scope){
     if(exprList){
         // First, need to check the expressions inside the block if any
-        const string err = exprList->typeChecking(prog, currentClass, scope);
+        const string err = exprList->typeChecking(prog, currentClass, inFieldInit, scope);
         if(err.compare(""))
             return err;
         
