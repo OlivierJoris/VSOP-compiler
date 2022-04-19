@@ -87,7 +87,7 @@ class Unit : public Expr
         Unit(const int line, const int column);
 
         /**
-         * @brief dumpASTASTAST the AST corresponding to Unit inside the returned string.
+         * @brief Dump the AST corresponding to Unit inside the returned string.
          * 
          * @return std::string AST.
          */
@@ -95,8 +95,6 @@ class Unit : public Expr
 
         /**
          * @brief Check if unit is using non defined types.
-         * 
-         * @param classesMap Map of classes defined throughout the source code.
          * 
          * @return const std::string Always empty string because no possible error.
          */

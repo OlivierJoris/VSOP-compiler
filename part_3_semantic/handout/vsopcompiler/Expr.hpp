@@ -43,6 +43,7 @@ class Expr
          * @brief Check if expr is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
+         * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         virtual const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const = 0;

@@ -46,7 +46,7 @@ string Field::dumpAST(bool annotated) const
     return "Field(" + Field::name + ", " + Field::type + initExpr + ")";
 }
 
-const std::string Field::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
+const string Field::checkUsageUndefinedType(const map<string, Class*>& classesMap) const {
     // Check type of field
     bool known = checkKnownType(classesMap, type);
     if(!known)

@@ -86,6 +86,7 @@ class Call : public Expr
     private:
         Expr *objExpr;
         std::string methodName;
+        std::map<std::string, std::string> methodType;
         Args *listExpr;
 
     public:
@@ -104,6 +105,7 @@ class Call : public Expr
          * @brief Check if the dispatch is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
+         * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
@@ -150,6 +152,7 @@ class New : public Expr
          * @brief Check if the instantiation is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
+         * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
@@ -185,8 +188,6 @@ class ObjectIdentifier : public Expr
         /**
          * @brief Check if the identifier is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
@@ -195,6 +196,7 @@ class ObjectIdentifier : public Expr
          * @brief Perform type checking on the object identifier.
          * 
          * @param scope Scope of identifiers usable by the identifier.
+         * 
          * @return const std::string Always empty string because no possible error.
          */
         const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>> scope) override;
@@ -219,8 +221,6 @@ class Self : public Expr
 
         /**
          * @brief Check if the keyword is using non defined types.
-         * 
-         * @param classesMap Map of classes defined throughout the source code.
          * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */

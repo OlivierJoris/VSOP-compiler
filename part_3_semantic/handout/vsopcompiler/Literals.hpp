@@ -37,8 +37,6 @@ class IntegerLiteral : public Expr
         /**
          * @brief Check if the literal is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
@@ -73,8 +71,6 @@ class StringLiteral : public Expr
 
         /**
          * @brief Check if the string is using non defined types.
-         * 
-         * @param classesMap Map of classes defined throughout the source code.
          * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
@@ -111,8 +107,6 @@ class BooleanLiteral : public Expr
 
         /**
          * @brief Check if the boolean is using non defined types.
-         * 
-         * @param classesMap Map of classes defined throughout the source code.
          * 
          * @return const std::string Empty string if no error. Otherwise, error message.
          */

@@ -153,8 +153,10 @@ string Call::dumpAST(bool annotated) const
     if(Call::objExpr)
         objExpr = Call::objExpr->dumpAST(annotated);
 
+    auto newType = Call::methodType.find(methodName);
+
     if(annotated)
-        return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ") : " + type;
+        return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ") : " + newType->second;
     else
         return "Call(" + objExpr + ", " + Call::methodName + ", " + listExpr + ")";
 }
@@ -290,6 +292,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, bool i
 
     // Set type of call as type of return of method
     type = method->getRetType();
+    methodType[methodName] = method->getRetType();
 
     return "";
 }

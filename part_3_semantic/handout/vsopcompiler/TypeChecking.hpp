@@ -23,6 +23,7 @@ const std::string checkUseUndefinedType(Program *prog);
  * 
  * @param types Map of known types.
  * @param toCheck Type to check.
+ * 
  * @return true if type is known.
  * @return false if type is unknown.
  */
@@ -32,6 +33,7 @@ bool checkKnownType(const std::map<std::string, Class*>& types, const std::strin
  * @brief Check if given type is primitive type.
  * 
  * @param toCheck Type to check.
+ * 
  * @return true If given type is primitive.
  * @return false If given type is not primitive.
  */
