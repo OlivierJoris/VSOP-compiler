@@ -27,15 +27,17 @@ class Program : public Expr
         std::vector<std::string> errors;
 
         Program();
-        std::vector<Class*> getClasses() {return classes;}
+        std::vector<Class*> getClasses() const {return classes;}
         void addClass(Class* cls) {classes.push_back(cls);}
 
         /**
          * @brief Dump the AST inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check for redefinitions.
@@ -58,17 +60,25 @@ class Program : public Expr
          * @brief Check if program is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
 
         /**
          * @brief Check if the program contains a Main class with a main method.
-         * If the program contains such a method, check if its signautre matches the specifications.
+         * If the program contains such a method, check if its signature matches the specifications.
          * 
          * @return std::string Empty string if no error. Otherwise, error message.
          */
         std::string checkMain() const;
+
+        /**
+         * @brief Perform type checking on the program.
+         *
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 class Unit : public Expr
@@ -81,15 +91,21 @@ class Unit : public Expr
          * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if unit is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * @return const std::string Always empty string because no possible error.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
+        
+        /**
+         * @brief Perform type checking on the unit.
+         * 
+         * @return const std::string Always empty string because no possible error.
+         */
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 #endif

@@ -37,6 +37,7 @@ class Method : public Expr
         std::map<std::string, Formal*> formalsMap;
         Method(const std::string name, Formals *formals, const std::string retType, Block *block, const int line, const int column);
         std::string getName() {return name;}
+        Formals* getFormalsPointer() {return formals;}
         std::vector<Formal*> getFormals();
         Formal *getFormals(unsigned int i);
         std::string getRetType() {return retType;}
@@ -44,17 +45,37 @@ class Method : public Expr
         /**
          * @brief Dump the AST corresponding to the method inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the method is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        /**
+         * @brief Perform type checking on the method.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
+         * @param inFieldInit Whether typeChecking is called inside a field initializer.
+         * @param scope Scope of identifiers usable by the method.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(
+            const Program* prog,
+            std::string currentClass,
+            bool inFieldInit,
+            std::vector<std::pair<std::string, Expr*>> scope
+        ) override;
 };
 
 /**
@@ -73,17 +94,37 @@ class Call : public Expr
         /**
          * @brief Dump the AST corresponding to the dispatch inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the dispatch is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        /**
+         * @brief Perform type checking on the dispatch.
+         * 
+         * @param prog Program that we are analyzing.
+         * @param currentClass Class in which we are running type checking.
+         * @param inFieldInit Whether typeChecking is called inside a field initializer.
+         * @param scope Scope of identifiers usable by the dispatch.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
+         */
+        const std::string typeChecking(
+            const Program* prog,
+            std::string currentClass,
+            bool inFieldInit,
+            std::vector<std::pair<std::string, Expr*>> scope
+        ) override;
 };
 
 /**
@@ -100,17 +141,27 @@ class New : public Expr
         /**
          * @brief Dump the AST corresponding to the instantiation inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the instantiation is using non defined types.
          * 
          * @param classesMap Map of classes defined throughout the source code.
-         * @return Expr*, if using non defined type. Otherwise, null.
+         * 
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>& classesMap) const override;
+
+        /**
+         * @brief Perform type checking on the instantiation.
+         * 
+         * @return const std::string Always empty string because error is not possible.
+         */
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -127,17 +178,27 @@ class ObjectIdentifier : public Expr
         /**
          * @brief Dump the AST corresponding to the identifier inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the identifier is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because the object identifier does not use any type.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
+
+        /**
+         * @brief Perform type checking on the object identifier.
+         * 
+         * @param scope Scope of identifiers usable by the identifier.
+         * 
+         * @return const std::string Always empty string because no possible error.
+         */
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>> scope) override;
 };
 
 /**
@@ -151,17 +212,27 @@ class Self : public Expr
         /**
          * @brief Dump the AST corresponding to the keyword inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the keyword is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because the keyword does not use any type.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
+
+        /**
+         * @brief Perform type checking on the self.
+         * 
+         * @param currentClass Class in which we are running type checking.
+         * 
+         * @return const std::string Always empty string because no possible error.
+         */
+        const std::string typeChecking(const Program*, std::string currentClass, bool, std::vector<std::pair<std::string, Expr*>>) override;
 };
 
 #endif

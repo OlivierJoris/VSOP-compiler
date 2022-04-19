@@ -28,17 +28,25 @@ class IntegerLiteral : public Expr
         /**
          * @brief Dump the AST corresponding to the integer inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the literal is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
+
+        /**
+         * @brief Perform type checking on the literal.
+         *
+         * @return const std::string Always empty string because no possible error.
+         */
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 /**
@@ -55,17 +63,25 @@ class StringLiteral : public Expr
         /**
          * @brief Dump the AST corresponding to the string inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the string is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
+
+        /**
+         * @brief Perform type checking on the literal.
+         * 
+         * @return const std::string Always empty string because no possible error.
+         */
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 
 };
 
@@ -83,17 +99,25 @@ class BooleanLiteral : public Expr
         /**
          * @brief Dump the AST corresponding to the boolean inside the returned string.
          * 
+         * @param annotated True, annotated AST. False, AST.
+         * 
          * @return std::string AST.
          */
-        std::string eval() const override;
+        std::string dumpAST(bool annotated) const override;
 
         /**
          * @brief Check if the boolean is using non defined types.
          * 
-         * @param classesMap Map of classes defined throughout the source code.
-         * @return Always NULL because Unit does not use any type.
+         * @return const std::string Empty string if no error. Otherwise, error message.
          */
-        const Expr* checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return NULL;};
+        const std::string checkUsageUndefinedType(const std::map<std::string, Class*>&) const override {return "";};
+
+        /**
+         * @brief Perform type checking on the literal.
+         * 
+         * @return const std::string Always empty string because no possible error.
+         */
+        const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 };
 
 #endif
