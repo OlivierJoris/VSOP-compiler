@@ -168,7 +168,7 @@ const string IsNull::checkUsageUndefinedType(const map<string, Class*>& classesM
     return UnOp::checkUsageUndefinedType(classesMap);
 }
 
-const std::string IsNull::typeChecking(const Program* prog, string currentClass, bool inFieldInit, std::vector<std::pair<std::string, Expr*>> scope){
+const string IsNull::typeChecking(const Program* prog, string currentClass, bool inFieldInit, vector<pair<string, Expr*>> scope){
     // Perform type checking on right-hand side
     if(expr){
         const string err = expr->typeChecking(prog, currentClass, inFieldInit, scope);

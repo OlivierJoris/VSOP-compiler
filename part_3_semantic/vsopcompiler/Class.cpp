@@ -24,7 +24,7 @@ Class::Class(const string name, const string parent, vector<Field*>& fields, vec
 
 string Class::dumpAST(bool annotated) const
 {
-    string fields = "";    
+    string fields = "";
 
     if(Class::fields.size() != 0)
     {
