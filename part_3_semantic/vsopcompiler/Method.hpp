@@ -86,6 +86,7 @@ class Call : public Expr
     private:
         Expr *objExpr;
         std::string methodName;
+        std::map<std::string, std::string> methodType;
         Args *listExpr;
 
     public:
