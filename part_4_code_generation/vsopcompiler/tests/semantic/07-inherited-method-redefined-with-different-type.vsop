@@ -1,0 +1,18 @@
+class List {
+    head : int32 <- 1;
+    isNil() : bool {
+        head <- hd
+    }
+}
+
+class Stack extends List {
+    isNil() : int32 {
+        head <- hd
+    }
+}
+
+class Main {
+    main() : int32 {
+        0
+    }
+}
