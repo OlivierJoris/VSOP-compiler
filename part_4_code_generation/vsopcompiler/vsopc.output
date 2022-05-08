@@ -1,0 +1,2554 @@
+Terminals unused in grammar
+
+    EMBEDDED
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Class ProgramContinued
+
+    2 ProgramContinued: %empty
+    3                 | Class ProgramContinued
+
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody "}"
+    5      | "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}"
+
+    6 ClassBody: %empty
+    7          | Field ClassBody
+    8          | Method ClassBody
+
+    9 Field: OBJECT_IDENTIFIER ":" Type ";"
+   10      | OBJECT_IDENTIFIER ":" Type "<-" Expr ";"
+
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block
+
+   12 Type: TYPE_IDENTIFIER
+   13     | "int32"
+   14     | "bool"
+   15     | "string"
+   16     | "unit"
+
+   17 Formals: %empty
+   18        | Formal FormalsContinued
+
+   19 FormalsContinued: %empty
+   20                 | "," Formal FormalsContinued
+
+   21 Formal: OBJECT_IDENTIFIER ":" Type
+
+   22 Block: "{" Expr BlockExpr "}"
+
+   23 BlockExpr: %empty
+   24          | ";" Expr BlockExpr
+
+   25 Expr: If
+   26     | While
+   27     | Let
+   28     | OBJECT_IDENTIFIER "<-" Expr
+   29     | "not" Expr
+   30     | Expr "and" Expr
+   31     | Expr "<=" Expr
+   32     | Expr "<" Expr
+   33     | Expr "=" Expr
+   34     | Expr "-" Expr
+   35     | Expr "+" Expr
+   36     | Expr "/" Expr
+   37     | Expr "*" Expr
+   38     | Expr "^" Expr
+   39     | "-" Expr
+   40     | "isnull" Expr
+   41     | OBJECT_IDENTIFIER "(" Args ")"
+   42     | Expr "." OBJECT_IDENTIFIER "(" Args ")"
+   43     | "new" TYPE_IDENTIFIER
+   44     | OBJECT_IDENTIFIER
+   45     | "self"
+   46     | Literal
+   47     | "(" ")"
+   48     | "(" Expr ")"
+   49     | Block
+   50     | InvalidToken
+
+   51 If: "if" Expr "then" Expr
+   52   | "if" Expr "then" Expr "else" Expr
+
+   53 While: "while" Expr "do" Expr
+
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr
+   55    | "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
+
+   56 Args: %empty
+   57     | Expr ArgsExprList
+
+   58 ArgsExprList: %empty
+   59             | "," Expr ArgsExprList
+
+   60 Literal: INTEGER_LITERAL
+   61        | STRING_LITERAL
+   62        | "true"
+   63        | "false"
+
+   64 InvalidToken: INVALID_CHAR
+   65             | INVALID_HEX_NUMBER
+   66             | INVALID_INTEGER_LITERAL
+   67             | INVALID_EOF_STRING
+   68             | INVALID_EOF_COMMENT
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    "and" (258) 30
+    "bool" <stringValue> (259) 14
+    "class" (260) 4 5
+    "do" (261) 53
+    "else" (262) 52
+    "extends" (263) 5
+    "false" (264) 63
+    "if" (265) 51 52
+    "in" (266) 54 55
+    "int32" <stringValue> (267) 13
+    "isnull" (268) 40
+    "let" (269) 54 55
+    "new" (270) 43
+    "not" (271) 29
+    "self" (272) 45
+    "string" <stringValue> (273) 15
+    "then" (274) 51 52
+    "true" (275) 62
+    "unit" <stringValue> (276) 16
+    "while" (277) 53
+    "{" (278) 4 5 22
+    "}" (279) 4 5 22
+    "(" (280) 11 41 42 47 48
+    ")" (281) 11 41 42 47 48
+    ":" (282) 9 10 11 21 54 55
+    ";" (283) 9 10 24
+    "," (284) 20 59
+    "+" (285) 35
+    "-" (286) 34 39
+    "*" (287) 37
+    "/" (288) 36
+    "^" (289) 38
+    "." (290) 42
+    "=" (291) 33
+    "<" (292) 32
+    "<=" (293) 31
+    "<-" (294) 10 28 55
+    INVALID_HEX_NUMBER <stringValue> (295) 65
+    INVALID_CHAR <stringValue> (296) 64
+    INVALID_EOF_STRING (297) 67
+    INVALID_EOF_COMMENT (298) 68
+    INVALID_INTEGER_LITERAL <stringValue> (299) 66
+    INTEGER_LITERAL <intValue> (300) 60
+    TYPE_IDENTIFIER <stringValue> (301) 4 5 12 43
+    OBJECT_IDENTIFIER <stringValue> (302) 9 10 11 21 28 41 42 44 54 55
+    STRING_LITERAL <stringValue> (303) 61
+    UNARYMINUS (304)
+    EMBEDDED (305)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (51)
+        on left: 0
+    Program <program> (52)
+        on left: 1
+        on right: 0
+    ProgramContinued <program> (53)
+        on left: 2 3
+        on right: 1 3
+    Class <cls> (54)
+        on left: 4 5
+        on right: 1 3
+    ClassBody <classBody> (55)
+        on left: 6 7 8
+        on right: 4 5 7 8
+    Field <field> (56)
+        on left: 9 10
+        on right: 7
+    Method <method> (57)
+        on left: 11
+        on right: 8
+    Type <stringValue> (58)
+        on left: 12 13 14 15 16
+        on right: 9 10 11 21 54 55
+    Formals <formals> (59)
+        on left: 17 18
+        on right: 11
+    FormalsContinued <formals> (60)
+        on left: 19 20
+        on right: 18 20
+    Formal <formal> (61)
+        on left: 21
+        on right: 18 20
+    Block <args> (62)
+        on left: 22
+        on right: 11 49
+    BlockExpr <args> (63)
+        on left: 23 24
+        on right: 22 24
+    Expr <expression> (64)
+        on left: 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+        on right: 10 22 24 28 29 30 31 32 33 34 35 36 37 38 39 40 42 48 51 52 53 54 55 57 59
+    If <expression> (65)
+        on left: 51 52
+        on right: 25
+    While <expression> (66)
+        on left: 53
+        on right: 26
+    Let <expression> (67)
+        on left: 54 55
+        on right: 27
+    Args <args> (68)
+        on left: 56 57
+        on right: 41 42
+    ArgsExprList <args> (69)
+        on left: 58 59
+        on right: 57 59
+    Literal <expression> (70)
+        on left: 60 61 62 63
+        on right: 46
+    InvalidToken <expression> (71)
+        on left: 64 65 66 67 68
+        on right: 50
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    "class"  shift, and go to state 1
+
+    Program  go to state 2
+    Class    go to state 3
+
+
+State 1
+
+    4 Class: "class" . TYPE_IDENTIFIER "{" ClassBody "}"
+    5      | "class" . TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}"
+
+    TYPE_IDENTIFIER  shift, and go to state 4
+
+
+State 2
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    1 Program: Class . ProgramContinued
+
+    "class"  shift, and go to state 1
+
+    $default  reduce using rule 2 (ProgramContinued)
+
+    ProgramContinued  go to state 6
+    Class             go to state 7
+
+
+State 4
+
+    4 Class: "class" TYPE_IDENTIFIER . "{" ClassBody "}"
+    5      | "class" TYPE_IDENTIFIER . "extends" TYPE_IDENTIFIER "{" ClassBody "}"
+
+    "extends"  shift, and go to state 8
+    "{"        shift, and go to state 9
+
+
+State 5
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 6
+
+    1 Program: Class ProgramContinued .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 7
+
+    3 ProgramContinued: Class . ProgramContinued
+
+    "class"  shift, and go to state 1
+
+    $default  reduce using rule 2 (ProgramContinued)
+
+    ProgramContinued  go to state 10
+    Class             go to state 7
+
+
+State 8
+
+    5 Class: "class" TYPE_IDENTIFIER "extends" . TYPE_IDENTIFIER "{" ClassBody "}"
+
+    TYPE_IDENTIFIER  shift, and go to state 11
+
+
+State 9
+
+    4 Class: "class" TYPE_IDENTIFIER "{" . ClassBody "}"
+
+    OBJECT_IDENTIFIER  shift, and go to state 12
+
+    $default  reduce using rule 6 (ClassBody)
+
+    ClassBody  go to state 13
+    Field      go to state 14
+    Method     go to state 15
+
+
+State 10
+
+    3 ProgramContinued: Class ProgramContinued .
+
+    $default  reduce using rule 3 (ProgramContinued)
+
+
+State 11
+
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER . "{" ClassBody "}"
+
+    "{"  shift, and go to state 16
+
+
+State 12
+
+    9 Field: OBJECT_IDENTIFIER . ":" Type ";"
+   10      | OBJECT_IDENTIFIER . ":" Type "<-" Expr ";"
+   11 Method: OBJECT_IDENTIFIER . "(" Formals ")" ":" Type Block
+
+    "("  shift, and go to state 17
+    ":"  shift, and go to state 18
+
+
+State 13
+
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody . "}"
+
+    "}"  shift, and go to state 19
+
+
+State 14
+
+    7 ClassBody: Field . ClassBody
+
+    OBJECT_IDENTIFIER  shift, and go to state 12
+
+    $default  reduce using rule 6 (ClassBody)
+
+    ClassBody  go to state 20
+    Field      go to state 14
+    Method     go to state 15
+
+
+State 15
+
+    8 ClassBody: Method . ClassBody
+
+    OBJECT_IDENTIFIER  shift, and go to state 12
+
+    $default  reduce using rule 6 (ClassBody)
+
+    ClassBody  go to state 21
+    Field      go to state 14
+    Method     go to state 15
+
+
+State 16
+
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" . ClassBody "}"
+
+    OBJECT_IDENTIFIER  shift, and go to state 12
+
+    $default  reduce using rule 6 (ClassBody)
+
+    ClassBody  go to state 22
+    Field      go to state 14
+    Method     go to state 15
+
+
+State 17
+
+   11 Method: OBJECT_IDENTIFIER "(" . Formals ")" ":" Type Block
+
+    OBJECT_IDENTIFIER  shift, and go to state 23
+
+    $default  reduce using rule 17 (Formals)
+
+    Formals  go to state 24
+    Formal   go to state 25
+
+
+State 18
+
+    9 Field: OBJECT_IDENTIFIER ":" . Type ";"
+   10      | OBJECT_IDENTIFIER ":" . Type "<-" Expr ";"
+
+    "bool"           shift, and go to state 26
+    "int32"          shift, and go to state 27
+    "string"         shift, and go to state 28
+    "unit"           shift, and go to state 29
+    TYPE_IDENTIFIER  shift, and go to state 30
+
+    Type  go to state 31
+
+
+State 19
+
+    4 Class: "class" TYPE_IDENTIFIER "{" ClassBody "}" .
+
+    $default  reduce using rule 4 (Class)
+
+
+State 20
+
+    7 ClassBody: Field ClassBody .
+
+    $default  reduce using rule 7 (ClassBody)
+
+
+State 21
+
+    8 ClassBody: Method ClassBody .
+
+    $default  reduce using rule 8 (ClassBody)
+
+
+State 22
+
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody . "}"
+
+    "}"  shift, and go to state 32
+
+
+State 23
+
+   21 Formal: OBJECT_IDENTIFIER . ":" Type
+
+    ":"  shift, and go to state 33
+
+
+State 24
+
+   11 Method: OBJECT_IDENTIFIER "(" Formals . ")" ":" Type Block
+
+    ")"  shift, and go to state 34
+
+
+State 25
+
+   18 Formals: Formal . FormalsContinued
+
+    ","  shift, and go to state 35
+
+    $default  reduce using rule 19 (FormalsContinued)
+
+    FormalsContinued  go to state 36
+
+
+State 26
+
+   14 Type: "bool" .
+
+    $default  reduce using rule 14 (Type)
+
+
+State 27
+
+   13 Type: "int32" .
+
+    $default  reduce using rule 13 (Type)
+
+
+State 28
+
+   15 Type: "string" .
+
+    $default  reduce using rule 15 (Type)
+
+
+State 29
+
+   16 Type: "unit" .
+
+    $default  reduce using rule 16 (Type)
+
+
+State 30
+
+   12 Type: TYPE_IDENTIFIER .
+
+    $default  reduce using rule 12 (Type)
+
+
+State 31
+
+    9 Field: OBJECT_IDENTIFIER ":" Type . ";"
+   10      | OBJECT_IDENTIFIER ":" Type . "<-" Expr ";"
+
+    ";"   shift, and go to state 37
+    "<-"  shift, and go to state 38
+
+
+State 32
+
+    5 Class: "class" TYPE_IDENTIFIER "extends" TYPE_IDENTIFIER "{" ClassBody "}" .
+
+    $default  reduce using rule 5 (Class)
+
+
+State 33
+
+   21 Formal: OBJECT_IDENTIFIER ":" . Type
+
+    "bool"           shift, and go to state 26
+    "int32"          shift, and go to state 27
+    "string"         shift, and go to state 28
+    "unit"           shift, and go to state 29
+    TYPE_IDENTIFIER  shift, and go to state 30
+
+    Type  go to state 39
+
+
+State 34
+
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" . ":" Type Block
+
+    ":"  shift, and go to state 40
+
+
+State 35
+
+   20 FormalsContinued: "," . Formal FormalsContinued
+
+    OBJECT_IDENTIFIER  shift, and go to state 23
+
+    Formal  go to state 41
+
+
+State 36
+
+   18 Formals: Formal FormalsContinued .
+
+    $default  reduce using rule 18 (Formals)
+
+
+State 37
+
+    9 Field: OBJECT_IDENTIFIER ":" Type ";" .
+
+    $default  reduce using rule 9 (Field)
+
+
+State 38
+
+   10 Field: OBJECT_IDENTIFIER ":" Type "<-" . Expr ";"
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 63
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 39
+
+   21 Formal: OBJECT_IDENTIFIER ":" Type .
+
+    $default  reduce using rule 21 (Formal)
+
+
+State 40
+
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" . Type Block
+
+    "bool"           shift, and go to state 26
+    "int32"          shift, and go to state 27
+    "string"         shift, and go to state 28
+    "unit"           shift, and go to state 29
+    TYPE_IDENTIFIER  shift, and go to state 30
+
+    Type  go to state 69
+
+
+State 41
+
+   20 FormalsContinued: "," Formal . FormalsContinued
+
+    ","  shift, and go to state 35
+
+    $default  reduce using rule 19 (FormalsContinued)
+
+    FormalsContinued  go to state 70
+
+
+State 42
+
+   63 Literal: "false" .
+
+    $default  reduce using rule 63 (Literal)
+
+
+State 43
+
+   51 If: "if" . Expr "then" Expr
+   52   | "if" . Expr "then" Expr "else" Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 71
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 44
+
+   40 Expr: "isnull" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 72
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 45
+
+   54 Let: "let" . OBJECT_IDENTIFIER ":" Type "in" Expr
+   55    | "let" . OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr
+
+    OBJECT_IDENTIFIER  shift, and go to state 73
+
+
+State 46
+
+   43 Expr: "new" . TYPE_IDENTIFIER
+
+    TYPE_IDENTIFIER  shift, and go to state 74
+
+
+State 47
+
+   29 Expr: "not" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 75
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 48
+
+   45 Expr: "self" .
+
+    $default  reduce using rule 45 (Expr)
+
+
+State 49
+
+   62 Literal: "true" .
+
+    $default  reduce using rule 62 (Literal)
+
+
+State 50
+
+   53 While: "while" . Expr "do" Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 76
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 51
+
+   22 Block: "{" . Expr BlockExpr "}"
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 77
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 52
+
+   47 Expr: "(" . ")"
+   48     | "(" . Expr ")"
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    ")"                      shift, and go to state 78
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 79
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 53
+
+   39 Expr: "-" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 80
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 54
+
+   65 InvalidToken: INVALID_HEX_NUMBER .
+
+    $default  reduce using rule 65 (InvalidToken)
+
+
+State 55
+
+   64 InvalidToken: INVALID_CHAR .
+
+    $default  reduce using rule 64 (InvalidToken)
+
+
+State 56
+
+   67 InvalidToken: INVALID_EOF_STRING .
+
+    $default  reduce using rule 67 (InvalidToken)
+
+
+State 57
+
+   68 InvalidToken: INVALID_EOF_COMMENT .
+
+    $default  reduce using rule 68 (InvalidToken)
+
+
+State 58
+
+   66 InvalidToken: INVALID_INTEGER_LITERAL .
+
+    $default  reduce using rule 66 (InvalidToken)
+
+
+State 59
+
+   60 Literal: INTEGER_LITERAL .
+
+    $default  reduce using rule 60 (Literal)
+
+
+State 60
+
+   28 Expr: OBJECT_IDENTIFIER . "<-" Expr
+   41     | OBJECT_IDENTIFIER . "(" Args ")"
+   44     | OBJECT_IDENTIFIER .
+
+    "("   shift, and go to state 81
+    "<-"  shift, and go to state 82
+
+    $default  reduce using rule 44 (Expr)
+
+
+State 61
+
+   61 Literal: STRING_LITERAL .
+
+    $default  reduce using rule 61 (Literal)
+
+
+State 62
+
+   49 Expr: Block .
+
+    $default  reduce using rule 49 (Expr)
+
+
+State 63
+
+   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr . ";"
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "and"  shift, and go to state 83
+    ";"    shift, and go to state 84
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+
+State 64
+
+   25 Expr: If .
+
+    $default  reduce using rule 25 (Expr)
+
+
+State 65
+
+   26 Expr: While .
+
+    $default  reduce using rule 26 (Expr)
+
+
+State 66
+
+   27 Expr: Let .
+
+    $default  reduce using rule 27 (Expr)
+
+
+State 67
+
+   46 Expr: Literal .
+
+    $default  reduce using rule 46 (Expr)
+
+
+State 68
+
+   50 Expr: InvalidToken .
+
+    $default  reduce using rule 50 (Expr)
+
+
+State 69
+
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type . Block
+
+    "{"  shift, and go to state 51
+
+    Block  go to state 94
+
+
+State 70
+
+   20 FormalsContinued: "," Formal FormalsContinued .
+
+    $default  reduce using rule 20 (FormalsContinued)
+
+
+State 71
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   51 If: "if" Expr . "then" Expr
+   52   | "if" Expr . "then" Expr "else" Expr
+
+    "and"   shift, and go to state 83
+    "then"  shift, and go to state 95
+    "+"     shift, and go to state 85
+    "-"     shift, and go to state 86
+    "*"     shift, and go to state 87
+    "/"     shift, and go to state 88
+    "^"     shift, and go to state 89
+    "."     shift, and go to state 90
+    "="     shift, and go to state 91
+    "<"     shift, and go to state 92
+    "<="    shift, and go to state 93
+
+
+State 72
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   40     | "isnull" Expr .
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    $default  reduce using rule 40 (Expr)
+
+
+State 73
+
+   54 Let: "let" OBJECT_IDENTIFIER . ":" Type "in" Expr
+   55    | "let" OBJECT_IDENTIFIER . ":" Type "<-" Expr "in" Expr
+
+    ":"  shift, and go to state 96
+
+
+State 74
+
+   43 Expr: "new" TYPE_IDENTIFIER .
+
+    $default  reduce using rule 43 (Expr)
+
+
+State 75
+
+   29 Expr: "not" Expr .
+   30     | Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"   shift, and go to state 85
+    "-"   shift, and go to state 86
+    "*"   shift, and go to state 87
+    "/"   shift, and go to state 88
+    "^"   shift, and go to state 89
+    "."   shift, and go to state 90
+    "="   shift, and go to state 91
+    "<"   shift, and go to state 92
+    "<="  shift, and go to state 93
+
+    $default  reduce using rule 29 (Expr)
+
+
+State 76
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   53 While: "while" Expr . "do" Expr
+
+    "and"  shift, and go to state 83
+    "do"   shift, and go to state 97
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+
+State 77
+
+   22 Block: "{" Expr . BlockExpr "}"
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "and"  shift, and go to state 83
+    ";"    shift, and go to state 98
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 23 (BlockExpr)
+
+    BlockExpr  go to state 99
+
+
+State 78
+
+   47 Expr: "(" ")" .
+
+    $default  reduce using rule 47 (Expr)
+
+
+State 79
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   48     | "(" Expr . ")"
+
+    "and"  shift, and go to state 83
+    ")"    shift, and go to state 100
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+
+State 80
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   39     | "-" Expr .
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    $default  reduce using rule 39 (Expr)
+
+
+State 81
+
+   41 Expr: OBJECT_IDENTIFIER "(" . Args ")"
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    $default  reduce using rule 56 (Args)
+
+    Block         go to state 62
+    Expr          go to state 101
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Args          go to state 102
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 82
+
+   28 Expr: OBJECT_IDENTIFIER "<-" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 103
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 83
+
+   30 Expr: Expr "and" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 104
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 84
+
+   10 Field: OBJECT_IDENTIFIER ":" Type "<-" Expr ";" .
+
+    $default  reduce using rule 10 (Field)
+
+
+State 85
+
+   35 Expr: Expr "+" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 105
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 86
+
+   34 Expr: Expr "-" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 106
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 87
+
+   37 Expr: Expr "*" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 107
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 88
+
+   36 Expr: Expr "/" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 108
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 89
+
+   38 Expr: Expr "^" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 109
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 90
+
+   42 Expr: Expr "." . OBJECT_IDENTIFIER "(" Args ")"
+
+    OBJECT_IDENTIFIER  shift, and go to state 110
+
+
+State 91
+
+   33 Expr: Expr "=" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 111
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 92
+
+   32 Expr: Expr "<" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 112
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 93
+
+   31 Expr: Expr "<=" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 113
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 94
+
+   11 Method: OBJECT_IDENTIFIER "(" Formals ")" ":" Type Block .
+
+    $default  reduce using rule 11 (Method)
+
+
+State 95
+
+   51 If: "if" Expr "then" . Expr
+   52   | "if" Expr "then" . Expr "else" Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 114
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 96
+
+   54 Let: "let" OBJECT_IDENTIFIER ":" . Type "in" Expr
+   55    | "let" OBJECT_IDENTIFIER ":" . Type "<-" Expr "in" Expr
+
+    "bool"           shift, and go to state 26
+    "int32"          shift, and go to state 27
+    "string"         shift, and go to state 28
+    "unit"           shift, and go to state 29
+    TYPE_IDENTIFIER  shift, and go to state 30
+
+    Type  go to state 115
+
+
+State 97
+
+   53 While: "while" Expr "do" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 116
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 98
+
+   24 BlockExpr: ";" . Expr BlockExpr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 117
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 99
+
+   22 Block: "{" Expr BlockExpr . "}"
+
+    "}"  shift, and go to state 118
+
+
+State 100
+
+   48 Expr: "(" Expr ")" .
+
+    $default  reduce using rule 48 (Expr)
+
+
+State 101
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   57 Args: Expr . ArgsExprList
+
+    "and"  shift, and go to state 83
+    ","    shift, and go to state 119
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 58 (ArgsExprList)
+
+    ArgsExprList  go to state 120
+
+
+State 102
+
+   41 Expr: OBJECT_IDENTIFIER "(" Args . ")"
+
+    ")"  shift, and go to state 121
+
+
+State 103
+
+   28 Expr: OBJECT_IDENTIFIER "<-" Expr .
+   30     | Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "and"  shift, and go to state 83
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 28 (Expr)
+
+
+State 104
+
+   30 Expr: Expr . "and" Expr
+   30     | Expr "and" Expr .
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"   shift, and go to state 85
+    "-"   shift, and go to state 86
+    "*"   shift, and go to state 87
+    "/"   shift, and go to state 88
+    "^"   shift, and go to state 89
+    "."   shift, and go to state 90
+    "="   shift, and go to state 91
+    "<"   shift, and go to state 92
+    "<="  shift, and go to state 93
+
+    $default  reduce using rule 30 (Expr)
+
+
+State 105
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   35     | Expr "+" Expr .
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "*"  shift, and go to state 87
+    "/"  shift, and go to state 88
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    $default  reduce using rule 35 (Expr)
+
+
+State 106
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   34     | Expr "-" Expr .
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "*"  shift, and go to state 87
+    "/"  shift, and go to state 88
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    $default  reduce using rule 34 (Expr)
+
+
+State 107
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   37     | Expr "*" Expr .
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    $default  reduce using rule 37 (Expr)
+
+
+State 108
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   36     | Expr "/" Expr .
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    $default  reduce using rule 36 (Expr)
+
+
+State 109
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   38     | Expr "^" Expr .
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    $default  reduce using rule 38 (Expr)
+
+
+State 110
+
+   42 Expr: Expr "." OBJECT_IDENTIFIER . "(" Args ")"
+
+    "("  shift, and go to state 122
+
+
+State 111
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   33     | Expr "=" Expr .
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"  shift, and go to state 85
+    "-"  shift, and go to state 86
+    "*"  shift, and go to state 87
+    "/"  shift, and go to state 88
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    "="   error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+
+    $default  reduce using rule 33 (Expr)
+
+
+State 112
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   32     | Expr "<" Expr .
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"  shift, and go to state 85
+    "-"  shift, and go to state 86
+    "*"  shift, and go to state 87
+    "/"  shift, and go to state 88
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    "="   error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+
+    $default  reduce using rule 32 (Expr)
+
+
+State 113
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   31     | Expr "<=" Expr .
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "+"  shift, and go to state 85
+    "-"  shift, and go to state 86
+    "*"  shift, and go to state 87
+    "/"  shift, and go to state 88
+    "^"  shift, and go to state 89
+    "."  shift, and go to state 90
+
+    "="   error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+
+    $default  reduce using rule 31 (Expr)
+
+
+State 114
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   51 If: "if" Expr "then" Expr .
+   52   | "if" Expr "then" Expr . "else" Expr
+
+    "and"   shift, and go to state 83
+    "else"  shift, and go to state 123
+    "+"     shift, and go to state 85
+    "-"     shift, and go to state 86
+    "*"     shift, and go to state 87
+    "/"     shift, and go to state 88
+    "^"     shift, and go to state 89
+    "."     shift, and go to state 90
+    "="     shift, and go to state 91
+    "<"     shift, and go to state 92
+    "<="    shift, and go to state 93
+
+    $default  reduce using rule 51 (If)
+
+
+State 115
+
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type . "in" Expr
+   55    | "let" OBJECT_IDENTIFIER ":" Type . "<-" Expr "in" Expr
+
+    "in"  shift, and go to state 124
+    "<-"  shift, and go to state 125
+
+
+State 116
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   53 While: "while" Expr "do" Expr .
+
+    "and"  shift, and go to state 83
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 53 (While)
+
+
+State 117
+
+   24 BlockExpr: ";" Expr . BlockExpr
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+
+    "and"  shift, and go to state 83
+    ";"    shift, and go to state 98
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 23 (BlockExpr)
+
+    BlockExpr  go to state 126
+
+
+State 118
+
+   22 Block: "{" Expr BlockExpr "}" .
+
+    $default  reduce using rule 22 (Block)
+
+
+State 119
+
+   59 ArgsExprList: "," . Expr ArgsExprList
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 127
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 120
+
+   57 Args: Expr ArgsExprList .
+
+    $default  reduce using rule 57 (Args)
+
+
+State 121
+
+   41 Expr: OBJECT_IDENTIFIER "(" Args ")" .
+
+    $default  reduce using rule 41 (Expr)
+
+
+State 122
+
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" . Args ")"
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    $default  reduce using rule 56 (Args)
+
+    Block         go to state 62
+    Expr          go to state 101
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Args          go to state 128
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 123
+
+   52 If: "if" Expr "then" Expr "else" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 129
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 124
+
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "in" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 130
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 125
+
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" . Expr "in" Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 131
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 126
+
+   24 BlockExpr: ";" Expr BlockExpr .
+
+    $default  reduce using rule 24 (BlockExpr)
+
+
+State 127
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   59 ArgsExprList: "," Expr . ArgsExprList
+
+    "and"  shift, and go to state 83
+    ","    shift, and go to state 119
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 58 (ArgsExprList)
+
+    ArgsExprList  go to state 132
+
+
+State 128
+
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args . ")"
+
+    ")"  shift, and go to state 133
+
+
+State 129
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   52 If: "if" Expr "then" Expr "else" Expr .
+
+    "and"  shift, and go to state 83
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 52 (If)
+
+
+State 130
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   54 Let: "let" OBJECT_IDENTIFIER ":" Type "in" Expr .
+
+    "and"  shift, and go to state 83
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 54 (Let)
+
+
+State 131
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr . "in" Expr
+
+    "and"  shift, and go to state 83
+    "in"   shift, and go to state 134
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+
+State 132
+
+   59 ArgsExprList: "," Expr ArgsExprList .
+
+    $default  reduce using rule 59 (ArgsExprList)
+
+
+State 133
+
+   42 Expr: Expr "." OBJECT_IDENTIFIER "(" Args ")" .
+
+    $default  reduce using rule 42 (Expr)
+
+
+State 134
+
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" . Expr
+
+    "false"                  shift, and go to state 42
+    "if"                     shift, and go to state 43
+    "isnull"                 shift, and go to state 44
+    "let"                    shift, and go to state 45
+    "new"                    shift, and go to state 46
+    "not"                    shift, and go to state 47
+    "self"                   shift, and go to state 48
+    "true"                   shift, and go to state 49
+    "while"                  shift, and go to state 50
+    "{"                      shift, and go to state 51
+    "("                      shift, and go to state 52
+    "-"                      shift, and go to state 53
+    INVALID_HEX_NUMBER       shift, and go to state 54
+    INVALID_CHAR             shift, and go to state 55
+    INVALID_EOF_STRING       shift, and go to state 56
+    INVALID_EOF_COMMENT      shift, and go to state 57
+    INVALID_INTEGER_LITERAL  shift, and go to state 58
+    INTEGER_LITERAL          shift, and go to state 59
+    OBJECT_IDENTIFIER        shift, and go to state 60
+    STRING_LITERAL           shift, and go to state 61
+
+    Block         go to state 62
+    Expr          go to state 135
+    If            go to state 64
+    While         go to state 65
+    Let           go to state 66
+    Literal       go to state 67
+    InvalidToken  go to state 68
+
+
+State 135
+
+   30 Expr: Expr . "and" Expr
+   31     | Expr . "<=" Expr
+   32     | Expr . "<" Expr
+   33     | Expr . "=" Expr
+   34     | Expr . "-" Expr
+   35     | Expr . "+" Expr
+   36     | Expr . "/" Expr
+   37     | Expr . "*" Expr
+   38     | Expr . "^" Expr
+   42     | Expr . "." OBJECT_IDENTIFIER "(" Args ")"
+   55 Let: "let" OBJECT_IDENTIFIER ":" Type "<-" Expr "in" Expr .
+
+    "and"  shift, and go to state 83
+    "+"    shift, and go to state 85
+    "-"    shift, and go to state 86
+    "*"    shift, and go to state 87
+    "/"    shift, and go to state 88
+    "^"    shift, and go to state 89
+    "."    shift, and go to state 90
+    "="    shift, and go to state 91
+    "<"    shift, and go to state 92
+    "<="   shift, and go to state 93
+
+    $default  reduce using rule 55 (Let)
