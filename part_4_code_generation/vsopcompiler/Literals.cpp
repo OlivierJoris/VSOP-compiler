@@ -11,6 +11,7 @@
 #include "Literals.hpp"
 #include "Expr.hpp"
 #include "Class.hpp"
+#include "LLVM.hpp"
 
 using namespace std;
 
@@ -26,6 +27,11 @@ string IntegerLiteral::dumpAST(bool annotated) const
         return to_string(IntegerLiteral::intValue) + " : " + type;
     else
         return to_string(IntegerLiteral::intValue);
+}
+
+llvm::Value *IntegerLiteral::generateCode(Program *program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+    return llvm::ConstantInt::get(llvm->getType("int32"), intValue);
 }
 
 StringLiteral::StringLiteral(const string stringValue, const int line, const int column): stringValue(stringValue){
@@ -67,6 +73,28 @@ string StringLiteral::dumpAST(bool annotated) const
         return ret + "\"";
 }
 
+llvm::Value *StringLiteral::generateCode(Program *Program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(Program, fileName);
+
+    std::string formatedString = "\"";
+
+    for(char character: StringLiteral::stringValue){
+
+        if(character != '\"' && character != '\\'){
+            if(character >= 32 && character <= 126)
+                formatedString += character;
+            else 
+                formatedString += hexConvert(character);
+        }
+        else
+            formatedString += hexConvert(character);
+    }
+
+    formatedString += "\"";
+
+    return llvm->builder->CreateGlobalStringPtr(formatedString);
+}
+
 BooleanLiteral::BooleanLiteral(const bool booleanValue, const int line, const int column): booleanValue(booleanValue){
     this->line = line;
     this->column = column;
@@ -84,4 +112,13 @@ string BooleanLiteral::dumpAST(bool annotated) const
         return boolString + " : bool";
     else
         return boolString;
+}
+
+llvm::Value *BooleanLiteral::generateCode(Program *Program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(Program, fileName);
+
+    if(booleanValue)
+        return llvm::ConstantInt::get(llvm->getType("bool"), 1);
+    
+    return llvm::ConstantInt::get(llvm->getType("bool"), 0);
 }

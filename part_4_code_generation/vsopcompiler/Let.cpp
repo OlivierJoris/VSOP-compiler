@@ -131,3 +131,33 @@ const string Let::typeChecking(const Program* prog, string currentClass, bool in
 
     return "";
 }
+
+llvm::Value *Let::generateCode(Program *program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+
+    auto let = llvm->builder->CreateAlloca(llvm->getType(type));
+    llvm::Value *llvmInit;
+    if(initExpr == NULL){
+        auto llvmType = llvm->getType(type);
+        if(type == "bool" || type == "int32"){
+            llvmInit = llvm::ConstantInt::get(llvmType, 0);
+        }
+        else if(type == "string"){
+            llvmInit = llvm->builder->CreateGlobalStringPtr("");
+        }
+        else{
+            llvmInit = llvm::ConstantPointerNull::get((llvm::PointerType *) llvmType);
+        }
+    } else {
+        llvmInit = initExpr->generateCode(program, cls, fileName);
+        llvmInit = llvm->builder->CreatePointerCast(llvmInit, llvm->getType(type));
+    }
+
+    llvm->builder->CreateStore(llvmInit, let);
+
+    auto llvmScope = scopeExpr->generateCode(program, cls, fileName);
+
+    program->variables[name] = let;
+
+    return llvmScope;
+}

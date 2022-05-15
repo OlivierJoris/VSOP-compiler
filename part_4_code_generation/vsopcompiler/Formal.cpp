@@ -34,6 +34,10 @@ const string Formal::checkUsageUndefinedType(const map<string, Class*>& classesM
         return to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: formal " + name + " is using an undefined type.";
 }
 
+llvm::Value *Formal::generateCode(Program *Program, Class* cls,const std::string &fileName){
+    return NULL;
+}
+
 Formals::Formals(){}
 
 string Formals::dumpAST(bool) const
@@ -79,4 +83,8 @@ const string Formals::typeChecking(const Program* prog, string currentClass, boo
     }
 
     return "";
+}
+
+llvm::Value *Formals::generateCode(Program *Program, Class* cls,const std::string &fileName){
+    return NULL;
 }

@@ -13,13 +13,14 @@
     #include "If.hpp"
     #include "Let.hpp"
     #include "Literals.hpp"
+    #include "LLVM.hpp"
     #include "Method.hpp"
     #include "Operators.hpp"
     #include "While.hpp"
 
     #define YYERROR_VERBOSE 1
 
-    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE> or ./vsopc -c <SOURCE-FILE>";
+    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE> or ./vsopc -c <SOURCE-FILE> or ./vsopc -i <SOURCE-FILE>";
 
     extern FILE *yyin;
     std::string fileName;
@@ -330,7 +331,7 @@ int main(int argc, char** argv){
 
     /* Check if expected option */
     std::string flag = argv[1];
-    if (flag != "-l" && flag != "-p" && flag != "-c") {
+    if (flag != "-l" && flag != "-p" && flag != "-c" && flag != "-i") {
         std::cerr << PROGRAM_USAGE << std::endl;
         return EXIT_FAILURE;
     }
@@ -560,6 +561,107 @@ int main(int argc, char** argv){
 
             std::cout << abstractSyntaxTree->dumpAST(true) << std::endl;
         }
+    }
+
+    if(flag == "-i") {
+        abstractSyntaxTree = new Program();
+        if(yyparse()) {
+            return EXIT_FAILURE;
+        }else{
+
+            /* Check for class, field, method, and formal redefinitions */
+            abstractSyntaxTree->checkRedefinition();
+
+            /* Check for inheritance */
+            abstractSyntaxTree->checkInheritance();
+
+            /* Check for overrides */ 
+            abstractSyntaxTree->checkOverrides();
+
+            /* Check Main class, main method, and main method signature */
+            std::string mainCheckErr = abstractSyntaxTree->checkMain();
+            if(mainCheckErr.compare("")){
+                semanticErrorWithLocation(mainCheckErr);
+                return EXIT_FAILURE;
+            }
+
+            /* Check for usage of undefined types */
+            std::string err = checkUseUndefinedType(abstractSyntaxTree);
+            if(err.compare("")){
+                semanticErrorWithLocation(err);
+                return EXIT_FAILURE;
+            }
+
+            /* Display errors if any */
+            if(abstractSyntaxTree->errors.size() > 0)
+            {
+                for(auto it = abstractSyntaxTree->errors.rbegin(); it != abstractSyntaxTree->errors.rend(); ++it)
+                    semanticErrorWithLocation(*it);
+                
+                return EXIT_FAILURE;
+            }
+
+            /* Type checking */
+            std::string typeCheckingERR = abstractSyntaxTree->typeChecking(abstractSyntaxTree, "", false, std::vector<std::pair<std::string, Expr*>>());
+            if(typeCheckingERR.compare("")){
+                semanticErrorWithLocation(typeCheckingERR);
+                return EXIT_FAILURE;
+            }
+
+            LLVM *llvm = LLVM::getInstance(abstractSyntaxTree, fileName);
+            abstractSyntaxTree->generateCode(abstractSyntaxTree, NULL, fileName);
+            llvm->displayIROnStdout();
+        }   
+    }
+
+    if(flag == "-e"){
+        abstractSyntaxTree = new Program();
+        if(yyparse()) {
+            return EXIT_FAILURE;
+        }else{
+
+            /* Check for class, field, method, and formal redefinitions */
+            abstractSyntaxTree->checkRedefinition();
+
+            /* Check for inheritance */
+            abstractSyntaxTree->checkInheritance();
+
+            /* Check for overrides */ 
+            abstractSyntaxTree->checkOverrides();
+
+            /* Check Main class, main method, and main method signature */
+            std::string mainCheckErr = abstractSyntaxTree->checkMain();
+            if(mainCheckErr.compare("")){
+                semanticErrorWithLocation(mainCheckErr);
+                return EXIT_FAILURE;
+            }
+
+            /* Check for usage of undefined types */
+            std::string err = checkUseUndefinedType(abstractSyntaxTree);
+            if(err.compare("")){
+                semanticErrorWithLocation(err);
+                return EXIT_FAILURE;
+            }
+
+            /* Display errors if any */
+            if(abstractSyntaxTree->errors.size() > 0)
+            {
+                for(auto it = abstractSyntaxTree->errors.rbegin(); it != abstractSyntaxTree->errors.rend(); ++it)
+                    semanticErrorWithLocation(*it);
+                
+                return EXIT_FAILURE;
+            }
+
+            /* Type checking */
+            std::string typeCheckingERR = abstractSyntaxTree->typeChecking(abstractSyntaxTree, "", false, std::vector<std::pair<std::string, Expr*>>());
+            if(typeCheckingERR.compare("")){
+                semanticErrorWithLocation(typeCheckingERR);
+                return EXIT_FAILURE;
+            }
+
+            LLVM *llvm = LLVM::getInstance(abstractSyntaxTree, fileName);
+            abstractSyntaxTree->generateCode(abstractSyntaxTree, NULL, fileName);
+        }   
     }
 
     fclose(yyin);

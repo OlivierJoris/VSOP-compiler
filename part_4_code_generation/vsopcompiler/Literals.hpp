@@ -47,6 +47,17 @@ class IntegerLiteral : public Expr
          * @return const std::string Always empty string because no possible error.
          */
         const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+
+        /**
+         * @brief Perform code generation on the expression.
+         * 
+         * @param Program Program for which we are generating code.
+         * @param cls current Class in which we are generating code.
+         * @param fileName Name of the file for which we are generating code.
+         * 
+         * @return llvm::Value* Value of the expression.
+         */
+        llvm::Value *generateCode(Program *Program, Class* cls, const std::string &fileName) override;
 };
 
 /**
@@ -83,6 +94,17 @@ class StringLiteral : public Expr
          */
         const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
 
+        /**
+         * @brief Perform code generation on the expression.
+         * 
+         * @param Program Program for which we are generating code.
+         * @param cls current Class in which we are generating code.
+         * @param fileName Name of the file for which we are generating code.
+         * 
+         * @return llvm::Value* Value of the expression.
+         */
+        llvm::Value *generateCode(Program *Program, Class* cls, const std::string &fileName) override;
+
 };
 
 /**
@@ -118,6 +140,17 @@ class BooleanLiteral : public Expr
          * @return const std::string Always empty string because no possible error.
          */
         const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+
+        /**
+         * @brief Perform code generation on the expression.
+         * 
+         * @param Program Program for which we are generating code.
+         * @param cls current Class in which we are generating code.
+         * @param fileName Name of the file for which we are generating code.
+         * 
+         * @return llvm::Value* Value of the expression.
+         */
+        llvm::Value *generateCode(Program *Program, Class* cls, const std::string &fileName) override;
 };
 
 #endif

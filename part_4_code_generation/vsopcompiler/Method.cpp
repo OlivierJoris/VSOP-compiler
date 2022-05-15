@@ -134,6 +134,29 @@ const string Method::typeChecking(const Program* prog, string currentClass, bool
     return "";
 }
 
+llvm::Value *Method::generateCode(Program *program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+    llvm::Function *method = llvm->mdl->getFunction(name + "_" + cls->getName());
+    auto *bloc = llvm::BasicBlock::Create(*(llvm->context), "entry", method);
+    llvm->builder->SetInsertPoint(bloc);
+
+    auto *args = method->args().begin() + 1;
+    vector<Formal*> formalsVec = getFormals();
+    for(auto it = formalsVec.rbegin(); it != formalsVec.rend(); ++it)
+    {
+        Formal *formal = *it;
+        llvm::Value *arg = llvm->builder->CreateAlloca(llvm->getType(formal->getType()));
+        llvm->builder->CreateStore(args, arg);
+        program->variables[formal->getName()] = arg;
+        args++;
+    }
+
+    auto ret = block->generateCode(program, cls, fileName);
+    llvm->builder->CreateRet(ret);
+
+    return NULL;
+}
+
 Call::Call(Expr *objExpr, const string methodName, Args *listExpr, const int line, const int column): objExpr(objExpr), methodName(methodName), listExpr(listExpr){
     this->line = line;
     this->column = column;
@@ -297,6 +320,37 @@ const string Call::typeChecking(const Program* prog, string currentClass, bool i
     return "";
 }
 
+llvm::Value *Call::generateCode(Program *program, Class* cls, const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+
+    auto arg = program->classesMap[objExpr->type]->generateCode(program, cls, fileName);
+
+    auto table = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(objExpr->type), arg, 0);
+    table = llvm->builder->CreateLoad(table);
+
+    int iMethod = program->methodsMap[objExpr->type][methodName];
+    auto type = llvm->mdl->getTypeByName("struct." + objExpr->type + "VTable");
+    auto method = llvm->builder->CreateStructGEP(type, table, iMethod);
+    method = llvm->builder->CreateLoad(method);
+    auto methodType = (llvm::FunctionType *) ((llvm::PointerType *)type->getStructElementType(iMethod))->getElementType();
+    auto argType = methodType->getParamType(0);
+    arg = (llvm::Argument *) llvm->builder->CreatePointerCast(arg, argType);
+
+    std::vector<llvm::Value *> args;
+    args.push_back(arg);
+    int i = 1;
+    for(auto arg : listExpr->getExpr()){
+        auto argCode = arg->generateCode(program, cls, fileName);
+        argCode = llvm->builder->CreatePointerCast(argCode, methodType->getParamType(i));
+        args.push_back(argCode);
+        i++;
+    }
+
+    auto methodCall = llvm->builder->CreateCall(methodType, method, args);
+
+    return methodCall;
+}
+
 New::New(const string typeName, const int line, const int column): typeName(typeName){
     this->line = line;
     this->column = column;
@@ -318,6 +372,11 @@ const string New::checkUsageUndefinedType(const map<string, Class*>& classesMap)
         return "";
     else
         return to_string(getLine()) + to_string(getColumn()) + ": semantic error: type " + typeName + " is not defined.";
+}
+
+llvm::Value *New::generateCode(Program *Program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(Program, fileName);
+    return llvm->builder->CreateCall(llvm->mdl->getFunction(std::string("new_") + typeName));
 }
 
 ObjectIdentifier::ObjectIdentifier(const string identifier, const int line, const int column): identifier(identifier){
@@ -354,6 +413,24 @@ const string ObjectIdentifier::typeChecking(const Program*, string, bool, vector
     return "";
 }
 
+llvm::Value *ObjectIdentifier::generateCode(Program *program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+    llvm::Value *retObj;
+    if(program->variables[identifier] != NULL){
+        retObj = program->variables[identifier];
+    }
+    else{
+        auto linkedClass = llvm->builder->GetInsertBlock()->getParent()->args().begin();
+        if(identifier == "self"){
+            return linkedClass;
+        }
+        else{
+            retObj = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(cls->getName()), linkedClass, program->fieldsMap[cls->getName()][identifier]);
+        }
+    }
+    return llvm->builder->CreateLoad(retObj);
+}
+
 Self::Self(const int line, const int column){
     this->line = line;
     this->column = column;
@@ -372,4 +449,8 @@ const string Self::typeChecking(const Program*, string currentClass, bool, vecto
     type = currentClass;
 
     return "";
+}
+
+llvm::Value *Self::generateCode(Program *program, Class* cls,const std::string &fileName){
+    return NULL;
 }

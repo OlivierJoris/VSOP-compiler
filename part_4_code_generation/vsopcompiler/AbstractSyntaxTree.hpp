@@ -13,6 +13,7 @@
 
 #include "Expr.hpp"
 #include "Class.hpp"
+#include "LLVM.hpp"
 
 /**
  * @brief Represent the program.
@@ -23,6 +24,9 @@ class Program : public Expr
         std::vector<Class*> classes;
 
     public:
+        std::map<std::string, llvm::Value*> variables;
+        std::map<std::string, std::map<std::string, int>> methodsMap; // Map between class name, method name and index
+        std::map<std::string, std::map<std::string, int>> fieldsMap; // Map between class name, field name and index
         std::map<std::string, Class*> classesMap;
         std::vector<std::string> errors;
 
@@ -79,6 +83,17 @@ class Program : public Expr
          * @return const std::string Empty string if no error. Otherwise, error message.
          */
         const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override;
+
+        /**
+         * @brief Perform code generation on the expression.
+         * 
+         * @param Program Program for which we are generating code.
+         * @param cls current Class in which we are generating code.
+         * @param fileName Name of the file for which we are generating code.
+         * 
+         * @return llvm::Value* Value of the expression.
+         */
+        llvm::Value *generateCode(Program *Program, Class* cls, const std::string &fileName) override;
 };
 
 class Unit : public Expr
@@ -106,6 +121,17 @@ class Unit : public Expr
          * @return const std::string Always empty string because no possible error.
          */
         const std::string typeChecking(const Program*, std::string, bool, std::vector<std::pair<std::string, Expr*>>) override {return "";};
+
+        /**
+         * @brief Perform code generation on the expression.
+         * 
+         * @param Program Program for which we are generating code.
+         * @param cls current Class in which we are generating code.
+         * @param fileName Name of the file for which we are generating code.
+         * 
+         * @return llvm::Value* Value of the expression.
+         */
+        llvm::Value *generateCode(Program *Program, Class* cls, const std::string &fileName) override;
 };
 
 #endif

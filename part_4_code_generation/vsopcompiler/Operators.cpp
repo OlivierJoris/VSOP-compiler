@@ -80,6 +80,24 @@ const string Assign::typeChecking(const Program* prog, string currentClass, bool
     return "";
 }
 
+llvm::Value *Assign::generateCode(Program *program, Class* cls, const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+
+    auto assignCode = expr->generateCode(program, cls, fileName);
+    assignCode = llvm->builder->CreatePointerCast(assignCode, llvm->getType(expr->type));
+    if(program->variables[name] == NULL){
+        auto function = llvm->builder->GetInsertBlock()->getParent();
+        auto clas = function->arg_begin();   
+        auto address = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(cls->getName()), clas, program->fieldsMap[cls->getName()][name]);
+        llvm->builder->CreateStore(assignCode, address);
+    }
+    else{
+        llvm->builder->CreateStore(assignCode, program->variables[name]);
+    }
+
+    return assignCode;
+}   
+
 /*********************
         UN OP
 *********************/
@@ -106,6 +124,24 @@ const string UnOp::checkUsageUndefinedType(const map<string, Class*>& classesMap
     }
 
     return "";
+}
+
+llvm::Value *UnOp::generateCode(Program *Program, Class* cls,const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(Program, fileName);
+
+    auto exprCode = expr->generateCode(Program, cls, fileName);
+    llvm::Value *ret;
+    
+    if (symbol == "-")
+        ret = llvm->builder->CreateNeg(exprCode);
+    else if (symbol == "isnull")
+        ret = llvm->builder->CreateIsNull(exprCode);
+    else if (symbol == "not")
+        ret = llvm->builder->CreateNot(exprCode);
+    else
+        ret = NULL;
+
+    return ret;
 }
 
 Not::Not(Expr *expr, const int line, const int column): UnOp("not", expr, line, column){}
@@ -221,6 +257,69 @@ const string BinOp::checkUsageUndefinedType(const map<string, Class*>& classesMa
     }
 
     return "";
+}
+
+llvm::Value *BinOp::generateCode(Program *program, Class* cls, const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+
+    auto leftExprCode = leftExpr->generateCode(program, cls, fileName);
+    auto rightExprCode = rightExpr->generateCode(program, cls, fileName);
+    llvm::Value *ret;
+
+    if (symbol == "+")
+        ret = llvm->builder->CreateAdd(leftExprCode, rightExprCode);
+    else if (symbol == "-")
+        ret = llvm->builder->CreateSub(leftExprCode, rightExprCode);
+    else if (symbol == "*")
+        ret = llvm->builder->CreateMul(leftExprCode, rightExprCode);
+    else if (symbol == "/")
+        ret = llvm->builder->CreateUDiv(leftExprCode, rightExprCode);
+    else if (symbol == "^"){
+        llvm::Value *call = llvm->builder->CreateCall(llvm->mdl->getFunction("power"), {leftExprCode, rightExprCode});
+        ret = llvm->builder->CreateIntCast(call, llvm::Type::getInt32Ty(*(llvm->context)), true);
+    }
+    else if (symbol == "="){
+        if(leftExpr->type != "bool" && leftExpr->type != "int32" && leftExpr->type != "unit" && leftExpr->type != "string" && rightExpr->type != "bool" && rightExpr->type != "int32" && rightExpr->type != "unit" && rightExpr->type != "string"){
+            leftExprCode = llvm->builder->CreatePointerCast(leftExprCode, llvm::IntegerType::getInt64Ty(*(llvm->context)));
+            rightExprCode = llvm->builder->CreatePointerCast(rightExprCode, llvm::IntegerType::getInt64Ty(*(llvm->context)));
+        }
+        ret = llvm->builder->CreateICmpEQ(leftExprCode, rightExprCode);
+    }
+    else if (symbol == "<")
+        ret = llvm->builder->CreateICmpSLT(leftExprCode, rightExprCode);
+    else if (symbol == "<=")
+        ret = llvm->builder->CreateICmpSLE(leftExprCode, rightExprCode);
+    else if (symbol == "and"){
+        llvm::BasicBlock *trueLeft = llvm::BasicBlock::Create(*(llvm->context), "and_true_left");
+        llvm::BasicBlock *falseLeft = llvm::BasicBlock::Create(*(llvm->context), "and_false_left");
+        llvm::BasicBlock *end = llvm::BasicBlock::Create(*(llvm->context), "and_end");
+
+        llvm->builder->CreateCondBr(leftExprCode, trueLeft, falseLeft);
+        llvm->builder->GetInsertBlock()->getParent()->getBasicBlockList().push_back(trueLeft);
+        llvm->builder->SetInsertPoint(trueLeft);
+        auto trueLeftCode = rightExpr->generateCode(program, cls, fileName);
+        llvm->builder->CreateBr(end);
+        trueLeft = llvm->builder->GetInsertBlock();
+
+        llvm->builder->GetInsertBlock()->getParent()->getBasicBlockList().push_back(falseLeft);
+        llvm->builder->SetInsertPoint(falseLeft);
+        auto falseLeftCode = llvm->builder->getFalse();
+        llvm->builder->CreateBr(end);
+        falseLeft = llvm->builder->GetInsertBlock();
+        llvm->builder->GetInsertBlock()->getParent()->getBasicBlockList().push_back(end);
+        llvm->builder->SetInsertPoint(end);
+
+        auto phi = llvm->builder->CreatePHI(llvm::Type::getInt1Ty(*(llvm->context)), 0);
+        phi->addIncoming(trueLeftCode, trueLeft);
+        phi->addIncoming(falseLeftCode, falseLeft);
+
+        ret = phi;
+    }
+
+    else
+        ret = NULL;
+
+    return ret;
 }
 
 /*********************

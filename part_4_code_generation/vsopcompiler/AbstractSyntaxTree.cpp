@@ -280,6 +280,17 @@ const string Program::typeChecking(const Program*, string, bool, vector<pair<str
     return "";
 }
 
+llvm::Value *Program::generateCode(Program *program, Class* cls,const std::string &fileName){
+    // Generate code on each class
+    for(auto clas = classes.rbegin(); clas != classes.rend(); clas++){
+        if(*clas){
+            (*clas)->generateCode(program, *clas, fileName);
+        }
+    }
+
+    return NULL;
+}
+
 Unit::Unit(const int line, const int column){
     this->line = line;
     this->column = column;
@@ -292,4 +303,8 @@ string Unit::dumpAST(bool annotated) const
         return "() : unit";
     else
         return "unit";
+}
+
+llvm::Value *Unit::generateCode(Program *program, Class* cls,const std::string &fileName){
+    return NULL;
 }

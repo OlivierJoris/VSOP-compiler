@@ -12,6 +12,8 @@
 #include <map>
 #include <utility>
 
+#include "llvm/IR/Value.h"
+
 class Program;
 class Class;
 
@@ -64,6 +66,17 @@ class Expr
             bool inFieldInit,
             std::vector<std::pair<std::string, Expr*>> scope
         ) = 0;
+
+        /**
+         * @brief Perform code generation on the expression.
+         * 
+         * @param Program Program for which we are generating code.
+         * @param cls Class in which we are generating code.
+         * @param fileName Name of the file in which we are running code generation.
+         * 
+         * @return llvm::Value* Value of the expression.
+         */
+        virtual llvm::Value *generateCode(Program *Program, Class* cls, const std::string &fileName) = 0;
 
         /**
          * @brief Get the line of the expression.

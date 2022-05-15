@@ -10,6 +10,7 @@
 #include "While.hpp"
 #include "Expr.hpp"
 #include "Class.hpp"
+#include "LLVM.hpp"
 
 using namespace std;
 
@@ -72,4 +73,25 @@ const string While::typeChecking(const Program* prog, string currentClass, bool 
     type = "unit";
 
     return "";
+}
+
+llvm::Value *While::generateCode(Program *program, Class* cls, const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+
+    auto block = llvm->builder->GetInsertBlock()->getParent();
+    auto condBlock = llvm::BasicBlock::Create(*(llvm->context), "while_cond", block);
+    auto bodyBlock = llvm::BasicBlock::Create(*(llvm->context), "while_body", block);
+    auto endBlock = llvm::BasicBlock::Create(*(llvm->context), "while_end", block);
+
+    llvm->builder->CreateBr(condBlock);
+    llvm->builder->SetInsertPoint(condBlock);
+    auto cond = condExpr->generateCode(program, cls, fileName);
+    llvm->builder->CreateCondBr(cond, bodyBlock, endBlock);
+
+    llvm->builder->SetInsertPoint(bodyBlock);
+    bodyExpr->generateCode(program, cls, fileName);
+    llvm->builder->CreateBr(condBlock);
+
+    llvm->builder->SetInsertPoint(endBlock);
+    return NULL;
 }

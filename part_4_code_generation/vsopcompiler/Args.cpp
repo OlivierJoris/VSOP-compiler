@@ -72,3 +72,8 @@ const string Args::typeChecking(const Program* prog, string currentClass, bool i
 
     return "";
 }
+
+llvm::Value *Args::generateCode(Program *Program, Class* cls,const std::string &fileName){
+    return NULL;
+
+}

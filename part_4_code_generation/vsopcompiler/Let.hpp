@@ -62,6 +62,17 @@ class Let : public Expr
             bool inFieldInit,
             std::vector<std::pair<std::string, Expr*>> scope
         ) override;
+
+        /**
+         * @brief Perform code generation on the expression.
+         * 
+         * @param Program Program for which we are generating code.
+         * @param cls current Class in which we are generating code.
+         * @param fileName Name of the file for which we are generating code.
+         * 
+         * @return llvm::Value* Value of the expression.
+         */
+        llvm::Value *generateCode(Program *Program, Class* cls, const std::string &fileName) override;
 };
 
 #endif

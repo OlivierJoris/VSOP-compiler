@@ -160,3 +160,43 @@ const string If::typeChecking(const Program* prog, string currentClass, bool inF
 
     return "";
 }
+
+llvm::Value *If::generateCode(Program *program, Class* cls, const std::string &fileName){
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+
+    llvm::Function *function = llvm->builder->GetInsertBlock()->getParent();
+    auto cond = condExpr->generateCode(program, cls, fileName);
+    auto thenBlock = llvm::BasicBlock::Create(*(llvm->context), "if_then");
+    auto elseBlock = llvm::BasicBlock::Create(*(llvm->context), "if_else");
+    auto endBlock = llvm::BasicBlock::Create(*(llvm->context), "if_end");
+
+    llvm->builder->CreateCondBr(cond, thenBlock, elseBlock);
+    auto llvmType = llvm->getType(type);
+    function->getBasicBlockList().push_back(thenBlock);
+    llvm->builder->SetInsertPoint(thenBlock);
+
+    auto then = thenExpr->generateCode(program, cls, fileName);
+    then = llvm->builder->CreatePointerCast(then, llvmType);
+
+    llvm->builder->CreateBr(endBlock);
+
+    thenBlock = llvm->builder->GetInsertBlock();
+    function->getBasicBlockList().push_back(elseBlock);
+    llvm->builder->SetInsertPoint(elseBlock);
+
+    llvm::Value *els = llvm::ConstantPointerNull::get((llvm::PointerType *)llvm::Type::getVoidTy(*(llvm->context)));
+    if(elseExpr)
+        els = elseExpr->generateCode(program, cls, fileName);
+
+    els = llvm->builder->CreatePointerCast(els, llvmType);
+    llvm->builder->CreateBr(endBlock);
+    elseBlock = llvm->builder->GetInsertBlock();
+    function->getBasicBlockList().push_back(endBlock);
+    llvm->builder->SetInsertPoint(endBlock);
+
+    auto phi = llvm->builder->CreatePHI(llvmType, 0, "phi");
+    phi->addIncoming(then, thenBlock);
+    phi->addIncoming(els, elseBlock);
+
+    return phi;
+}
