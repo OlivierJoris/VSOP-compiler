@@ -1,0 +1,8 @@
+class Main {
+    main() : int32 {
+        
+                print("hola");
+                0
+        }
+    
+}

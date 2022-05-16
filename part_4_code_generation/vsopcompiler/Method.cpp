@@ -134,20 +134,18 @@ const string Method::typeChecking(const Program* prog, string currentClass, bool
     return "";
 }
 
-llvm::Value *Method::generateCode(Program *program, Class* cls,const std::string &fileName){
+llvm::Value *Method::generateCode(Program *program, Class* cls, const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
     llvm::Function *method = llvm->mdl->getFunction(name + "_" + cls->getName());
-    auto *bloc = llvm::BasicBlock::Create(*(llvm->context), "entry", method);
+    auto bloc = llvm::BasicBlock::Create(*(llvm->context), "entry", method);
     llvm->builder->SetInsertPoint(bloc);
 
-    auto *args = method->args().begin() + 1;
-    vector<Formal*> formalsVec = getFormals();
-    for(auto it = formalsVec.rbegin(); it != formalsVec.rend(); ++it)
+    auto args = method->arg_begin() + 1;
+    for(auto formal: formalsMap)
     {
-        Formal *formal = *it;
-        llvm::Value *arg = llvm->builder->CreateAlloca(llvm->getType(formal->getType()));
+        llvm::Value *arg = llvm->builder->CreateAlloca(llvm->getType(formal.second->getType()));
         llvm->builder->CreateStore(args, arg);
-        program->variables[formal->getName()] = arg;
+        program->variables[formal.first] = arg;
         args++;
     }
 
@@ -323,7 +321,7 @@ const string Call::typeChecking(const Program* prog, string currentClass, bool i
 llvm::Value *Call::generateCode(Program *program, Class* cls, const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
-    auto arg = program->classesMap[objExpr->type]->generateCode(program, cls, fileName);
+    auto *arg = objExpr->generateCode(program, cls, fileName);
 
     auto table = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(objExpr->type), arg, 0);
     table = llvm->builder->CreateLoad(table);
@@ -376,7 +374,7 @@ const string New::checkUsageUndefinedType(const map<string, Class*>& classesMap)
 
 llvm::Value *New::generateCode(Program *Program, Class* cls,const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(Program, fileName);
-    return llvm->builder->CreateCall(llvm->mdl->getFunction(std::string("new_") + typeName));
+    return llvm->builder->CreateCall(llvm->mdl->getFunction(std::string("new") + typeName));
 }
 
 ObjectIdentifier::ObjectIdentifier(const string identifier, const int line, const int column): identifier(identifier){
@@ -452,5 +450,5 @@ const string Self::typeChecking(const Program*, string currentClass, bool, vecto
 }
 
 llvm::Value *Self::generateCode(Program *program, Class* cls,const std::string &fileName){
-    return NULL;
+    return program->variables[cls->getName()];
 }

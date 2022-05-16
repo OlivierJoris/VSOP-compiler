@@ -120,6 +120,12 @@ const string Class::typeChecking(const Program* prog, string currentClass, bool,
 
 llvm::Value *Class::generateCode(Program *program, Class* cls, const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
+
+    // New method
+    auto newMethod = llvm->mdl->getFunction(std::string("new") + name);
+    auto newBlock = llvm::BasicBlock::Create(*(llvm->context), "entry", newMethod);
+    llvm->builder->SetInsertPoint(newBlock);
+
     // Malloc
     auto malloc = llvm->mdl->getFunction("malloc");
     auto dataLayout = new llvm::DataLayout(llvm->mdl);
@@ -127,26 +133,21 @@ llvm::Value *Class::generateCode(Program *program, Class* cls, const std::string
     std::vector<llvm::Value*> args = {llvm::ConstantInt::get(llvm::Type::getInt64Ty(*(llvm->context)), size)};
     auto mallocCall = llvm->builder->CreateCall(malloc, args);
 
-    // New method
-    auto newMethod = llvm->mdl->getFunction(std::string("new_") + name);
-    auto newBlock = llvm::BasicBlock::Create(*(llvm->context), "entry", newMethod);
-    llvm->builder->SetInsertPoint(newBlock);
-
     // Parent class
     auto parentRef = llvm->builder->CreatePointerCast(mallocCall, llvm::PointerType::get(llvm->mdl->getTypeByName(parent), 0));
-    auto parentInit = llvm->mdl->getFunction(std::string("init_") + parent);
+    auto parentInit = llvm->mdl->getFunction(std::string("init") + parent);
     parentRef = llvm->builder->CreateCall(parentInit, {parentRef});
 
     // Child class
     auto childRef = llvm->builder->CreatePointerCast(parentRef, llvm::PointerType::get(llvm->mdl->getTypeByName(name), 0));
-    auto childInit = llvm->mdl->getFunction(std::string("init_") + name);
+    auto childInit = llvm->mdl->getFunction(std::string("init") + name);
     childRef = llvm->builder->CreateCall(childInit, {childRef});
 
     // Return
     llvm->builder->CreateRet(childRef);
 
     // Init method
-    auto initMethod = llvm->mdl->getFunction(std::string("init_") + name);
+    auto initMethod = llvm->mdl->getFunction(std::string("init") + name);
     auto initBlock = llvm::BasicBlock::Create(*(llvm->context), "entry", initMethod);
     llvm->builder->SetInsertPoint(initBlock);
 
@@ -156,12 +157,12 @@ llvm::Value *Class::generateCode(Program *program, Class* cls, const std::string
     llvm->builder->CreateStore(llvm->mdl->getNamedGlobal(name + "_vtable"), vtable);
 
     std::stack<std::string> parentClasses = std::stack<std::string>();
-        
-    std::string parent = getParent();
-    while(parent != "Object")
+    std::string currentClass = name;
+    parentClasses.push(currentClass);
+    while(currentClass != "Object")
     {
-        parentClasses.push(parent);
-        parent = program->classesMap[parent]->getParent();
+        currentClass = program->classesMap[currentClass]->getParent();
+        parentClasses.push(currentClass);
     }
     int i = 1;
     while(!parentClasses.empty())
@@ -169,20 +170,20 @@ llvm::Value *Class::generateCode(Program *program, Class* cls, const std::string
         std::string parentClass = parentClasses.top();
         parentClasses.pop();
 
-        for(auto field: program->classesMap[parentClass]->getFields())
+        for(auto field: program->classesMap[parentClass]->fieldsMap)
         {
-            auto fieldValue = field->generateCode(program, this, fileName);
+            auto fieldValue = field.second->generateCode(program, this, fileName);
             auto fieldStruct = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(name), thisRef, i);
             llvm->builder->CreateStore(fieldValue, fieldStruct);
-            program->fieldsMap[name][field->getName()] = i;
+            program->fieldsMap[name][field.first] = i;
             ++i;
         }   
     }
 
     llvm->builder->CreateRet(thisRef);
 
-    for(auto method: methods)
-        method->generateCode(program, this, fileName);
+    for(auto method: methodsMap)
+        method.second->generateCode(program, this, fileName);
 
     return NULL;
 }

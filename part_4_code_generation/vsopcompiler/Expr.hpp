@@ -71,8 +71,8 @@ class Expr
          * @brief Perform code generation on the expression.
          * 
          * @param Program Program for which we are generating code.
-         * @param cls Class in which we are generating code.
-         * @param fileName Name of the file in which we are running code generation.
+         * @param cls current Class in which we are generating code.
+         * @param fileName Name of the file for which we are generating code.
          * 
          * @return llvm::Value* Value of the expression.
          */
