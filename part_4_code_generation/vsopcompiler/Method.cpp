@@ -321,7 +321,9 @@ const string Call::typeChecking(const Program* prog, string currentClass, bool i
 llvm::Value *Call::generateCode(Program *program, Class* cls, const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
-    auto *arg = objExpr->generateCode(program, cls, fileName);
+    std::cout << objExpr->type << std::endl;
+
+    auto arg = objExpr->generateCode(program, cls, fileName);
 
     auto table = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(objExpr->type), arg, 0);
     table = llvm->builder->CreateLoad(table);
@@ -330,11 +332,11 @@ llvm::Value *Call::generateCode(Program *program, Class* cls, const std::string 
     auto type = llvm->mdl->getTypeByName("struct." + objExpr->type + "VTable");
     auto method = llvm->builder->CreateStructGEP(type, table, iMethod);
     method = llvm->builder->CreateLoad(method);
-    auto methodType = (llvm::FunctionType *) ((llvm::PointerType *)type->getStructElementType(iMethod))->getElementType();
+    auto methodType = (llvm::FunctionType*) ((llvm::PointerType*) type->getStructElementType(iMethod))->getElementType();
     auto argType = methodType->getParamType(0);
-    arg = (llvm::Argument *) llvm->builder->CreatePointerCast(arg, argType);
+    arg = (llvm::Argument*) llvm->builder->CreatePointerCast(arg, argType);
 
-    std::vector<llvm::Value *> args;
+    std::vector<llvm::Value*> args;
     args.push_back(arg);
     int i = 1;
     for(auto arg : listExpr->getExpr()){
@@ -450,5 +452,6 @@ const string Self::typeChecking(const Program*, string currentClass, bool, vecto
 }
 
 llvm::Value *Self::generateCode(Program *program, Class* cls,const std::string &fileName){
-    return program->variables[cls->getName()];
+    LLVM *llvm = LLVM::getInstance(program, fileName);
+    return llvm->builder->GetInsertBlock()->getParent()->args().begin();
 }

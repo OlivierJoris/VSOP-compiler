@@ -75,5 +75,4 @@ const string Args::typeChecking(const Program* prog, string currentClass, bool i
 
 llvm::Value *Args::generateCode(Program *Program, Class* cls,const std::string &fileName){
     return NULL;
-
 }

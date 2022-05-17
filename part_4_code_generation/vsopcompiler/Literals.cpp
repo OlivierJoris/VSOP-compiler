@@ -76,7 +76,7 @@ string StringLiteral::dumpAST(bool annotated) const
 llvm::Value *StringLiteral::generateCode(Program *Program, Class* cls,const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(Program, fileName);
 
-    std::string formatedString = "\"";
+    std::string formatedString = "";
 
     for(char character: StringLiteral::stringValue){
 
@@ -89,8 +89,6 @@ llvm::Value *StringLiteral::generateCode(Program *Program, Class* cls,const std:
         else
             formatedString += hexConvert(character);
     }
-
-    formatedString += "\"";
 
     return llvm->builder->CreateGlobalStringPtr(formatedString);
 }

@@ -204,9 +204,9 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
         structType->setBody(types);
     }
 
-    mdl->getOrInsertFunction("main", llvm::FunctionType::get(getType("int32"), false));
-    auto mainBlock = llvm::BasicBlock::Create(*context, "entry", mdl->getFunction("main"));
-    builder->SetInsertPoint(mainBlock);
+    mdl->getOrInsertFunction("program_entry", llvm::FunctionType::get(getType("int32"), false));
+    auto entryBlock = llvm::BasicBlock::Create(*context, "entry", mdl->getFunction("program_entry"));
+    builder->SetInsertPoint(entryBlock);
     auto main = mdl->getFunction(std::string("newMain"));
     auto mainValue = builder->CreateCall(main);
     auto mainMethod = mdl->getFunction(std::string("main_Main"));
@@ -228,9 +228,9 @@ LLVM *LLVM::getInstance(Program *program, const std::string &fileName)
 llvm::Type *LLVM::getType(const std::string type)
 {
     if (type == "int32")
-        return llvm::IntegerType::getInt32Ty(*context);
+        return llvm::Type::getInt32Ty(*context);
     else if (type == "bool")
-        return llvm::IntegerType::getInt1Ty(*context);
+        return llvm::Type::getInt1Ty(*context);
     else if (type == "unit")
         return llvm::Type::getVoidTy(*context);    
     else if (type == "string")
