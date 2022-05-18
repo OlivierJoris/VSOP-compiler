@@ -80,6 +80,13 @@ class LLVM
          * 
          */
         void optimizeCode();
+
+        /**
+         * @brief Generate executable in a file.
+         * 
+         * @param fileName Name of the VSOP file.
+         */
+        void generateExecutable(const std::string &fileName);
 };
 
 #endif 

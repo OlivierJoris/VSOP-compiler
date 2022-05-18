@@ -136,7 +136,7 @@ const string Method::typeChecking(const Program* prog, string currentClass, bool
 
 llvm::Value *Method::generateCode(Program *program, Class* cls, const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
-    llvm::Function *method = llvm->mdl->getFunction(name + "_" + cls->getName());
+    llvm::Function *method = llvm->mdl->getFunction(cls->getName() + "__" + name);
     auto bloc = llvm::BasicBlock::Create(*(llvm->context), "entry", method);
     llvm->builder->SetInsertPoint(bloc);
 
@@ -321,15 +321,13 @@ const string Call::typeChecking(const Program* prog, string currentClass, bool i
 llvm::Value *Call::generateCode(Program *program, Class* cls, const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
-    std::cout << objExpr->type << std::endl;
-
     auto arg = objExpr->generateCode(program, cls, fileName);
 
     auto table = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(objExpr->type), arg, 0);
     table = llvm->builder->CreateLoad(table);
 
     int iMethod = program->methodsMap[objExpr->type][methodName];
-    auto type = llvm->mdl->getTypeByName("struct." + objExpr->type + "VTable");
+    auto type = llvm->mdl->getTypeByName(objExpr->type + "VTable");
     auto method = llvm->builder->CreateStructGEP(type, table, iMethod);
     method = llvm->builder->CreateLoad(method);
     auto methodType = (llvm::FunctionType*) ((llvm::PointerType*) type->getStructElementType(iMethod))->getElementType();
@@ -376,7 +374,7 @@ const string New::checkUsageUndefinedType(const map<string, Class*>& classesMap)
 
 llvm::Value *New::generateCode(Program *Program, Class* cls,const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(Program, fileName);
-    return llvm->builder->CreateCall(llvm->mdl->getFunction(std::string("new") + typeName));
+    return llvm->builder->CreateCall(llvm->mdl->getFunction(typeName + std::string("___new")));
 }
 
 ObjectIdentifier::ObjectIdentifier(const string identifier, const int line, const int column): identifier(identifier){

@@ -8,6 +8,7 @@
 
 #include <stack>
 #include <iostream>
+#include <fstream>
 
 LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
 {
@@ -20,7 +21,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
         // Declare structure
         llvm::StructType::create(*context, cls.first);
         // Declare VTable
-        llvm::StructType::create(*context, "struct." + cls.first + "VTable");
+        llvm::StructType::create(*context, cls.first + "VTable");
     }
 
     /****************** Declare 'malloc' function ******************/
@@ -58,7 +59,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
     llvm::Function::Create(
         newMethodType,                         // The signature
         llvm::GlobalValue::ExternalLinkage, // The linkage
-        std::string("new") + std::string("Object"),                  // The name
+        std::string("Object___new"),                  // The name
         mdl);    
 
     // Declare init method of Object class
@@ -70,7 +71,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
     llvm::Function::Create(
         initMethodType,                         // The signature
         llvm::GlobalValue::ExternalLinkage, // The linkage
-        std::string("init") + std::string("Object"),                  // The name
+        std::string("Object___init"),                  // The name
         mdl);
 
     // Declare methods of the Object class
@@ -83,7 +84,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
             formals.push_back(getType(formal->getType()));
 
         auto methodType = llvm::FunctionType::get(getType(method.second->getRetType()), formals, false);
-        llvm::Function::Create(methodType, llvm::GlobalValue::ExternalLinkage, std::string(method.second->getName()) + "_Object", mdl);
+        llvm::Function::Create(methodType, llvm::GlobalValue::ExternalLinkage, "Object__" + std::string(method.second->getName()), mdl);
     }
     
     // Declare class methods
@@ -98,7 +99,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
         {},                   // The arguments
         false);   
 
-        mdl->getOrInsertFunction(std::string("new") + cls.first, newMethodType);
+        mdl->getOrInsertFunction(cls.first + std::string("___new"), newMethodType);
 
         // Declare init method of Object class
         auto initMethodType = llvm::FunctionType::get(
@@ -106,7 +107,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
         {getType(cls.first)},  // The arguments
         false);
 
-        mdl->getOrInsertFunction(std::string("init") + cls.first, initMethodType);
+        mdl->getOrInsertFunction(cls.first + std::string("___init"), initMethodType);
 
         for(auto method: cls.second->getMethods())
         {
@@ -117,14 +118,14 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
                 formals.push_back(getType(formal->getType()));
             
             auto methodType = llvm::FunctionType::get(getType(method->getRetType()), formals, false);
-            mdl->getOrInsertFunction(method->getName() + "_" + cls.first, methodType);
+            mdl->getOrInsertFunction(cls.first + "__" + method->getName(), methodType);
         }
     }
 
     // Declare inherited methods
     for(auto cls: program->classesMap)
     {
-        llvm::StructType *structType = mdl->getTypeByName("struct." + cls.first + "VTable");
+        llvm::StructType *structType = mdl->getTypeByName(cls.first + "VTable");
         auto types = std::vector<llvm::Type*>();
         auto methods = std::vector<llvm::Constant*>();
 
@@ -150,8 +151,8 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
             {
                 if(!isOverriding[method.first])
                 {
-                    auto tmpType = mdl->getFunction(method.first + "_" + parentClass)->getFunctionType();
-                    methods.push_back(mdl->getFunction(method.first + "_" + parentClass));
+                    auto tmpType = mdl->getFunction(parentClass + "__" + method.first)->getFunctionType();
+                    methods.push_back(mdl->getFunction(parentClass + "__" + method.first));
                     types.push_back(llvm::PointerType::get(tmpType, 0));
                     isOverriding[method.first] = true;
                     indexes[method.first] = i;
@@ -159,7 +160,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
                 }
                 else
                 {
-                    methods[indexes[method.first]] = mdl->getFunction(method.first + "_" + parentClass);
+                    methods[indexes[method.first]] = mdl->getFunction(parentClass + "__" + method.first);
                     auto tmpType = ((llvm::Function*) methods[indexes[method.first]])->getFunctionType();
                     types[indexes[method.first]] = llvm::PointerType::get(tmpType, 0);
                 }
@@ -170,7 +171,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
         if(cls.first != "Object")
         {
             auto cstStruct = llvm::ConstantStruct::get(structType, methods);
-            llvm::GlobalVariable *globalVTable = (llvm::GlobalVariable *) mdl->getOrInsertGlobal(cls.first + "_vtable", structType);
+            llvm::GlobalVariable *globalVTable = (llvm::GlobalVariable *) mdl->getOrInsertGlobal(cls.first + "___vtable", structType);
             globalVTable->setInitializer(cstStruct);
             globalVTable->setConstant(true);
         }
@@ -181,7 +182,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
     {
         llvm::StructType *structType = (llvm::StructType *) mdl->getTypeByName(cls.first);
         auto types = std::vector<llvm::Type*>();
-        types.push_back(llvm::PointerType::get(mdl->getTypeByName("struct." + cls.first + "VTable"), 0));
+        types.push_back(llvm::PointerType::get(mdl->getTypeByName(cls.first + "VTable"), 0));
 
         std::stack<std::string> parentClasses = std::stack<std::string>();
         std::string currentClass = cls.first;
@@ -204,12 +205,12 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
         structType->setBody(types);
     }
 
-    mdl->getOrInsertFunction("program_entry", llvm::FunctionType::get(getType("int32"), false));
-    auto entryBlock = llvm::BasicBlock::Create(*context, "entry", mdl->getFunction("program_entry"));
+    mdl->getOrInsertFunction("main", llvm::FunctionType::get(getType("int32"), false));
+    auto entryBlock = llvm::BasicBlock::Create(*context, "entry", mdl->getFunction("main"));
     builder->SetInsertPoint(entryBlock);
-    auto main = mdl->getFunction(std::string("newMain"));
+    auto main = mdl->getFunction(std::string("Main___new"));
     auto mainValue = builder->CreateCall(main);
-    auto mainMethod = mdl->getFunction(std::string("main_Main"));
+    auto mainMethod = mdl->getFunction(std::string("Main__main"));
     auto mainReturn = builder->CreateCall(mainMethod, {mainValue});
     builder->CreateRet(mainReturn);
 }
@@ -240,11 +241,11 @@ llvm::Type *LLVM::getType(const std::string type)
 }
 
 void LLVM::displayIROnStdout(){
-    std::string outstr;
-    llvm::raw_string_ostream oss(outstr);
+    std::string outStr;
+    llvm::raw_string_ostream oss(outStr);
     mdl->print(oss, nullptr);
 
-    std::cout << outstr << std::endl;
+    std::cout << outStr << std::endl;
 }
 
 void LLVM::optimizeCode()
@@ -266,4 +267,19 @@ void LLVM::optimizeCode()
 
     for(auto it = mdl->begin(); it != mdl->end(); ++it) 
         functionPassManager.run(*it);
+}
+
+void LLVM::generateExecutable(const std::string &fileName)
+{
+    std::string execName = fileName.substr(0, fileName.find_last_of("."));
+    std::ofstream exec(execName + ".ll");
+    std::string outStr;
+    llvm::raw_string_ostream oss(outStr);
+    mdl->print(oss, nullptr);
+	exec << outStr;
+	exec.close();
+    std::string cmd = "clang -o " + execName + " " + execName + ".ll" + " runtime/object.c runtime/power.c";
+    char c[cmd.size() + 1];
+    strcpy(c, cmd.c_str());
+    system(c);
 }

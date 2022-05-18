@@ -122,7 +122,7 @@ llvm::Value *Class::generateCode(Program *program, Class* cls, const std::string
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
     // New method
-    auto newMethod = llvm->mdl->getFunction(std::string("new") + name);
+    auto newMethod = llvm->mdl->getFunction(name + std::string("___new"));
     auto newBlock = llvm::BasicBlock::Create(*(llvm->context), "entry", newMethod);
     llvm->builder->SetInsertPoint(newBlock);
 
@@ -135,26 +135,26 @@ llvm::Value *Class::generateCode(Program *program, Class* cls, const std::string
 
     // Parent class
     auto parentRef = llvm->builder->CreatePointerCast(mallocCall, llvm::PointerType::get(llvm->mdl->getTypeByName(parent), 0));
-    auto parentInit = llvm->mdl->getFunction(std::string("init") + parent);
+    auto parentInit = llvm->mdl->getFunction(parent + std::string("___init"));
     parentRef = llvm->builder->CreateCall(parentInit, {parentRef});
 
     // Child class
     auto childRef = llvm->builder->CreatePointerCast(parentRef, llvm::PointerType::get(llvm->mdl->getTypeByName(name), 0));
-    auto childInit = llvm->mdl->getFunction(std::string("init") + name);
+    auto childInit = llvm->mdl->getFunction(name + std::string("___init"));
     childRef = llvm->builder->CreateCall(childInit, {childRef});
 
     // Return
     llvm->builder->CreateRet(childRef);
 
     // Init method
-    auto initMethod = llvm->mdl->getFunction(std::string("init") + name);
+    auto initMethod = llvm->mdl->getFunction(name + std::string("___init"));
     auto initBlock = llvm::BasicBlock::Create(*(llvm->context), "entry", initMethod);
     llvm->builder->SetInsertPoint(initBlock);
 
     // Vtable
-    auto thisRef = initMethod->args().begin();
+    auto thisRef = initMethod->arg_begin();
     auto vtable = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(name), thisRef, 0);
-    llvm->builder->CreateStore(llvm->mdl->getNamedGlobal(name + "_vtable"), vtable);
+    llvm->builder->CreateStore(llvm->mdl->getNamedGlobal(name + "___vtable"), vtable);
 
     std::stack<std::string> parentClasses = std::stack<std::string>();
     std::string currentClass = name;

@@ -20,7 +20,8 @@
 
     #define YYERROR_VERBOSE 1
 
-    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <SOURCE-FILE> or ./vsopc -p <SOURCE-FILE> or ./vsopc -c <SOURCE-FILE> or ./vsopc -i <SOURCE-FILE>";
+    const std::string PROGRAM_USAGE = "Program usage: ./vsopc -l <FILENAME> or ./vsopc -p <FILENAME> or ./vsopc -c <FILENAME> or ./vsopc -i <FILENAME>";
+    const std::string WRONG_TYPE = "Source file must be of type .vsop or .VSOP";
 
     extern FILE *yyin;
     std::string fileName;
@@ -324,24 +325,41 @@ static std::string encodeString(char *string){
 
 int main(int argc, char** argv){
     /* Check arguments */
-    if(argc != 3){
+    if(argc != 3 && argc != 2){
         std::cerr << PROGRAM_USAGE << std::endl;
         return EXIT_FAILURE;
     }
 
-    /* Check if expected option */
     std::string flag = argv[1];
-    if (flag != "-l" && flag != "-p" && flag != "-c" && flag != "-i") {
-        std::cerr << PROGRAM_USAGE << std::endl;
-        return EXIT_FAILURE;
-    }
 
-    /* Open vsop source file */
-    fileName = argv[2];
-    yyin = fopen(argv[2], "r");
-    if(!yyin){
-        std::cerr << "Can't open file " << fileName << std::endl;
-        return EXIT_FAILURE;
+    if(flag[0] != '-'){
+        std::string extension = flag.substr(flag.length() - 5, flag.length());
+        if(extension != ".vsop" && extension != ".VSOP") {
+            std::cerr << WRONG_TYPE << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        /* Open vsop source file */
+        fileName = argv[1];
+        yyin = fopen(argv[1], "r");
+        if(!yyin){
+            std::cerr << "Can't open file " << fileName << std::endl;
+            return EXIT_FAILURE;
+        }
+        
+    }else{
+        if(flag != "-l" && flag != "-p" && flag != "-c" && flag != "-i"){
+            /* Check if expected option */
+            std::cerr << PROGRAM_USAGE << std::endl;
+            return EXIT_FAILURE;
+        }
+        /* Open vsop source file */
+        fileName = argv[2];
+        yyin = fopen(argv[2], "r");
+        if(!yyin){
+            std::cerr << "Can't open file " << fileName << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     /* Start lexer */
@@ -615,7 +633,7 @@ int main(int argc, char** argv){
         }   
     }
 
-    if(flag == "-e"){
+    else{
         abstractSyntaxTree = new Program();
         if(yyparse()) {
             return EXIT_FAILURE;
@@ -663,6 +681,7 @@ int main(int argc, char** argv){
             LLVM *llvm = LLVM::getInstance(abstractSyntaxTree, fileName);
             abstractSyntaxTree->generateCode(abstractSyntaxTree, NULL, fileName);
             llvm->optimizeCode();
+            llvm->generateExecutable(fileName);
         }   
     }
 
