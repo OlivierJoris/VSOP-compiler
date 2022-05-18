@@ -610,6 +610,7 @@ int main(int argc, char** argv){
 
             LLVM *llvm = LLVM::getInstance(abstractSyntaxTree, fileName);
             abstractSyntaxTree->generateCode(abstractSyntaxTree, NULL, fileName);
+            llvm->optimizeCode();
             llvm->displayIROnStdout();
         }   
     }
@@ -661,6 +662,7 @@ int main(int argc, char** argv){
 
             LLVM *llvm = LLVM::getInstance(abstractSyntaxTree, fileName);
             abstractSyntaxTree->generateCode(abstractSyntaxTree, NULL, fileName);
+            llvm->optimizeCode();
         }   
     }
 

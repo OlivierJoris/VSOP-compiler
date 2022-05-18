@@ -246,3 +246,24 @@ void LLVM::displayIROnStdout(){
 
     std::cout << outstr << std::endl;
 }
+
+void LLVM::optimizeCode()
+{
+    llvm::legacy::FunctionPassManager functionPassManager(mdl);
+
+    // Promote allocas to registers.
+    functionPassManager.add(llvm::createPromoteMemoryToRegisterPass());
+    // Do simple "peephole" optimizations
+    functionPassManager.add(llvm::createInstructionCombiningPass());
+    // Reassociate expressions.
+    functionPassManager.add(llvm::createReassociatePass());
+    // Eliminate Common SubExpressions.
+    functionPassManager.add(llvm::createGVNPass());
+    // Simplify the control flow graph (deleting unreachable blocks etc).
+    functionPassManager.add(llvm::createCFGSimplificationPass());
+
+    functionPassManager.doInitialization();
+
+    for(auto it = mdl->begin(); it != mdl->end(); ++it) 
+        functionPassManager.run(*it);
+}

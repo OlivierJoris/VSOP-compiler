@@ -19,6 +19,12 @@
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/Transforms/InstCombine/InstCombine.h"
+#include "llvm/Transforms/Scalar.h"
+#include "llvm/Transforms/Scalar/GVN.h"
+#include "llvm/Transforms/Utils.h"
 
 #include "AbstractSyntaxTree.hpp"
 
@@ -64,11 +70,16 @@ class LLVM
         llvm::Type *getType(const std::string type);
 
         /**
-         * @brief Return the associated LLVM type.
+         * @brief Display the LLVM code generated on the stdout.
          * 
-         * @return llvm::Type * LLVM Type.
          */
         void displayIROnStdout();
+
+        /**
+         * @brief Optimize the LLVM code generated through optimization passes.
+         * 
+         */
+        void optimizeCode();
 };
 
 #endif 
