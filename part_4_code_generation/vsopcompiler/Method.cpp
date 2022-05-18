@@ -338,6 +338,9 @@ llvm::Value *Call::generateCode(Program *program, Class* cls, const std::string 
     args.push_back(arg);
     int i = 1;
     for(auto arg : listExpr->getExpr()){
+        if(arg->type == "unit")
+            continue;
+
         auto argCode = arg->generateCode(program, cls, fileName);
         argCode = llvm->builder->CreatePointerCast(argCode, methodType->getParamType(i));
         args.push_back(argCode);
