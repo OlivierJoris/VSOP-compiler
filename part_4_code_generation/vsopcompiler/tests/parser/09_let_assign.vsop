@@ -1,7 +1,0 @@
-class Main {
-    main() : bool {
-        let n : int32 <- inputInt32() in {
-            maxime <- 1
-        }
-    }
-}

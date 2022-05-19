@@ -1,5 +1,0 @@
-class Main {
-    factorial(n : int32) : int32 {
-        if n < 2 then 1
-    }
-}
