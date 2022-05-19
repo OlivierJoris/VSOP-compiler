@@ -1,0 +1,9 @@
+class Main {
+    init() : int32 {
+        self;
+        true
+    }
+    main() : int32 {
+        0
+    }
+}

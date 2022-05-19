@@ -1,0 +1,6 @@
+class Main {
+    head : Maxime;
+    main() : int32 {
+        0
+    }
+}

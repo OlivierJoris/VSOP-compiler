@@ -633,7 +633,7 @@ int main(int argc, char** argv){
         }   
     }
 
-    else{
+    if (flag[0] != '-'){
         abstractSyntaxTree = new Program();
         if(yyparse()) {
             return EXIT_FAILURE;

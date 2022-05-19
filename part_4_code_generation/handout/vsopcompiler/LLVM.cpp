@@ -249,23 +249,23 @@ void LLVM::displayIROnStdout(){
 
 void LLVM::optimizeCode()
 {
-//     llvm::legacy::FunctionPassManager functionPassManager(mdl);
+    llvm::legacy::FunctionPassManager functionPassManager(mdl);
 
-//     // Promote allocas to registers.
-//     functionPassManager.add(llvm::createPromoteMemoryToRegisterPass());
-//     // Do simple "peephole" optimizations
-//     functionPassManager.add(llvm::createInstructionCombiningPass());
-//     // Reassociate expressions.
-//     functionPassManager.add(llvm::createReassociatePass());
-//     // Eliminate Common SubExpressions.
-//     functionPassManager.add(llvm::createGVNPass());
-//     // Simplify the control flow graph (deleting unreachable blocks etc).
-//     functionPassManager.add(llvm::createCFGSimplificationPass());
+    // Promote allocas to registers.
+    functionPassManager.add(llvm::createPromoteMemoryToRegisterPass());
+    // Do simple "peephole" optimizations
+    functionPassManager.add(llvm::createInstructionCombiningPass());
+    // Reassociate expressions.
+    functionPassManager.add(llvm::createReassociatePass());
+    // Eliminate Common SubExpressions.
+    functionPassManager.add(llvm::createGVNPass());
+    // Simplify the control flow graph (deleting unreachable blocks etc).
+    functionPassManager.add(llvm::createCFGSimplificationPass());
 
-//     functionPassManager.doInitialization();
+    functionPassManager.doInitialization();
 
-//     for(auto it = mdl->begin(); it != mdl->end(); ++it) 
-//         functionPassManager.run(*it);
+    for(auto it = mdl->begin(); it != mdl->end(); ++it) 
+        functionPassManager.run(*it);
 }
 
 void LLVM::generateExecutable(const std::string &fileName)
@@ -277,7 +277,7 @@ void LLVM::generateExecutable(const std::string &fileName)
     mdl->print(oss, nullptr);
 	exec << outStr;
 	exec.close();
-    std::string cmd = "clang -Wno-override-module -o " + execName + " " + execName + ".ll" + " runtime/*.c";
+    std::string cmd = "clang -Wno-override-module -o " + execName + " " + execName + ".ll" + " runtime/object.c runtime/power.c";
     char c[cmd.size() + 1];
     strcpy(c, cmd.c_str());
     system(c);
