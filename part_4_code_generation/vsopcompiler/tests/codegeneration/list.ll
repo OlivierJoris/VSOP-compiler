@@ -1,21 +1,21 @@
 ; ModuleID = 'tests/codegeneration/list.vsop'
 source_filename = "tests/codegeneration/list.vsop"
 
-%ConsVTable = type { i1 (%Object*)*, i32 (%Object*)*, i8* (%Object*)*, %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i1 (%Cons*)*, i32 (%Cons*)*, i32 (%Cons*)*, %Cons* (%Cons*, %List*, i32)* }
+%ConsVTable = type { %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i8* (%Object*)*, i1 (%Object*)*, i32 (%Object*)*, i1 (%Cons*)*, i32 (%Cons*)*, %Cons* (%Cons*, %List*, i32)*, i32 (%Cons*)* }
 %Object = type { %ObjectVTable* }
-%ObjectVTable = type { i1 (%Object*)*, i32 (%Object*)*, i8* (%Object*)*, %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)* }
+%ObjectVTable = type { %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i8* (%Object*)*, i1 (%Object*)*, i32 (%Object*)* }
 %Cons = type { %ConsVTable*, i32, %List* }
 %List = type { %ListVTable* }
-%ListVTable = type { i1 (%Object*)*, i32 (%Object*)*, i8* (%Object*)*, %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i1 (%List*)*, i32 (%List*)* }
-%MainVTable = type { i1 (%Object*)*, i32 (%Object*)*, i8* (%Object*)*, %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i32 (%Main*)* }
+%ListVTable = type { %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i8* (%Object*)*, i1 (%Object*)*, i32 (%Object*)*, i1 (%List*)*, i32 (%List*)* }
+%MainVTable = type { %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i8* (%Object*)*, i1 (%Object*)*, i32 (%Object*)*, i32 (%Main*)* }
 %Main = type { %MainVTable* }
-%NilVTable = type { i1 (%Object*)*, i32 (%Object*)*, i8* (%Object*)*, %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i1 (%List*)*, i32 (%List*)* }
+%NilVTable = type { %Object* (%Object*, i8*)*, %Object* (%Object*, i1)*, %Object* (%Object*, i32)*, i8* (%Object*)*, i1 (%Object*)*, i32 (%Object*)*, i1 (%List*)*, i32 (%List*)* }
 %Nil = type { %NilVTable* }
 
-@Cons___vtable = constant %ConsVTable { i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i8* (%Object*)* @Object__inputLine, %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i1 (%Cons*)* @Cons__isNil, i32 (%Cons*)* @Cons__length, i32 (%Cons*)* @Cons__head, %Cons* (%Cons*, %List*, i32)* @Cons__init }
-@List___vtable = constant %ListVTable { i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i8* (%Object*)* @Object__inputLine, %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i1 (%List*)* @List__isNil, i32 (%List*)* @List__length }
-@Main___vtable = constant %MainVTable { i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i8* (%Object*)* @Object__inputLine, %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i32 (%Main*)* @Main__main }
-@Nil___vtable = constant %NilVTable { i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i8* (%Object*)* @Object__inputLine, %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i1 (%List*)* @List__isNil, i32 (%List*)* @List__length }
+@Cons___vtable = constant %ConsVTable { %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i8* (%Object*)* @Object__inputLine, i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i1 (%Cons*)* @Cons__isNil, i32 (%Cons*)* @Cons__length, %Cons* (%Cons*, %List*, i32)* @Cons__init, i32 (%Cons*)* @Cons__head }
+@List___vtable = constant %ListVTable { %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i8* (%Object*)* @Object__inputLine, i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i1 (%List*)* @List__isNil, i32 (%List*)* @List__length }
+@Main___vtable = constant %MainVTable { %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i8* (%Object*)* @Object__inputLine, i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i32 (%Main*)* @Main__main }
+@Nil___vtable = constant %NilVTable { %Object* (%Object*, i8*)* @Object__print, %Object* (%Object*, i1)* @Object__printBool, %Object* (%Object*, i32)* @Object__printInt32, i8* (%Object*)* @Object__inputLine, i1 (%Object*)* @Object__inputBool, i32 (%Object*)* @Object__inputInt32, i1 (%List*)* @List__isNil, i32 (%List*)* @List__length }
 @0 = private unnamed_addr constant [17 x i8] c"List has length \00", align 1
 @1 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
 
@@ -144,17 +144,17 @@ entry:
   %1 = call %Cons* @Cons___new()
   %2 = getelementptr inbounds %Cons, %Cons* %1, i64 0, i32 0
   %3 = load %ConsVTable*, %ConsVTable** %2, align 8
-  %4 = getelementptr inbounds %ConsVTable, %ConsVTable* %3, i64 0, i32 9
+  %4 = getelementptr inbounds %ConsVTable, %ConsVTable* %3, i64 0, i32 8
   %5 = load %Cons* (%Cons*, %List*, i32)*, %Cons* (%Cons*, %List*, i32)** %4, align 8
   %6 = call %Cons* @Cons___new()
   %7 = getelementptr inbounds %Cons, %Cons* %6, i64 0, i32 0
   %8 = load %ConsVTable*, %ConsVTable** %7, align 8
-  %9 = getelementptr inbounds %ConsVTable, %ConsVTable* %8, i64 0, i32 9
+  %9 = getelementptr inbounds %ConsVTable, %ConsVTable* %8, i64 0, i32 8
   %10 = load %Cons* (%Cons*, %List*, i32)*, %Cons* (%Cons*, %List*, i32)** %9, align 8
   %11 = call %Cons* @Cons___new()
   %12 = getelementptr inbounds %Cons, %Cons* %11, i64 0, i32 0
   %13 = load %ConsVTable*, %ConsVTable** %12, align 8
-  %14 = getelementptr inbounds %ConsVTable, %ConsVTable* %13, i64 0, i32 9
+  %14 = getelementptr inbounds %ConsVTable, %ConsVTable* %13, i64 0, i32 8
   %15 = load %Cons* (%Cons*, %List*, i32)*, %Cons* (%Cons*, %List*, i32)** %14, align 8
   %16 = call %Nil* @Nil___new()
   %17 = bitcast %Nil* %16 to %List*
@@ -166,12 +166,12 @@ entry:
   %23 = bitcast %Cons* %22 to %List*
   %24 = getelementptr inbounds %Main, %Main* %0, i64 0, i32 0
   %25 = load %MainVTable*, %MainVTable** %24, align 8
-  %26 = getelementptr inbounds %MainVTable, %MainVTable* %25, i64 0, i32 3
+  %26 = getelementptr inbounds %MainVTable, %MainVTable* %25, i64 0, i32 0
   %27 = load %Object* (%Object*, i8*)*, %Object* (%Object*, i8*)** %26, align 8
   %28 = bitcast %Main* %0 to %Object*
   %29 = call %Object* %27(%Object* %28, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @0, i64 0, i64 0))
   %30 = load %MainVTable*, %MainVTable** %24, align 8
-  %31 = getelementptr inbounds %MainVTable, %MainVTable* %30, i64 0, i32 5
+  %31 = getelementptr inbounds %MainVTable, %MainVTable* %30, i64 0, i32 2
   %32 = load %Object* (%Object*, i32)*, %Object* (%Object*, i32)** %31, align 8
   %33 = bitcast %Cons* %22 to %ListVTable**
   %34 = load %ListVTable*, %ListVTable** %33, align 8
@@ -180,7 +180,7 @@ entry:
   %37 = call i32 %36(%List* %23)
   %38 = call %Object* %32(%Object* %28, i32 %37)
   %39 = load %MainVTable*, %MainVTable** %24, align 8
-  %40 = getelementptr inbounds %MainVTable, %MainVTable* %39, i64 0, i32 3
+  %40 = getelementptr inbounds %MainVTable, %MainVTable* %39, i64 0, i32 0
   %41 = load %Object* (%Object*, i8*)*, %Object* (%Object*, i8*)** %40, align 8
   %42 = call %Object* %41(%Object* %28, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @1, i64 0, i64 0))
   ret i32 0

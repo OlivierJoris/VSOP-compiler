@@ -1,0 +1,6 @@
+class Main {
+    main() : int32 {
+        (new Object).print("Hello, it's me.\n");
+        0
+    }
+}

@@ -1,4 +1,0 @@
-class MyClass {
-    s : string <- "Compilers 2022"
-    i : int32 <- 0x1b
-}

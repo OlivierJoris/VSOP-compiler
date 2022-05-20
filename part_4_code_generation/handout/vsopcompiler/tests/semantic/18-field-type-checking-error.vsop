@@ -1,6 +1,0 @@
-class Main {
-    mySuperField : bool <- 0;
-    main() : int32 {
-        0
-    }
-}

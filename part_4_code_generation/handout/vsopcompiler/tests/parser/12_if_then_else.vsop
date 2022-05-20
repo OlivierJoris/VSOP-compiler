@@ -1,9 +1,0 @@
-class Main {
-    main() : int32 {
-        if n < 0 then {
-            print("Number must be greater-than or equal to 0.\n")
-        } else {
-            print("The factorial of ")
-        }
-    }
-}

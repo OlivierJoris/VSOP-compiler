@@ -21,6 +21,7 @@ install-tools:
 	sudo apt-get install flex
 	sudo apt-get install bison	
 	sudo apt-get install clang
+	sudo cp -R ./runtime/ /usr/local/lib/vsop/
 
 clean:
 	rm -f $(DIR)vgcore.*

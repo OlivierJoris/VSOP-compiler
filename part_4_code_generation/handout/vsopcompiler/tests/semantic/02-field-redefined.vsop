@@ -1,9 +1,0 @@
-class List {
-    tail : int32 <- 32;
-    tail : int32 <- 32;
-}
-class Main {
-    main() : int32 {
-        0
-    }
-}

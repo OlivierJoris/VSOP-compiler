@@ -1,7 +1,0 @@
-class List extends MyAmazingClass {
-    testWhile() : bool {
-        while (maxime < 1) do {
-            maxime <- 0
-        }
-    }
-}

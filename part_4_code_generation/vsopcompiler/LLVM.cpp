@@ -147,22 +147,24 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
             std::string parentClass = parentClasses.top();
             parentClasses.pop();
 
-            for(auto method: program->classesMap[parentClass]->methodsMap)
+            std::vector<Method*> tmpMethods = program->classesMap[parentClass]->getMethods();
+            for(auto it = tmpMethods.rbegin(); it != tmpMethods.rend(); ++it)
             {
-                if(!isOverriding[method.first])
+                Method *method = *it;
+                if(!isOverriding[method->getName()])
                 {
-                    auto tmpType = mdl->getFunction(parentClass + "__" + method.first)->getFunctionType();
-                    methods.push_back(mdl->getFunction(parentClass + "__" + method.first));
+                    auto tmpType = mdl->getFunction(parentClass + "__" + method->getName())->getFunctionType();
+                    methods.push_back(mdl->getFunction(parentClass + "__" + method->getName()));
                     types.push_back(llvm::PointerType::get(tmpType, 0));
-                    isOverriding[method.first] = true;
-                    indexes[method.first] = i;
-                    program->methodsMap[cls.first][method.first] = i;
+                    isOverriding[method->getName()] = true;
+                    indexes[method->getName()] = i;
+                    program->methodsMap[cls.first][method->getName()] = i;
                 }
                 else
                 {
-                    methods[indexes[method.first]] = mdl->getFunction(parentClass + "__" + method.first);
-                    auto tmpType = ((llvm::Function*) methods[indexes[method.first]])->getFunctionType();
-                    types[indexes[method.first]] = llvm::PointerType::get(tmpType, 0);
+                    methods[indexes[method->getName()]] = mdl->getFunction(parentClass + "__" + method->getName());
+                    auto tmpType = ((llvm::Function*) methods[indexes[method->getName()]])->getFunctionType();
+                    types[indexes[method->getName()]] = llvm::PointerType::get(tmpType, 0);
                 }
                 ++i;
             }
@@ -200,6 +202,7 @@ LLVM::LLVM(Program* program, const std::string &fileName): fileName(fileName)
 
             for(auto field: program->classesMap[parentClass]->fieldsMap)
                 types.push_back(getType(field.second->getType()));
+            
         }
 
         structType->setBody(types);
@@ -231,10 +234,8 @@ llvm::Type *LLVM::getType(const std::string type)
     if (type == "int32")
         return llvm::Type::getInt32Ty(*context);
     else if (type == "bool")
-        return llvm::Type::getInt1Ty(*context);
-    else if (type == "unit")
-        return llvm::Type::getVoidTy(*context);    
-    else if (type == "string")
+        return llvm::Type::getInt1Ty(*context);   
+    else if (type == "string" || type == "unit")
         return llvm::PointerType::getInt8PtrTy(*context);
     else
         return llvm::PointerType::get(mdl->getTypeByName(type), 0);
@@ -277,7 +278,7 @@ void LLVM::generateExecutable(const std::string &fileName)
     mdl->print(oss, nullptr);
 	exec << outStr;
 	exec.close();
-    std::string cmd = "clang -Wno-override-module -o " + execName + " " + execName + ".ll" + " runtime/object.c runtime/power.c";
+    std::string cmd = "clang -Wno-override-module -o " + execName + " " + execName + ".ll" + " /usr/local/lib/vsop/*.c";
     char c[cmd.size() + 1];
     strcpy(c, cmd.c_str());
     system(c);

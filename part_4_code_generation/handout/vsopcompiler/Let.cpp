@@ -135,7 +135,7 @@ const string Let::typeChecking(const Program* prog, string currentClass, bool in
 llvm::Value *Let::generateCode(Program *program, Class* cls,const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
-    auto let = llvm->builder->CreateAlloca(llvm->getType(initExpr->type));
+    auto let = llvm->builder->CreateAlloca(llvm->getType(type));
     llvm::Value *llvmInit;
     if(!initExpr){
         auto llvmType = llvm->getType(type);
@@ -150,7 +150,7 @@ llvm::Value *Let::generateCode(Program *program, Class* cls,const std::string &f
         }
     } else {
         llvmInit = initExpr->generateCode(program, cls, fileName);
-        llvmInit = llvm->builder->CreatePointerCast(llvmInit, llvm->getType(initExpr->type));
+        llvmInit = llvm->builder->CreatePointerCast(llvmInit, llvm->getType(type));
     }
 
     llvm->builder->CreateStore(llvmInit, let);

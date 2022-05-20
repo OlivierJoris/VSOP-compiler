@@ -113,18 +113,19 @@ llvm::Value *Field::generateCode(Program *program, Class* cls, const std::string
     llvm::Type *llvmType;
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
-    if(initExpr)
+    if(!defaultInitialized){
         val = initExpr->generateCode(program, cls, fileName);
+    }
     else
     {
         llvmType = llvm->getType(type);
 
         if(type == "bool" || type == "int32")
             val = llvm::ConstantInt::get(llvmType, 0);
-        if (type == "string")
+        else if (type == "string")
             val = llvm->builder->CreateGlobalStringPtr("");
         else
-            val = llvm::ConstantPointerNull::get(llvmType->getPointerTo()); 
+            val = llvm::ConstantPointerNull::get((llvm::PointerType*) llvmType);
     }
 
     return val;

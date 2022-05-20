@@ -374,7 +374,7 @@ const string New::checkUsageUndefinedType(const map<string, Class*>& classesMap)
 
 llvm::Value *New::generateCode(Program *Program, Class* cls,const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(Program, fileName);
-    return llvm->builder->CreateCall(llvm->mdl->getFunction(typeName + std::string("___new")));
+    return llvm->builder->CreateCall(llvm->mdl->getFunction(type + std::string("___new")));
 }
 
 ObjectIdentifier::ObjectIdentifier(const string identifier, const int line, const int column): identifier(identifier){
@@ -414,19 +414,15 @@ const string ObjectIdentifier::typeChecking(const Program*, string, bool, vector
 llvm::Value *ObjectIdentifier::generateCode(Program *program, Class* cls,const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
     llvm::Value *retObj;
-    // std::cout << identifier << std::endl;
-    // std::cout << program->variables[identifier] << std::endl;
-    if(program->variables[identifier] != NULL){
+
+    if(program->variables[identifier] != NULL)
         retObj = program->variables[identifier];
-    }
     else{
         auto linkedClass = llvm->builder->GetInsertBlock()->getParent()->arg_begin();
-        if(identifier == "self"){
+        if(identifier == "self")
             return linkedClass;
-        }
-        else{
+        else
             retObj = llvm->builder->CreateStructGEP(llvm->mdl->getTypeByName(cls->getName()), linkedClass, program->fieldsMap[cls->getName()][identifier]);
-        }
     }
     return llvm->builder->CreateLoad(retObj);
 }

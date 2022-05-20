@@ -1,5 +1,0 @@
-class Main {
-    main(test : int32) : int32 {
-        0
-    }
-}

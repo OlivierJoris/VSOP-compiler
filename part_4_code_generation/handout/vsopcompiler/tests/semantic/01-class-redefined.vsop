@@ -1,7 +1,0 @@
-class List {}
-class List {}
-class Main {
-    main() : int32 {
-        0
-    }
-}

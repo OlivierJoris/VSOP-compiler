@@ -49,6 +49,14 @@ Program::Program()
     Method *inputBool = new Method("inputBool", inputBoolFormals, "bool", NULL, 0, 0);
     Method *inputInt = new Method("inputInt32", inputIntFormals, "int32", NULL, 0, 0);
     Class *object = new Class("Object", "", fields, methods, 0, 0);
+    
+    object->addMethod(inputInt);
+    object->addMethod(inputBool);
+    object->addMethod(inputLine);
+    object->addMethod(printInt32);
+    object->addMethod(printBool);
+    object->addMethod(print);
+
     object->methodsMap.insert(pair<string, Method*>("print", print));
     object->methodsMap.insert(pair<string, Method*>("printBool", printBool));
     object->methodsMap.insert(pair<string, Method*>("printInt32", printInt32));
@@ -307,5 +315,6 @@ string Unit::dumpAST(bool annotated) const
 
 llvm::Value *Unit::generateCode(Program *program, Class* cls,const std::string &fileName){
     LLVM *llvm = LLVM::getInstance(program, fileName);
-    return llvm::ConstantPointerNull::get((llvm::PointerType *) llvm->getType("unit"));
+
+    return llvm::ConstantPointerNull::get((llvm::PointerType*) llvm->getType("unit"));;
 }

@@ -51,12 +51,12 @@ const string Block::typeChecking(const Program* prog, string currentClass, bool 
     return "";
 }
 
-llvm::Value *Block::generateCode(Program *Program, Class* cls,const std::string &fileName){
+llvm::Value *Block::generateCode(Program *program, Class* cls, const std::string &fileName){
     llvm::Value *code;
     std::vector<Expr*> exprs = exprList->getExpr();
     for(auto it = exprs.rbegin(); it != exprs.rend(); ++it){
         Expr *arg = *it;
-        code = arg->generateCode(Program, cls, fileName);
+        code = arg->generateCode(program, cls, fileName);
     }
 
     return code;

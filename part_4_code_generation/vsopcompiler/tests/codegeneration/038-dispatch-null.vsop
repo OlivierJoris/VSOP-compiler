@@ -1,0 +1,8 @@
+class Main {
+    obj : Object; // should be default-initialized to null
+
+    main() : int32 {
+        obj.print("Never to be printed\n"); // Dispatch to null should error
+        0
+    }
+}

@@ -119,7 +119,7 @@ const string If::typeChecking(const Program* prog, string currentClass, bool inF
                     Class *cls = (*tmpClass).second;
                     if(cls){
                         tmpElse = cls->getParent();
-                        listAncestorThen.push_back(tmpElse);
+                        listAncestorElse.push_back(tmpElse);
                     }else
                         break;
                 }else
@@ -184,7 +184,7 @@ llvm::Value *If::generateCode(Program *program, Class* cls, const std::string &f
     function->getBasicBlockList().push_back(elseBlock);
     llvm->builder->SetInsertPoint(elseBlock);
 
-    llvm::Value *els = llvm::ConstantPointerNull::get((llvm::PointerType *)llvm::Type::getVoidTy(*(llvm->context)));
+    llvm::Value *els = llvm::ConstantPointerNull::get((llvm::PointerType *)llvm::PointerType::getInt8PtrTy(*(llvm->context)));
     if(elseExpr)
         els = elseExpr->generateCode(program, cls, fileName);
 

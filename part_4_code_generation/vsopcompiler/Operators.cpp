@@ -64,17 +64,35 @@ const string Assign::typeChecking(const Program* prog, string currentClass, bool
             string err = to_string(getLine()) + ":" + to_string(getColumn()) + ": semantic error: " + name + " is not in scope.";
             return err;
         }
+
+        vector<string> ancestors = vector<string>();
+        auto classes = prog->getClasses();
+
+        string tmpExpr = expr->type;
+        ancestors.push_back(tmpExpr);
+        while(tmpExpr.compare("Object")){
+            auto tmpClass = prog->classesMap.find(tmpExpr);
+            if(tmpClass != prog->classesMap.end()){
+                Class *cls = (*tmpClass).second;
+                if(cls){
+                    tmpExpr = cls->getParent();
+                    ancestors.push_back(tmpExpr);
+                }else
+                    break;
+            }else
+                break;
+        }
         
         // Check that type of expr matches type of id (name)
-        if(obj->type.compare(expr->type)){
+        if(std::find(ancestors.begin(), ancestors.end(), obj->type) == ancestors.end()){
             string err = to_string(getLine()) + ":" + to_string(getColumn()) +
                 ": semantic error: <expr> does not have the same type as " + name +
-                ". " + name + " has type " + obj->type + " while <expr> has type " + expr->type + ".";
+                " or one of its ancestors.";
             return err;
         }
 
         // Type of assign is type of expr
-        type = expr->type;
+        type = obj->type;
     }
 
     return "";
@@ -84,7 +102,7 @@ llvm::Value *Assign::generateCode(Program *program, Class* cls, const std::strin
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
     auto assignCode = expr->generateCode(program, cls, fileName);
-    assignCode = llvm->builder->CreatePointerCast(assignCode, llvm->getType(expr->type));
+    assignCode = llvm->builder->CreatePointerCast(assignCode, llvm->getType(type));
     if(program->variables[name] == NULL){
         auto function = llvm->builder->GetInsertBlock()->getParent();
         auto clas = function->arg_begin();   
@@ -263,35 +281,10 @@ llvm::Value *BinOp::generateCode(Program *program, Class* cls, const std::string
     LLVM *llvm = LLVM::getInstance(program, fileName);
 
     auto leftExprCode = leftExpr->generateCode(program, cls, fileName);
-    auto rightExprCode = rightExpr->generateCode(program, cls, fileName);
     llvm::Value *ret;
-
-    if (symbol == "+")
-        ret = llvm->builder->CreateAdd(leftExprCode, rightExprCode);
-    else if (symbol == "-")
-        ret = llvm->builder->CreateSub(leftExprCode, rightExprCode);
-    else if (symbol == "*")
-        ret = llvm->builder->CreateMul(leftExprCode, rightExprCode);
-    else if (symbol == "/")
-        ret = llvm->builder->CreateUDiv(leftExprCode, rightExprCode);
-    else if (symbol == "^"){
-        llvm::Value *call = llvm->builder->CreateCall(llvm->mdl->getFunction("power"), {leftExprCode, rightExprCode});
-        ret = llvm->builder->CreateIntCast(call, llvm::Type::getInt32Ty(*(llvm->context)), true);
-    }
-    else if (symbol == "="){
-        if(leftExpr->type != "bool" && leftExpr->type != "int32" && leftExpr->type != "unit" && leftExpr->type != "string" && rightExpr->type != "bool" && rightExpr->type != "int32" && rightExpr->type != "unit" && rightExpr->type != "string"){
-            leftExprCode = llvm->builder->CreatePointerCast(leftExprCode, llvm::IntegerType::getInt64Ty(*(llvm->context)));
-            rightExprCode = llvm->builder->CreatePointerCast(rightExprCode, llvm::IntegerType::getInt64Ty(*(llvm->context)));
-        }
-        ret = llvm->builder->CreateICmpEQ(leftExprCode, rightExprCode);
-    }
-    else if (symbol == "<")
-        ret = llvm->builder->CreateICmpSLT(leftExprCode, rightExprCode);
-    else if (symbol == "<=")
-        ret = llvm->builder->CreateICmpSLE(leftExprCode, rightExprCode);
-    else if (symbol == "and"){
-        llvm::BasicBlock *trueLeft = llvm::BasicBlock::Create(*(llvm->context), "and_true_left");
-        llvm::BasicBlock *falseLeft = llvm::BasicBlock::Create(*(llvm->context), "and_false_left");
+    if (symbol == "and"){
+        llvm::BasicBlock *trueLeft = llvm::BasicBlock::Create(*(llvm->context), "and_true");
+        llvm::BasicBlock *falseLeft = llvm::BasicBlock::Create(*(llvm->context), "and_false");
         llvm::BasicBlock *end = llvm::BasicBlock::Create(*(llvm->context), "and_end");
 
         llvm->builder->CreateCondBr(leftExprCode, trueLeft, falseLeft);
@@ -315,9 +308,38 @@ llvm::Value *BinOp::generateCode(Program *program, Class* cls, const std::string
 
         ret = phi;
     }
+    else {
+        auto rightExprCode = rightExpr->generateCode(program, cls, fileName);
 
-    else
-        ret = NULL;
+        if (symbol == "+")
+            ret = llvm->builder->CreateAdd(leftExprCode, rightExprCode);
+        else if (symbol == "-")
+            ret = llvm->builder->CreateSub(leftExprCode, rightExprCode);
+        else if (symbol == "*")
+            ret = llvm->builder->CreateMul(leftExprCode, rightExprCode);
+        else if (symbol == "/")
+            ret = llvm->builder->CreateUDiv(leftExprCode, rightExprCode);
+        else if (symbol == "^"){
+            llvm::Value *call = llvm->builder->CreateCall(llvm->mdl->getFunction("power"), {leftExprCode, rightExprCode});
+            ret = llvm->builder->CreateIntCast(call, llvm::Type::getInt32Ty(*(llvm->context)), true);
+        }
+        else if (symbol == "="){
+            if(leftExpr->type == "unit" && rightExpr->type == "unit")
+                return llvm::ConstantInt::get(llvm->getType("bool"), 1);
+            if(leftExpr->type != "bool" && leftExpr->type != "int32" && leftExpr->type != "unit" && leftExpr->type != "string" && rightExpr->type != "bool" && rightExpr->type != "int32" && rightExpr->type != "unit" && rightExpr->type != "string"){
+                leftExprCode = llvm->builder->CreatePointerCast(leftExprCode, llvm::IntegerType::getInt64Ty(*(llvm->context)));
+                rightExprCode = llvm->builder->CreatePointerCast(rightExprCode, llvm::IntegerType::getInt64Ty(*(llvm->context)));
+            }
+
+            ret = llvm->builder->CreateICmpEQ(leftExprCode, rightExprCode);
+        }
+        else if (symbol == "<")
+            ret = llvm->builder->CreateICmpSLT(leftExprCode, rightExprCode);
+        else if (symbol == "<=")
+            ret = llvm->builder->CreateICmpSLE(leftExprCode, rightExprCode);
+        else
+            ret = NULL;
+    }
 
     return ret;
 }

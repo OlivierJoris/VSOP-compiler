@@ -40,6 +40,7 @@ class Class : public Expr
         std::string getParent() {return parent;}
         std::vector<Field*> getFields() {return fields;}
         std::vector<Method*> getMethods() {return methods;}
+        void addMethod(Method *method) {methods.push_back(method);}
 
         /**
          * @brief Dump the AST corresponding to the class inside the returned string.
