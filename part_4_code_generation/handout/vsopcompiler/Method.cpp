@@ -150,6 +150,7 @@ llvm::Value *Method::generateCode(Program *program, Class* cls, const std::strin
     }
 
     auto ret = block->generateCode(program, cls, fileName);
+    ret = llvm->builder->CreatePointerCast(ret, llvm->getType(retType));
     llvm->builder->CreateRet(ret);
 
     return NULL;

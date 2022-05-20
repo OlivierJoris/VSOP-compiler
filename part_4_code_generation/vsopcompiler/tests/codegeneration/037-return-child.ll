@@ -97,7 +97,8 @@ entry:
 define %Parent* @Main__someParent(%Main* %0) {
 entry:
   %1 = call %Child* @Child___new()
-  ret %Child* %1
+  %2 = bitcast %Child* %1 to %Parent*
+  ret %Parent* %2
 }
 
 define %Parent* @Parent___new() {
